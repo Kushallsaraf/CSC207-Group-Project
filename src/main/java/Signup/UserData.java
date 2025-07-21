@@ -17,8 +17,6 @@ public class UserData {
         FileReader reader = new FileReader(filePath);
         data = JsonParser.parseReader(reader).getAsJsonObject();
 
-
-
     }
 
     public String [][] getArray(){
@@ -30,12 +28,10 @@ public class UserData {
             result[i][1] = user.get("pwd").getAsString();
         }
 
-
         return result;
 
-
-
-
     }
+
+
 
 }
