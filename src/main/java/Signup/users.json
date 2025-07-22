@@ -2,19 +2,19 @@
   "Users": [
     {
       "username": "alice",
-      "pwd": "$2a$10$zRZ...",
-      "wishlist": [],
-      "library": [],
-      "completedGames": [],
-      "reviews": []
+      "pwd": "$2a$10$N9qo8uLOickgx2ZMRZo5e.uEixZaY1dZ3YdZmzpR2eYjG1NQ1d2bW"
     },
     {
       "username": "bob",
-      "pwd": "$2a$10$3QX...",
-      "wishlist": [],
-      "library": [],
-      "completedGames": [],
-      "reviews": []
+      "pwd": "$2a$10$somesecurehashedpasswordstring"
+    },
+    {
+      "username": "drake",
+      "pwd": "$2a$10$anotherhashedpasswordexample"
+    },
+    {
+      "username": "chuck",
+      "pwd": "3444"
     }
   ]
 }
