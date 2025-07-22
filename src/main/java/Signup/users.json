@@ -15,6 +15,14 @@
     {
       "username": "chuck",
       "pwd": "3444"
+    },
+    {
+      "username": "alien",
+      "pwd": "$2a$10$dzW6bOm77Tw062EBvGm0D.ByCrlDzZ82/FwZqlbWSLeJ4bhG77YGG"
+    },
+    {
+      "username": "moon",
+      "pwd": "$2a$10$XrDCSfcqDXZovl8X1XV4y.Nc2stw/9OdEIUyxZHEOOZKfytabuxEK"
     }
   ]
 }

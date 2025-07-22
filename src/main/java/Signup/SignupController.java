@@ -3,6 +3,7 @@ package Signup;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * Controller class for the sign-up screen.
@@ -29,11 +30,16 @@ public class SignupController {
             public void actionPerformed(ActionEvent e) {
                 String username = view.getUsernameField().getText();
                 String password = new String(view.getPasswordField().getPassword());
-                String resultMessage = interactor.handleSignUp(username, password);
+                try {
+                    String resultMessage = interactor.handleSignUp(username, password);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
     }
+
     private void launchUI() {
         JFrame frame = new JFrame("Sign Up");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,20 +1,21 @@
 package Signup;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class SignupInteractor {
     private SignupUseCase useCase;
-    private String username;
-    private String password;
 
-    public SignupInteractor(String username, String password){
-        this.username = username;
-        this.password = password;
+
+    public SignupInteractor() throws FileNotFoundException {
+
         useCase = new SignupUseCase();
 
 
 
     }
 
-    public String handleSignUp(String username, String password){
-        return null;
+    public String handleSignUp(String username, String password) throws IOException {
+        return useCase.signUp(username, password);
     }
 }

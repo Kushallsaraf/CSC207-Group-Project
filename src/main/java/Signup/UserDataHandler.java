@@ -7,8 +7,10 @@ import java.util.Map;
 import User.User;
 
 /**
- * Responsible for reading and writing to the json file. Any checks that
- * are made for the json file will be done through this class.
+ * Responsible for reading and writing to the json file. Any time information
+ * is written to or read from the user data file will be done through
+ * this class.
+ *
  */
 public class UserDataHandler {
 
@@ -42,27 +44,9 @@ public class UserDataHandler {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 gson.toJson(data, writer);
             }
-
-
-
-
-
-
         }
     }
 
-    public String [][] getArray(){
-        JsonArray array = data.getAsJsonArray("Users");
-        String[][] result = new String[array.size()][2];
-        for (int i = 0; i < array.size(); i++) {
-            JsonObject user = array.get(i).getAsJsonObject();
-            result[i][0] = user.get("username").getAsString();
-            result[i][1] = user.get("pwd").getAsString();
-        }
-
-        return result;
-
-    }
 
     public Map<String, User> getUsers(){
         Map<String, User> users = new HashMap<String, User>();
@@ -77,13 +61,5 @@ public class UserDataHandler {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        UserDataHandler handler = new UserDataHandler("src/main/java/Signup/users.json");
-        System.out.println(handler.hasUser("alice"));
-        System.out.println(handler.hasUser("bob"));
-        System.out.println(handler.hasUser("drake"));
-        System.out.println(handler.hasUser("billy"));
-        handler.addUser("chuck", "3444");
 
-    }
 }
