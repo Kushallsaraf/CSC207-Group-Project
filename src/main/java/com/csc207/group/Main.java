@@ -1,7 +1,10 @@
 package com.csc207.group;
 
-import Signup.SignupController;
+import Login.LoginInteractor;
+import UserAuthentication.Constants;
+import UserAuthentication.UserAuthenticationController;
 import Signup.SignupInteractor;
+import UserAuthentication.UserDataHandler;
 
 import java.io.FileNotFoundException;
 
@@ -9,9 +12,12 @@ import java.io.FileNotFoundException;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
-        SignupInteractor signupInteractor = new SignupInteractor();
-        SignupController signupController = new SignupController(signupInteractor);
-        // TODO 1: Add a delete_user feature UserDataHandler
+        UserDataHandler handler = new UserDataHandler(Constants.FILE_PATH_ONE);
+        SignupInteractor signupInteractor = new SignupInteractor(handler);
+        LoginInteractor loginInteractor = new LoginInteractor(handler);
+        UserAuthenticationController userAuthenticationController = new UserAuthenticationController(signupInteractor, loginInteractor);
+        // TODO: PRIORITY 1: Decouple controller, have quasi main application to verify login [session manager]
+        // TODO 1: impose restrictions on password and username inputs
         // TODO 2: Implement login functionality
         // TODO 7: Replace Swing with JavaFX
         // TODO 8: To make 7 smoother, it is best to modify the architecture to make the controller independent of GUI

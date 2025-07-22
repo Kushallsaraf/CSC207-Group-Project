@@ -1,5 +1,7 @@
 package Signup;
 
+import UserAuthentication.UserDataHandler;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -7,9 +9,9 @@ public class SignupInteractor {
     private SignupUseCase useCase;
 
 
-    public SignupInteractor() throws FileNotFoundException {
+    public SignupInteractor(UserDataHandler handler) throws FileNotFoundException {
 
-        useCase = new SignupUseCase();
+        useCase = new SignupUseCase(handler);
 
 
 

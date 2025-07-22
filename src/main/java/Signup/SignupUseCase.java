@@ -1,5 +1,9 @@
 package Signup;
 
+import UserAuthentication.Constants;
+import UserAuthentication.PasswordHasher;
+import UserAuthentication.UserDataHandler;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -10,8 +14,8 @@ import java.io.IOException;
 public class SignupUseCase {
     private UserDataHandler handler;
 
-    public SignupUseCase() throws FileNotFoundException {
-        this.handler = new UserDataHandler(Constants.FILE_PATH_ONE);
+    public SignupUseCase(UserDataHandler handler) throws FileNotFoundException {
+        this.handler = handler;
 
 
     }

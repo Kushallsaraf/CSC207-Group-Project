@@ -1,4 +1,4 @@
-package Signup;
+package UserAuthentication;
 
 import org.mindrot.jbcrypt.BCrypt;
 /**

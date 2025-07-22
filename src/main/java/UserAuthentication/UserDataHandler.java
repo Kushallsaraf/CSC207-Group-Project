@@ -1,4 +1,4 @@
-package Signup;
+package UserAuthentication;
 import com.google.gson.*;
 
 import java.io.*;
@@ -47,6 +47,35 @@ public class UserDataHandler {
         }
     }
 
+    public boolean deleteUser(String username){
+        if (hasUser(username)){
+            JsonArray usersArray = data.getAsJsonArray("Users");
+            JsonArray updatedArray = new JsonArray();
+            for (JsonElement userElement : usersArray) {
+                JsonObject userObj = userElement.getAsJsonObject();
+                String currentUsername = userObj.get("username").getAsString();
+                if (!currentUsername.equals(username)) {
+                    updatedArray.add(userObj);}
+
+                }
+            data.add("Users", updatedArray);
+            try (Writer writer = new FileWriter(filePath)) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                gson.toJson(data, writer);
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        } return false;}
+
+
+
+
+
+
+
 
     public Map<String, User> getUsers(){
         Map<String, User> users = new HashMap<String, User>();
@@ -61,5 +90,17 @@ public class UserDataHandler {
 
     }
 
+    public static void main(String[] args) throws IOException {
+        UserDataHandler d = new UserDataHandler(Constants.FILE_PATH_ONE);
+        System.out.println(d.hasUser("Taabish"));
+        d.addUser("Taabish", "123456");
+        System.out.println(d.hasUser("Taabish"));
+
+
+
+
+    }
+
 
 }
+

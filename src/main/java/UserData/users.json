@@ -13,16 +13,28 @@
       "pwd": "$2a$10$anotherhashedpasswordexample"
     },
     {
-      "username": "chuck",
-      "pwd": "3444"
-    },
-    {
       "username": "alien",
       "pwd": "$2a$10$dzW6bOm77Tw062EBvGm0D.ByCrlDzZ82/FwZqlbWSLeJ4bhG77YGG"
     },
     {
       "username": "moon",
       "pwd": "$2a$10$XrDCSfcqDXZovl8X1XV4y.Nc2stw/9OdEIUyxZHEOOZKfytabuxEK"
+    },
+    {
+      "username": "mickey",
+      "pwd": "$2a$10$URp19iC74umwpxj1IslCveZFhVC.HeBt.Dzv5tOIdwbzXTq..3AMW"
+    },
+    {
+      "username": "carlosalberto",
+      "pwd": "$2a$10$dj0I/pnEbgo1OVa3c0bXo.RSzzOL4t.rcRKEswbjjXoQm1zhmNaL6"
+    },
+    {
+      "username": "Taabish",
+      "pwd": "123456"
+    },
+    {
+      "username": "lionelmessi",
+      "pwd": "$2a$10$8ulA5qh/1WBaSIObr6ZAE.sIKLGaEl2N7sV.2CMLBjMma9JGZf37W"
     }
   ]
 }
