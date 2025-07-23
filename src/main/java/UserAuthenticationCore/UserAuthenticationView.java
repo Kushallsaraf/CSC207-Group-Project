@@ -20,14 +20,11 @@ public interface UserAuthenticationView {
      */
     public String getPasswordInput();
 
-    /** Lets the controller know the signup button has been pressed
-     *
-     */
-    public void pressSignUp();
 
-    /** Lets the controller know the login button has been pressed
+    /** Makes the view visible
      *
      */
-    public void pressLogIn();
+    public void display();
+
 
 }
