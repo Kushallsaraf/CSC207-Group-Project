@@ -1,5 +1,7 @@
 package UserAuthentication;
 
+import java.io.IOException;
+
 /**Stores user data from data source and writes data to data source.
  *
  */
@@ -12,7 +14,7 @@ public interface UserDataHandler {
      */
     public boolean usernameExists(String username);
 
-    public void registerUser(String username, String hashedPassword);
+    public void registerUser(String username, String hashedPassword) throws IOException;
 
 
 }
