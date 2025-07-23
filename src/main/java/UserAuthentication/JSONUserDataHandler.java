@@ -83,7 +83,23 @@ public class JSONUserDataHandler implements UserDataHandler {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 gson.toJson(data, writer);
             }
+
         }
+
+    }
+
+    @Override
+    public User getUser(String usernameInput) {
+        return getUsers().get(usernameInput);
+    }
+
+    public static void main(String[] args) throws IOException {
+        JSONUserDataHandler h = new JSONUserDataHandler(Constants.FILE_PATH);
+        System.out.println(h.usernameExists("bob"));
+        System.out.println(h.usernameExists("drake"));
+        h.registerUser("drake", PasswordHasher.hashPassword("funnybunny"));
+        System.out.println(h.usernameExists("drake"));
+
 
     }
 }

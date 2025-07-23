@@ -26,30 +26,8 @@ public interface UserAuthenticationView {
      */
     public void display();
 
-    /**Update the message label to let a user know the username
-     * is already taken
+    /**Update the message label
      *
      */
-    public void usernameAlreadyTakenError();
-
-    /**Update the message label to let a user know the username
-     * they entered is invalid
-     *
-     */
-    public void invalidUsernameError();
-
-    /**Update the message label to let a user know the password they
-     * entered is invalid
-     *
-     */
-    public void invalidPasswordError();
-
-
-    /**Update the message label to let a user know both the password they
-     * entered is invalid as well as the username.
-     *
-     */
-    public void invalidInputError();
-
-
+    public void updateMessageView(String message);
 }

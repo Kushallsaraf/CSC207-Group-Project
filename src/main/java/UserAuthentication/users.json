@@ -7,6 +7,18 @@
     {
       "username": "bob",
       "pwd": "$2a$10$anotherHashedPasswordHere987654321"
+    },
+    {
+      "username": "drake",
+      "pwd": "$2a$10$c25o8DIWimMG6gyAGiYri.cmrGUHfabJ8nY0iHQs7DGl8la9LCt5C"
+    },
+    {
+      "username": "gwyndolin",
+      "pwd": "$2a$10$RhXDvry9BSQkMKEq68oUb.vaUCfqoRsqT.1scXYuq7BmxOd5o4G3u"
+    },
+    {
+      "username": "jeff",
+      "pwd": "$2a$10$O9qztc6cy3HvPtTyKFNybuLDp3GMIy7IvzrA8.NPJdr8AxsvZUDha"
     }
   ]
 }

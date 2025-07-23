@@ -6,20 +6,19 @@ package UserAuthentication;
 public class InputValidator {
     public static String validateInput(String username, String password){
         if (!isUsernameValid(username) && !isPasswordValid(password)){
-            return "usernames should be 1-20 characters long with no spaces in between characters\n" +
-                    "passwords should be 10-20 characters long with no spaces in between";
+            return Constants.INVALID_INPUTS;
         } else if (!isUsernameValid(username)) {
-            return "usernames should be 1-20 characters long with no spaces in between characters";
+            return Constants.INVALID_USERNAME;
 
 
         }
         else if (!isPasswordValid(password)){
-            return "passwords should be 10-20 characters long with no spaces in between";
+            return Constants.INVALID_PASSWORD;
 
         }
 
         else{
-            return "successfully signed up";
+            return Constants.SUCCESSFUL_SIGNUP;
         }
 
     }

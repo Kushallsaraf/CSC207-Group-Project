@@ -1,17 +1,20 @@
 package UserAuthentication;
 
-/**Will hash passwords and check if user input matches hashed password
- *
- */
-public interface PasswordHasher {
+import org.mindrot.jbcrypt.BCrypt;
 
-    public void hashPassword(String password);
-
-    public boolean checkPassword(String password, String hashedPassword);
+public class PasswordHasher{
 
 
 
+    public static String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
 
 
+    }
 
+
+    public static boolean checkPassword(String password, String hashedPassword) {
+        return BCrypt.checkpw(password, hashedPassword);
+
+    }
 }

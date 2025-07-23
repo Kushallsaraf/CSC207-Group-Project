@@ -17,4 +17,5 @@ public interface UserDataHandler {
     public void registerUser(String username, String hashedPassword) throws IOException;
 
 
+    public User getUser(String usernameInput);
 }
