@@ -1,0 +1,12 @@
+{
+  "Users": [
+    {
+      "username": "alice",
+      "pwd": "$2a$10$abcdefg1234567890hashedPasswordHere"
+    },
+    {
+      "username": "bob",
+      "pwd": "$2a$10$anotherHashedPasswordHere987654321"
+    }
+  ]
+}

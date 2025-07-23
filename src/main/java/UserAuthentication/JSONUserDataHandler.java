@@ -26,20 +26,7 @@ public class JSONUserDataHandler implements UserDataHandler {
 
     }
 
-    public void addUser(String username, String password) throws IOException {
-        if (!hasUser(username)){
-            JsonObject newUser = new JsonObject();
-            newUser.addProperty("username", username);
-            newUser.addProperty("pwd", password);
-            JsonArray usersArray = data.getAsJsonArray("Users");
-            usersArray.add(newUser);
-            data.add("Users", usersArray);
-            try (Writer writer = new FileWriter(filePath)) {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                gson.toJson(data, writer);
-            }
-        }
-    }
+
 
     public boolean deleteUser(String username){
         if (hasUser(username)){
@@ -63,12 +50,6 @@ public class JSONUserDataHandler implements UserDataHandler {
             }
 
         } return false;}
-
-
-
-
-
-
 
 
     public Map<String, User> getUsers(){
