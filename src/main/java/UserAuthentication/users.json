@@ -19,6 +19,18 @@
     {
       "username": "jeff",
       "pwd": "$2a$10$O9qztc6cy3HvPtTyKFNybuLDp3GMIy7IvzrA8.NPJdr8AxsvZUDha"
+    },
+    {
+      "username": "HELIOS",
+      "pwd": "$2a$10$znTlNCPR4HF1sbZN6Jz3YuoEe/OiGqyZC110k6H1X1ZEQ4RMw6ah2"
+    },
+    {
+      "username": "Toronto1984",
+      "pwd": "$2a$10$qi9tlOZJjK4.vQEZlXlKGOHsi/kxLKv152laXWB.r3kuVLH5mjmzC"
+    },
+    {
+      "username": "johndoe",
+      "pwd": "$2a$10$qKI68VXLq4VTK20hcXe.OevABER0XSk6WNvAc0vVGejIpa4yxkuX6"
     }
   ]
 }

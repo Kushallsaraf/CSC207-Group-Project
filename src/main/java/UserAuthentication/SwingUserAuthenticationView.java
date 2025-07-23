@@ -81,8 +81,14 @@ public class SwingUserAuthenticationView implements UserAuthenticationView {
 
     }
 
+    private void resetFields(){
+        this.usernameField.setText("");
+        this.passwordField.setText("");
+    }
+
     @Override
     public void updateMessageView(String message) {
+        resetFields();
         messageLabel.setText(message);
 
         Timer timer = new Timer(5000, new ActionListener() {
@@ -96,7 +102,10 @@ public class SwingUserAuthenticationView implements UserAuthenticationView {
         timer.start();
     }
 
-
+    @Override
+    public void close() {
+        this.frame.setVisible(false);
+    }
 
 
 }

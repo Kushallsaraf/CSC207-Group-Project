@@ -23,4 +23,8 @@ public class LoginInteractor {
 
 
     }
+
+    public User getUser(String username){
+        return this.handler.getUser(username);
+    }
 }

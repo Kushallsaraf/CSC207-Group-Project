@@ -30,4 +30,10 @@ public interface UserAuthenticationView {
      *
      */
     public void updateMessageView(String message);
+
+
+    /**Closes the view
+     *
+     */
+    public void close();
 }

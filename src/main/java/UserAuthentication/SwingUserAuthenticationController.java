@@ -1,5 +1,7 @@
 package UserAuthentication;
 
+import com.csc207.group.MainApp;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -9,6 +11,7 @@ public class SwingUserAuthenticationController {
     private SwingUserAuthenticationView view;
     private SignupInteractor signupInteractor;
     private LoginInteractor loginInteractor;
+
 
     public SwingUserAuthenticationController(SwingUserAuthenticationView view, LoginInteractor loginInteractor,
                                              SignupInteractor signupInteractor){
@@ -22,16 +25,31 @@ public class SwingUserAuthenticationController {
 
     }
 
+
     private void connectLoginButton(){
         this.view.getLoginButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginInteractor.handleLogin(view.getUsernameInput(), view.getPasswordInput());
+                handleLogin();
+
             }
+
+
         });
 
 
 
+    }
+    private void handleLogin(){
+        String username = view.getUsernameInput();
+        if (loginInteractor.handleLogin(view.getUsernameInput(), view.getPasswordInput())){
+
+            this.view.close();
+            MainApp mainApp = new MainApp(loginInteractor.getUser(username));
+            mainApp.launch();
+
+
+        };
     }
 
     private void connectSignupButton(){
