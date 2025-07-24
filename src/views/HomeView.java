@@ -4,7 +4,6 @@ import components.GameCard;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -13,10 +12,8 @@ import javafx.scene.layout.VBox;
 public class HomeView {
 
     private VBox view;
-    // Field to store the handler
     private EventHandler<MouseEvent> cardClickHandler;
 
-    // Modified constructor to accept the handler
     public HomeView(EventHandler<MouseEvent> cardClickHandler) {
         this.cardClickHandler = cardClickHandler;
 
@@ -30,18 +27,14 @@ public class HomeView {
         Label subLabel = new Label("Start searching below to find new games.");
         subLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #ccc;");
 
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search for games...");
-        searchField.setMaxWidth(400);
-        searchField.setStyle("-fx-font-size: 14px; -fx-padding: 8;");
+        // SearchField has been removed from this view.
 
         Label rpgHeader = new Label("Here are some of the Best Recent RPGs");
         rpgHeader.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
 
-        // This method will now use the handler
         GridPane gameGrid = createGameGrid();
 
-        view.getChildren().addAll(welcomeLabel, subLabel, searchField, rpgHeader, gameGrid);
+        view.getChildren().addAll(welcomeLabel, subLabel, rpgHeader, gameGrid);
     }
 
     private GridPane createGameGrid() {
@@ -50,7 +43,6 @@ public class HomeView {
         gridPane.setVgap(20);
         gridPane.setAlignment(Pos.CENTER);
 
-        // Pass the cardClickHandler to each GameCard instance
         gridPane.add(new GameCard("Clair Obscur: Expedition 33", "Sandfall Interactive", "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSrUsfBxfPMYJN_au0TpmDpM-B7UKz0y-g4orgNCpcbjuddHyitTPb5BMPaYnbIxv6p_Tm0", cardClickHandler).getView(), 0, 0);
         gridPane.add(new GameCard("The Witcher III", "CD Projekt Red", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgOPtH8lO6v8aRGGNpdEpaJgtR5GEO1UlnPv33E4-9hyPDQHa7", cardClickHandler).getView(), 1, 0);
         gridPane.add(new GameCard("Skyrim", "Bethesda", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTlOmOTidO6ZLe8s4dhVR9f1G8-fKT5RpQrBr5rprMr9PrzLba9", cardClickHandler).getView(), 2, 0);
