@@ -51,12 +51,12 @@ public class HomeView {
         gridPane.setAlignment(Pos.CENTER);
 
         // Pass the cardClickHandler to each GameCard instance
-        gridPane.add(new GameCard("Clair Obscur: Expedition 33", "Sandfall Interactive", "https://placehold.co/150x200/2a2a2a/ffffff?text=Clair+Obscur", cardClickHandler).getView(), 0, 0);
-        gridPane.add(new GameCard("The Witcher III", "CD Projekt Red", "https://placehold.co/150x200/2a2a2a/ffffff?text=Witcher+III", cardClickHandler).getView(), 1, 0);
-        gridPane.add(new GameCard("Skyrim", "Bethesda", "https://placehold.co/150x200/2a2a2a/ffffff?text=Skyrim", cardClickHandler).getView(), 2, 0);
-        gridPane.add(new GameCard("CyberPunk 2077", "CD Projekt Red", "https://placehold.co/150x200/2a2a2a/ffffff?text=CyberPunk", cardClickHandler).getView(), 3, 0);
-        gridPane.add(new GameCard("Elden Ring", "FromSoftware", "https://placehold.co/150x200/2a2a2a/ffffff?text=Elden+Ring", cardClickHandler).getView(), 4, 0);
-        gridPane.add(new GameCard("Baldur's Gate 3", "Larian Studios", "https://placehold.co/150x200/2a2a2a/ffffff?text=Baldur's+Gate", cardClickHandler).getView(), 5, 0);
+        gridPane.add(new GameCard("Clair Obscur: Expedition 33", "Sandfall Interactive", "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSrUsfBxfPMYJN_au0TpmDpM-B7UKz0y-g4orgNCpcbjuddHyitTPb5BMPaYnbIxv6p_Tm0", cardClickHandler).getView(), 0, 0);
+        gridPane.add(new GameCard("The Witcher III", "CD Projekt Red", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgOPtH8lO6v8aRGGNpdEpaJgtR5GEO1UlnPv33E4-9hyPDQHa7", cardClickHandler).getView(), 1, 0);
+        gridPane.add(new GameCard("Skyrim", "Bethesda", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTlOmOTidO6ZLe8s4dhVR9f1G8-fKT5RpQrBr5rprMr9PrzLba9", cardClickHandler).getView(), 2, 0);
+        gridPane.add(new GameCard("CyberPunk 2077", "CD Projekt Red", "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSM0vv4cTvXHOMfYfmXSTPaasKG5HoqiDj4hlDizehQgBSBqzYX", cardClickHandler).getView(), 3, 0);
+        gridPane.add(new GameCard("Elden Ring", "FromSoftware", "https://m.media-amazon.com/images/M/MV5BZGQxMjYyOTUtNjYyMC00NzdmLWI4YmYtMDhiODU3Njc5ZDJkXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg", cardClickHandler).getView(), 4, 0);
+        gridPane.add(new GameCard("Baldur's Gate 3", "Larian Studios", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRmSeTi7xVt1FOA_NaILhSLFVvEI_VSCcGY1A6jPeI1H8ReA9E3Sq4kV18_qSAnSKkxs2lV", cardClickHandler).getView(), 5, 0);
 
         return gridPane;
     }
