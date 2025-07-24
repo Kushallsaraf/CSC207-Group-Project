@@ -13,7 +13,7 @@ public class LoginView {
 
     private VBox view;
     // Hardcoded user credentials for demonstration
-    private final String[][] users = {{"Yash", "Yash123"}, {"Taabish", "Taabish123"}};
+    private final String[][] users = {{"Yash", "Yash123"}, {"Taabish", "Taabish123"}, {"pass", "pass"}};
 
     public LoginView(Runnable onLoginSuccess) {
         // Main container
