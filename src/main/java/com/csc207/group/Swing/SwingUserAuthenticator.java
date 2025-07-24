@@ -1,6 +1,8 @@
-package com.csc207.group;
+package com.csc207.group.Swing;
 
 import UserAuthentication.*;
+import UserAuthentication.controllers.SwingUserAuthenticationController;
+import UserAuthentication.controllers.SwingUserAuthenticationView;
 
 import java.io.FileNotFoundException;
 

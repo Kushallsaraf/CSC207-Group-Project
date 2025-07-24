@@ -1,10 +1,7 @@
-package com.csc207.group;
+package com.csc207.group.Swing;
 
 
 import UserAuthentication.*;
-
-import java.io.FileNotFoundException;
-import java.lang.constant.Constable;
 
 /**
  * Just a placeholder mainapp.

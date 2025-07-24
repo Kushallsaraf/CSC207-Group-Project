@@ -31,6 +31,10 @@
     {
       "username": "johndoe",
       "pwd": "$2a$10$qKI68VXLq4VTK20hcXe.OevABER0XSk6WNvAc0vVGejIpa4yxkuX6"
+    },
+    {
+      "username": "tyrion",
+      "pwd": "$2a$10$akN22Zyfrq01V3sifo.SWOVDDUrI.lulifOLK4yIEXH9BOdl9gTkK"
     }
   ]
 }

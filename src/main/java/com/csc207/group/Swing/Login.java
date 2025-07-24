@@ -1,4 +1,4 @@
-package com.csc207.group;
+package com.csc207.group.Swing;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -41,6 +41,7 @@ public class Login extends Application {
         password.setStyle("-fx-background-color: transparent;");
 
         Button loginButton = new Button("Login");
+        Button signUpButton = new Button("Signup");
         loginButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 14));
         loginButton.setStyle("-fx-background-color: ROYALBLUE; -fx-border-color: Black; -fx-border-width: 2");
 

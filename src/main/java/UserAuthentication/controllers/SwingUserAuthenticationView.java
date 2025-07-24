@@ -1,4 +1,6 @@
-package UserAuthentication;
+package UserAuthentication.controllers;
+
+import UserAuthentication.UserAuthenticationView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

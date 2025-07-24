@@ -1,6 +1,8 @@
-package UserAuthentication;
+package UserAuthentication.controllers;
 
-import com.csc207.group.MainApp;
+import UserAuthentication.LoginInteractor;
+import UserAuthentication.SignupInteractor;
+import com.csc207.group.Swing.MainApp;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
