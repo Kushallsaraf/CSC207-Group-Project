@@ -1,8 +1,6 @@
-package com.csc207.group;
+package com.csc207.group.View;
 
-import UserAuthentication.UserAuthenticationView;
 import UserAuthentication.controllers.JavaFXUserAuthenticationView;
-import com.csc207.group.JavaFXUserAuthenticator;
 import javafx.stage.Stage;
 
 public class ViewManager {

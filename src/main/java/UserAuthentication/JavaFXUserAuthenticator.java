@@ -1,10 +1,8 @@
-package com.csc207.group;
+package UserAuthentication;
 
-import UserAuthentication.*;
 import UserAuthentication.controllers.JavaFXUserAuthenticationController;
 import UserAuthentication.controllers.JavaFXUserAuthenticationView;
-import UserAuthentication.controllers.SwingUserAuthenticationController;
-import UserAuthentication.controllers.SwingUserAuthenticationView;
+import com.csc207.group.View.ViewManager;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;

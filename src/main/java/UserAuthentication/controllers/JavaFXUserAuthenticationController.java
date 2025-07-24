@@ -2,7 +2,7 @@ package UserAuthentication.controllers;
 
 import UserAuthentication.LoginInteractor;
 import UserAuthentication.SignupInteractor;
-import com.csc207.group.ViewManager;
+import com.csc207.group.View.ViewManager;
 
 import java.io.IOException;
 

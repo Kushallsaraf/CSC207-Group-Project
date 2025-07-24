@@ -1,4 +1,4 @@
-package com.csc207.group;
+package com.csc207.group.View;
 
 
 import javafx.scene.Scene;

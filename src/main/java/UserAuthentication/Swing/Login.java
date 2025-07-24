@@ -1,4 +1,4 @@
-package com.csc207.group.Swing;
+package UserAuthentication.Swing;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

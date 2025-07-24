@@ -1,4 +1,4 @@
-package com.csc207.group.Swing;
+package UserAuthentication.Swing;
 
 /**Run the app from here
  *
