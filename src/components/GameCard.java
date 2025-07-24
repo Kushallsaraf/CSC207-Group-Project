@@ -7,16 +7,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle; // Import Rectangle for clipping
 
 public class GameCard {
     private VBox view;
 
-    // Modified constructor to accept a click handler
     public GameCard(String title, String developer, String imageUrl, EventHandler<MouseEvent> clickHandler) {
         view = new VBox(5);
         view.setAlignment(Pos.CENTER_LEFT);
-        // Added a hand cursor to indicate it's clickable
-        view.setStyle("-fx-padding: 10; -fx-background-color: #444; -fx-background-radius: 10; -fx-cursor: hand;");
+        // Added a hand cursor and updated the background radius
+        view.setStyle("-fx-padding: 10; -fx-background-color: #444; -fx-background-radius: 30; -fx-cursor: hand;");
 
         ImageView gameImageView = new ImageView();
         try {
@@ -27,6 +27,13 @@ public class GameCard {
             Image placeholder = new Image("https://placehold.co/150x200/ff0000/ffffff?text=Error", 150, 200, false, true);
             gameImageView.setImage(placeholder);
         }
+
+        // Set a clip to round the corners of the image
+        Rectangle clip = new Rectangle(150, 200);
+        clip.setArcWidth(30);
+        clip.setArcHeight(30);
+        gameImageView.setClip(clip);
+
         gameImageView.setFitWidth(150);
         gameImageView.setFitHeight(200);
 
