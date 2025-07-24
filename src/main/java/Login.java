@@ -1,16 +1,29 @@
+import User.User;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import UserAuthentication.*;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.io.FileNotFoundException;
+import java.util.Map;
+
 public class Login extends Application {
-    String[][] ARR = {{"Yash","Yash123"},{"Taabish","Taabish123"}};
-    public void start(Stage stage) {
+
+    public Login() throws FileNotFoundException {
+    }
+
+    public void start(Stage stage) throws FileNotFoundException {
+        UserDataHandler chk = new UserDataHandler("C:\\CSC207\\Grp Proj Exp\\src\\main\\java\\SignUp\\users.json");
+
         Label logo = new Label("Game Central");
         logo.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 30));
         logo.setStyle("-fx-background-color: transparent");
@@ -43,37 +56,52 @@ public class Login extends Application {
         loginButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 14));
         loginButton.setStyle("-fx-background-color: ROYALBLUE; -fx-border-color: Black; -fx-border-width: 2");
 
+        HBox SignUp = new HBox(15);
+        Label SignUpLabel = new Label("Don't have an account yet?");
+        SignUpLabel.setFont(Font.font("Bahnschrift", FontWeight.NORMAL, 12));
+        Button signUpButton = new Button("Sign Up");
+        signUpButton.setFont(Font.font("Bahnschrift", FontWeight.NORMAL, 12));
+        signUpButton.setStyle("-fx-background-color: ROYALBLUE; -fx-border-color: Black; -fx-border-width: 2");
+        SignUp.setAlignment(Pos.CENTER);
+        SignUp.getChildren().addAll(SignUpLabel, signUpButton);
+
         VBox top =  new VBox(25);
         top.setStyle("-fx-background-color: rgb(0,206,209);");
-        top.getChildren().addAll(logo, label, user, password, loginButton);
+        top.getChildren().addAll(logo, label, user, password, loginButton,  SignUp);
         top.setAlignment(Pos.TOP_CENTER);
         Scene scene = new Scene(top,640,360);
         stage.setScene(scene);
         stage.show();
 
         loginButton.setOnAction(e -> {
-            boolean result = authen(ARR,usernameField.getText(),passwordField.getText());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Login");
-            alert.setHeaderText(null);
+            boolean result = authen(chk.getUsers(),usernameField.getText(),passwordField.getText());
             if (result) {
 //                new GameCentral().start(stage);
-                alert.setContentText("*Shows GameCentral homepage, trust me");
             }
             else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Login");
+                alert.setHeaderText(null);
                 alert.setContentText("Login Failed");
+                alert.showAndWait();
             }
-            alert.showAndWait();
+
         });
+        signUpButton.setOnAction(e -> {
+            try {
+                new SignUp().start(stage);
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+
     }
 
-    public boolean authen(String[][] array, String username, String password) {
+    public boolean authen(Map<String, User> dct, String username, String password) {
         boolean result = false;
-        for (int i = 0; i < array.length; i++) {
-            if (username.equals(array[i][0]) && password.equals(array[i][1])) {
-                result = true;
-            }
-        }
+        String hscode = dct.get(username).getHashedPassword();
+        result = BCrypt.checkpw(password,hscode);
         return result;
     }
 
