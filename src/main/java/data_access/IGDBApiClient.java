@@ -27,7 +27,7 @@ public class IGDBApiClient {
     }
 
     public JsonNode getGameDetailsById(int id) {
-        String body = "fields name, genres, involved_companies; where id = " + id + ";";
+        String body = "fields *; where id = " + id + ";";
 
         HttpResponse<JsonNode> response = Unirest.post(BASE_URL + "games")
                 .header("Client-ID", CLIENT_ID)
@@ -39,7 +39,7 @@ public class IGDBApiClient {
         if (response.getStatus() != 200) {
             throw new RuntimeException("Details fetch failed with status: " + response.getStatus());
         }
-
+        System.out.println(response.getBody());
         return response.getBody();
     }
 
