@@ -87,7 +87,7 @@ public class GameCentral extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button libraryButton = new Button("Saad's Library");
+        Button libraryButton = new Button("Your Library");
         libraryButton.setStyle("-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 12; -fx-background-radius: 5;");
 
         homeButton.setOnAction(e -> showHomeView());
