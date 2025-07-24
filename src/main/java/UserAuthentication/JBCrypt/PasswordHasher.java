@@ -1,4 +1,4 @@
-package UserAuthentication;
+package UserAuthentication.JBCrypt;
 
 import org.mindrot.jbcrypt.BCrypt;
 

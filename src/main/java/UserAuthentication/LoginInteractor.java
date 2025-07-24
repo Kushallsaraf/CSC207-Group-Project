@@ -1,5 +1,7 @@
 package UserAuthentication;
 
+import UserAuthentication.JBCrypt.PasswordHasher;
+
 public class LoginInteractor {
     private UserDataHandler handler;
     private LoginPresenter presenter;

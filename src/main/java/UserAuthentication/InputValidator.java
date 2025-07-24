@@ -31,7 +31,7 @@ public class InputValidator {
 
     private static boolean isPasswordValid(String password){
         return password != null &&
-                password.length() >= 10 &&
+                password.length() >= 1 &&
                 password.length() <= 20 &&
                 !password.contains(" ");
     }

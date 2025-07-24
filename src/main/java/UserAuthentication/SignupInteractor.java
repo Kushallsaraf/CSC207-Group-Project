@@ -1,5 +1,7 @@
 package UserAuthentication;
 
+import UserAuthentication.JBCrypt.PasswordHasher;
+
 import java.io.IOException;
 
 public class SignupInteractor {

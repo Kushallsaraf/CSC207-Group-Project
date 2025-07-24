@@ -1,4 +1,4 @@
-package UserAuthentication;
+package com.csc207.group.View;
 
 /**
  * Has methods to provide the controller with all relevant

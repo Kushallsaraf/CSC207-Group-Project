@@ -1,5 +1,7 @@
 package UserAuthentication;
 
+import com.csc207.group.View.UserAuthenticationView;
+
 public class LoginPresenter {
     private UserAuthenticationView view;
 

@@ -1,8 +1,7 @@
 package UserAuthentication.Swing;
 
 import UserAuthentication.*;
-import UserAuthentication.controllers.SwingUserAuthenticationController;
-import UserAuthentication.controllers.SwingUserAuthenticationView;
+import UserAuthentication.JSON.JSONUserDataHandler;
 
 import java.io.FileNotFoundException;
 

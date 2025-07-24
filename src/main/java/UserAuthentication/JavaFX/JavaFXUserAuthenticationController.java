@@ -1,7 +1,8 @@
-package UserAuthentication.controllers;
+package UserAuthentication.JavaFX;
 
 import UserAuthentication.LoginInteractor;
 import UserAuthentication.SignupInteractor;
+import com.csc207.group.View.JavaFXUserAuthenticationView;
 import com.csc207.group.View.ViewManager;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class JavaFXUserAuthenticationController {
         String password = this.view.getPasswordInput();
         if (this.loginInteractor.handleLogin(username, password)){
             this.view.close();
-            this.viewManager.showHomepage();
+            this.viewManager.showHomepage(this.loginInteractor.getUser(username));
         }
     }
 

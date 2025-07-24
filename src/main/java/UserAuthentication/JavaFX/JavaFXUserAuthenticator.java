@@ -1,7 +1,8 @@
-package UserAuthentication;
+package UserAuthentication.JavaFX;
 
-import UserAuthentication.controllers.JavaFXUserAuthenticationController;
-import UserAuthentication.controllers.JavaFXUserAuthenticationView;
+import UserAuthentication.*;
+import UserAuthentication.JSON.JSONUserDataHandler;
+import com.csc207.group.View.JavaFXUserAuthenticationView;
 import com.csc207.group.View.ViewManager;
 import javafx.stage.Stage;
 
@@ -42,6 +43,6 @@ public class JavaFXUserAuthenticator implements Runnable{
 
     @Override
     public void run() {
-        viewManager.showLoginView();
+        viewManager.showUserAuthenticationView();
     }
 }

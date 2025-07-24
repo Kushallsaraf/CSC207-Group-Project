@@ -1,8 +1,8 @@
-package UserAuthentication.controllers;
+package com.csc207.group.View;
 
-import UserAuthentication.UserAuthenticationView;
 import javafx.animation.PauseTransition;
-import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -90,7 +90,7 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
         return this.signupButton;
     }
 
-    // ---- Interface methods ----
+
 
     @Override
     public String getUsernameInput() {
@@ -114,8 +114,15 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
         messageLabel.setText(message);
 
         PauseTransition pause = new PauseTransition(Duration.seconds(5));
-        pause.setOnFinished(e -> messageLabel.setText(""));
+        pause.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                messageLabel.setText("");
+            }
+        });
         pause.play();
+
+
     }
 
     @Override
