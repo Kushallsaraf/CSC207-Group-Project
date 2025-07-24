@@ -16,11 +16,11 @@ public class GameService {
     public int getGameIdByName(String name) {
         JsonNode json = apiClient.searchGamesByName(name);
         JSONArray array = json.getArray();
-        System.out.println(json);
+        System.out.println(array);
 
         if (array.isEmpty()) return -1;
 
-        JSONObject firstMatch = array.getJSONObject(0);
+        JSONObject firstMatch = array.getJSONObject(1);
         return firstMatch.getInt("id");
     }
 
@@ -41,14 +41,14 @@ public class GameService {
             }
         }
 
-        String developer = "Developer ID(s): ";
+        StringBuilder developer = new StringBuilder("Developer ID(s): ");
         if (gameJson.has("involved_companies")) {
             JSONArray devArray = gameJson.getJSONArray("involved_companies");
             for (int i = 0; i < devArray.length(); i++) {
-                developer += devArray.getInt(i) + " ";
+                developer.append(devArray.getInt(i)).append(" ");
             }
         }
 
-        return new Game(name, genres, developer);
+        return new Game(name, genres, developer.toString());
     }
 }
