@@ -1,5 +1,6 @@
 package com.csc207.group.View;
 
+import UserAuthentication.Constants;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +13,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class JavaFXUserAuthenticationView implements UserAuthenticationView {
 
@@ -112,6 +116,14 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
     @Override
     public void updateMessageView(String message) {
         messageLabel.setText(message);
+        String[] usernameAndPasswordClearanceConditions = {Constants.INVALID_USERNAME, Constants.INVALID_INPUTS,
+                Constants.SUCCESSFUL_SIGNUP, Constants.USERNAME_TAKEN, Constants.FAILED_LOGIN_USERNAME,
+                Constants.SUCCESSFUL_LOGIN};
+        List<String> usernameAndPasswordClearanceConditionsList = Arrays.stream(usernameAndPasswordClearanceConditions)
+                .toList();
+        if (usernameAndPasswordClearanceConditionsList.contains(message)){
+            this.clearUsernameAndPasswordFields();
+        }else{this.clearPasswordField();}
 
         PauseTransition pause = new PauseTransition(Duration.seconds(5));
         pause.setOnFinished(new EventHandler<ActionEvent>() {
@@ -130,6 +142,18 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
         if (primaryStage != null) {
             primaryStage.close();
         }
+    }
+
+    @Override
+    public void clearUsernameAndPasswordFields() {
+        this.usernameField.clear();
+        this.passwordField.clear();
+    }
+
+    @Override
+    public void clearPasswordField() {
+        this.passwordField.clear();
+
     }
 
 }

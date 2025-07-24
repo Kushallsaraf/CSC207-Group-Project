@@ -109,5 +109,17 @@ public class SwingUserAuthenticationView implements UserAuthenticationView {
         this.frame.setVisible(false);
     }
 
+    @Override
+    public void clearUsernameAndPasswordFields() {
+        this.usernameField.setText("");
+        this.passwordField.setText("");
+    }
+
+    @Override
+    public void clearPasswordField() {
+        this.passwordField.setText("");
+
+    }
+
 
 }

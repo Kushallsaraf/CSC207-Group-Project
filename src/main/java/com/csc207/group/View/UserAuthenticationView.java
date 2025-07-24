@@ -36,4 +36,9 @@ public interface UserAuthenticationView {
      *
      */
     public void close();
+
+
+    public void clearUsernameAndPasswordFields();
+
+    public void clearPasswordField();
 }

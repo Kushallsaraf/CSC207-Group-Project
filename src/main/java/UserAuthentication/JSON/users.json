@@ -43,6 +43,10 @@
     {
       "username": "LuisSuarez",
       "pwd": "$2a$10$U8zSPqZgq7/XHlPd4jI5DuTCwYsCwPF99OHspjKCf8/Vs9VbzclFy"
+    },
+    {
+      "username": "Luis_Suarez",
+      "pwd": "$2a$10$j8J3sIR.Rb57fFtk9DmVM.U7gjmBkJEM2eACcvyK6GuiNDiz2qp2W"
     }
   ]
 }

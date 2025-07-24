@@ -10,7 +10,7 @@ public class Constants {
     public static final String INVALID_INPUTS = "usernames should be 1-20 characters long with no spaces in between " +
             "characters\n" + "passwords should be 1-20 characters long with no spaces in between";
 
-    public static final String SUCCESSFUL_SIGNUP = "successfully signed up";
+    public static final String SUCCESSFUL_SIGNUP = "Successfully signed up. Please renter username and password";
 
     public static final String USERNAME_TAKEN = "this username is already taken";
 
