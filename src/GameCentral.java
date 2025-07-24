@@ -10,12 +10,14 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import views.GameDetailView;
 import views.HomeView;
+import views.LoginView;
+import views.MyListsView;
 import views.NewsView;
-import views.MyListsView; // Import the new view
 
 public class GameCentral extends Application {
 
     private BorderPane mainLayout;
+    private Stage primaryStage; // Store the primary stage
 
     public static void main(String[] args) {
         launch(args);
@@ -23,18 +25,29 @@ public class GameCentral extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage; // Keep a reference to the stage
         primaryStage.setTitle("Game Central");
-        mainLayout = new BorderPane();
 
+        // --- Show Login View First ---
+        // This method will be called upon successful login.
+        LoginView loginView = new LoginView(this::showMainApplication);
+        Scene loginScene = new Scene(loginView.getView(), 1200, 800);
+        primaryStage.setScene(loginScene);
+        primaryStage.show();
+    }
+
+    /**
+     * This method is called by the LoginView upon a successful login.
+     * It builds the main application UI and sets it as the current scene.
+     */
+    private void showMainApplication() {
+        mainLayout = new BorderPane();
         HBox topNav = createTopNav();
         mainLayout.setTop(topNav);
+        showHomeView(); // Show the home view by default
 
-        // Set initial view to Home
-        showHomeView();
-
-        Scene scene = new Scene(mainLayout, 1200, 800);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        Scene mainScene = new Scene(mainLayout, 1200, 800);
+        primaryStage.setScene(mainScene);
     }
 
     // --- Navigation Methods ---
@@ -54,12 +67,10 @@ public class GameCentral extends Application {
         mainLayout.setCenter(gameDetailView.getView());
     }
 
-    // Method to show the new My Lists view
     private void showMyListsView() {
         MyListsView myListsView = new MyListsView();
         mainLayout.setCenter(myListsView.getView());
     }
-
 
     private HBox createTopNav() {
         HBox topNav = new HBox(15);
@@ -69,24 +80,20 @@ public class GameCentral extends Application {
         Button newsButton = new Button("News");
         Button myListsButton = new Button("My Lists");
 
-        // Search bar is now part of the top navigation
         TextField searchField = new TextField();
         searchField.setPromptText("Search...");
         searchField.setStyle("-fx-font-size: 14px; -fx-pref-width: 350px;");
 
-        // Spacer pushes elements to the right
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // Library button styled to match the screenshot
-        Button libraryButton = new Button("Your Library");
+        Button libraryButton = new Button("Saad's Library");
         libraryButton.setStyle("-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 12; -fx-background-radius: 5;");
 
         homeButton.setOnAction(e -> showHomeView());
         newsButton.setOnAction(e -> showNewsView());
-        myListsButton.setOnAction(e -> showMyListsView()); // Action for the new view
+        myListsButton.setOnAction(e -> showMyListsView());
 
-        // Style for text-like buttons on the left
         String buttonStyle = "-fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-size: 16px;";
         homeButton.setStyle(buttonStyle);
         newsButton.setStyle(buttonStyle);
