@@ -36,7 +36,7 @@ public class GameService {
         if (gameJson.has("genres")) {
             JSONArray genreArray = gameJson.getJSONArray("genres");
             for (int i = 0; i < genreArray.length(); i++) {
-                genres.add("Genre ID: " + genreArray.getInt(i));
+                genres.add(String.valueOf(genreArray.getInt(i)));
             }
         }
 

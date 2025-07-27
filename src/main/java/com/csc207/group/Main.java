@@ -2,11 +2,13 @@ package com.csc207.group;
 
 import com.csc207.group.model.Game;
 import com.csc207.group.service.GameService;
-import com.csc207.group.data_access.RAWGApiClient;
+import com.csc207.group.service.GenreService;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        String gameName = "witcher 3";
+        String gameName = "gta 5";
         GameService service = new GameService();
         int id = service.getGameIdByName(gameName);
 
@@ -14,7 +16,18 @@ public class Main {
         System.out.println(game);
         System.out.println("/n/n");
 
-        String response = RAWGApiClient.getGamesByGenre("action");
-        System.out.println(response);
+//        GenreService genreService = new GenreService();
+//        String genre = "action";
+//        List<Game> games = genreService.getGamesByGenre(genre);
+//        for (Game g : games) {
+//            System.out.println(g);
+//        }
+        List<String> genreids = game.getGenres();
+        for (String genreid : genreids) {
+            System.out.println(new GenreService().getGenresById(Integer.parseInt(genreid)));
+        }
+
+
+
     }
 }

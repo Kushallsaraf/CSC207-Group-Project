@@ -1,8 +1,13 @@
 package com.csc207.group.service;
 
+import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.data_access.RAWGApiClient;
 import com.csc207.group.model.Game;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import kong.unirest.JsonNode;
+import kong.unirest.json.JSONArray;
+import kong.unirest.json.JSONObject;
 
 
 import java.util.ArrayList;
@@ -28,6 +33,14 @@ public class GenreService {
             }
         }
         return games;
+    }
+
+    public String getGenresById(int id) {
+        final IGDBApiClient apiClient = new IGDBApiClient();
+        JsonNode response = apiClient.getGenresById(id);
+        JSONArray array = response.getArray();
+        JSONObject genreObject = array.getJSONObject(0);
+        return genreObject.get("name").toString();
     }
 }
 

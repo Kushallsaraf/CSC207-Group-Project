@@ -42,6 +42,21 @@ public class IGDBApiClient {
         return response.getBody();
     }
 
+    public JsonNode getGenresById(int id) {
+        String body ="fields *; where id = " + id + ";";
+
+        HttpResponse<JsonNode> response = Unirest.post("https://api.igdb.com/v4/genres")
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Accept", "application/json")
+                .body(body)
+                .asJson();
+        if (response.getStatus() != 200) {
+            throw new RuntimeException("Genres fetch failed with status: " + response.getStatus());
+        }
+        return response.getBody();
+    }
+
     public void shutdown() {
         Unirest.shutDown();
     }
