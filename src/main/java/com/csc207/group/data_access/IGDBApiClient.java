@@ -39,7 +39,6 @@ public class IGDBApiClient {
         if (response.getStatus() != 200) {
             throw new RuntimeException("Details fetch failed with status: " + response.getStatus());
         }
-        System.out.println(response.getBody());
         return response.getBody();
     }
 

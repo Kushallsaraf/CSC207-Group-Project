@@ -16,7 +16,6 @@ public class GameService {
     public int getGameIdByName(String name) {
         JsonNode json = apiClient.searchGamesByName(name);
         JSONArray array = json.getArray();
-        System.out.println(array);
 
         if (array.isEmpty()) return -1;
 
