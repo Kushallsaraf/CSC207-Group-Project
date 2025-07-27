@@ -1,4 +1,4 @@
-package data_access;
+package com.csc207.group.data_access;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -13,7 +13,7 @@ public class IGDBApiClient {
     public JsonNode searchGamesByName(String gameName) {
         String body = "search \"" + gameName + "\"; fields id; limit 5;";
 
-        HttpResponse<JsonNode> response = Unirest.post(BASE_URL + "games")
+        HttpResponse <JsonNode> response = Unirest.post(BASE_URL + "games")
                 .header("Client-ID", CLIENT_ID)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN)
                 .header("Accept", "application/json")

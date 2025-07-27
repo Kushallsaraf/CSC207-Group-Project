@@ -1,7 +1,7 @@
 package com.csc207.group.service;
 
 import com.csc207.group.model.Game;
-import data_access.IGDBApiClient;
+import com.csc207.group.data_access.IGDBApiClient;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
