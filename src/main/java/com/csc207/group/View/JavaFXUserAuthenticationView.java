@@ -1,5 +1,9 @@
 package com.csc207.group.View;
 
+import UserAuthentication.Constants;
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,6 +13,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A JavaFX-based login view implementing the UserAuthenticationView interface.
@@ -88,6 +96,28 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
     @Override
     public void updateMessageView(String message) {
         messageLabel.setText(message);
+        if (Constants.SUCCESSFUL_LOGIN.equals(message)) {
+            messageLabel.setStyle("-fx-text-fill: #00ff00;"); // Green
+        } else {
+            messageLabel.setStyle("-fx-text-fill: red;"); // Red (default)
+        }
+        String[] usernameAndPasswordClearanceConditions = {Constants.INVALID_USERNAME, Constants.INVALID_INPUTS,
+                Constants.SUCCESSFUL_SIGNUP, Constants.USERNAME_TAKEN, Constants.FAILED_LOGIN_USERNAME,
+                Constants.SUCCESSFUL_LOGIN};
+        List<String> usernameAndPasswordClearanceConditionsList = Arrays.stream(usernameAndPasswordClearanceConditions)
+                .toList();
+        if (usernameAndPasswordClearanceConditionsList.contains(message)){
+            this.clearUsernameAndPasswordFields();
+        }else{this.clearPasswordField();}
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(5));
+        pause.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                messageLabel.setText("");
+            }
+        });
+        pause.play();
     }
 
     @Override

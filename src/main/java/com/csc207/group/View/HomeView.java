@@ -13,6 +13,7 @@ public class HomeView {
 
     private VBox view;
     private EventHandler<MouseEvent> cardClickHandler;
+    private Label userLabel;  // New label to show the username
 
     public HomeView(EventHandler<MouseEvent> cardClickHandler) {
         this.cardClickHandler = cardClickHandler;
@@ -27,14 +28,15 @@ public class HomeView {
         Label subLabel = new Label("Start searching below to find new games.");
         subLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #ccc;");
 
-        // SearchField has been removed from this view.
+        userLabel = new Label();  // Initially empty
+        userLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #00ffff;");
 
         Label rpgHeader = new Label("Here are some of the Best Recent RPGs");
         rpgHeader.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         GridPane gameGrid = createGameGrid();
 
-        view.getChildren().addAll(welcomeLabel, subLabel, rpgHeader, gameGrid);
+        view.getChildren().addAll(welcomeLabel, userLabel, subLabel, rpgHeader, gameGrid);
     }
 
     private GridPane createGameGrid() {
@@ -51,6 +53,10 @@ public class HomeView {
         gridPane.add(new GameCard("Baldur's Gate 3", "Larian Studios", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRmSeTi7xVt1FOA_NaILhSLFVvEI_VSCcGY1A6jPeI1H8ReA9E3Sq4kV18_qSAnSKkxs2lV", cardClickHandler).getView(), 5, 0);
 
         return gridPane;
+    }
+
+    public void setUsername(String username) {
+        userLabel.setText("Logged in as: " + username);
     }
 
     public Pane getView() {

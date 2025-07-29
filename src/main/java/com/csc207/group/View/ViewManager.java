@@ -36,6 +36,7 @@ public class ViewManager {
         };
 
         HomeView homeView = new HomeView(cardClickHandler);
+        homeView.setUsername(user.getUsername());
         Scene scene = new Scene(homeView.getView(), 800, 600); // Adjust size as needed
         primaryStage.setScene(scene);
         primaryStage.setTitle("Game Central - Home");

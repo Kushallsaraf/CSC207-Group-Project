@@ -4,6 +4,10 @@ import UserAuthentication.LoginInteractor;
 import UserAuthentication.SignupInteractor;
 import com.csc207.group.View.JavaFXUserAuthenticationView;
 import com.csc207.group.View.ViewManager;
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -38,8 +42,17 @@ public class JavaFXUserAuthenticationController {
         String username = this.view.getUsernameInput();
         String password = this.view.getPasswordInput();
         if (this.loginInteractor.handleLogin(username, password)){
-            this.view.close();
-            this.viewManager.showHomepage(this.loginInteractor.getUser(username));
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(1));
+            delay.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    view.close();
+                    viewManager.showHomepage(loginInteractor.getUser(username)); // Replace with your actual navigation method
+                }
+            });
+            delay.play();
+
         }
     }
 
