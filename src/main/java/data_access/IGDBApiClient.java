@@ -28,10 +28,10 @@ public class IGDBApiClient {
 
     }
     public JsonNode searchGamesByName(String gameName) {
-        gameName = gameName.toLowerCase().replace(" ", "");
-
-         if (this.cache.hasRequest(GAMES_BY_NAME_REQUEST, gameName)){
-             //return (JsonNode)this.cache.getResponse(GAMES_BY_NAME_REQUEST, gameName, JSON_NODE_UNIREST);
+        // checks if cache has the request stored already
+        if (this.cache.hasRequest(GAMES_BY_NAME_REQUEST, gameName)){
+            System.out.println("request already in cache, returning value");
+             return new JsonNode(this.cache.getResponse(GAMES_BY_NAME_REQUEST, gameName, JSON_NODE_UNIREST));
          }
 
 
@@ -47,8 +47,8 @@ public class IGDBApiClient {
         if (response.getStatus() != 200) {
             throw new RuntimeException("Search failed with status: " + response.getStatus());
         }
-        System.out.println("searchGamesByName has been called. Request not in cache; calling API.");
-        return cache.cacheResponse(GAMES_BY_NAME_REQUEST, gameName.toLowerCase().replace(" ", ""),
+        System.out.println("request not cached, calling API");
+        return cache.cacheResponse(GAMES_BY_NAME_REQUEST, gameName,
                 response.getBody());
     }
 
@@ -75,13 +75,7 @@ public class IGDBApiClient {
 
 
 
-    public static void main(String[] args) {
-        IGDBApiClient client = new IGDBApiClient(new IGDBRequestCache(FilePaths.TAABISH_PATH));
-        System.out.println(client.searchGamesByName("elden ring").getArray());
 
-
-
-    }
 
 
 

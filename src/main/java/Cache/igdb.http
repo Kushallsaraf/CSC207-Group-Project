@@ -1,7 +1,0 @@
-### Get details for game by ID
-POST https://api.igdb.com/v4/games
-Client-ID: 8iht4bl3vlgdgy2j6jtp9l63ky4ee1
-Authorization: Bearer r7scsy47par3y00mi8wha41bayl6fm
-Accept: application/json
-
-fields *; where id = 75;
