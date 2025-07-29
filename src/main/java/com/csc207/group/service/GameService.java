@@ -1,5 +1,6 @@
 package com.csc207.group.service;
 
+import Cache.IGDBRequestCache;
 import com.csc207.group.model.Game;
 import data_access.IGDBApiClient;
 import kong.unirest.JsonNode;
@@ -11,7 +12,8 @@ import java.util.List;
 
 public class GameService {
 
-    private final IGDBApiClient apiClient = new IGDBApiClient();
+    private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBRequestCache(
+            "src/main/java/Cache/igdb_requests_cache.json"));
 
     public int getGameIdByName(String name) {
         JsonNode json = apiClient.searchGamesByName(name);
@@ -25,6 +27,7 @@ public class GameService {
     }
 
     public Game getGameById(int id) {
+
         JsonNode json = apiClient.getGameDetailsById(id);
         JSONArray array = json.getArray();
 
@@ -50,5 +53,10 @@ public class GameService {
         }
 
         return new Game(name, genres, developer.toString());
+    }
+
+    public static void main(String[] args) {
+        GameService g = new GameService();
+        g.getGameIdByName("Mass Effect");
     }
 }
