@@ -49,7 +49,7 @@ public class SwingUserAuthenticationView implements UserAuthenticationView {
         mainPanel.add(messagePanel);
         mainPanel.add(buttonPanel);
 
-        frame = new JFrame("GameCentral Login");
+        frame = new JFrame("com.csc207.group.MainApp.GameCentral Login");
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

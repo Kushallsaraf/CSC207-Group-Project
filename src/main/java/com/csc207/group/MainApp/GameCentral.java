@@ -1,3 +1,6 @@
+import UserAuthentication.JavaFX.JavaFXUserAuthenticator;
+import com.csc207.group.View.JavaFXUserAuthenticationView;
+import com.csc207.group.View.ViewManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,7 +12,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import views.GameDetailView;
 import com.csc207.group.View.HomeView;
-import views.LoginView;
+import com.csc207.group.View.LoginView;
 import views.MyListsView;
 import views.NewsView;
 
@@ -27,12 +30,10 @@ public class GameCentral extends Application {
         this.primaryStage = primaryStage; // Keep a reference to the stage
         primaryStage.setTitle("Game Central");
 
-        // --- Show Login View First ---
-        // This method will be called upon successful login.
-        LoginView loginView = new LoginView(this::showMainApplication);
-        Scene loginScene = new Scene(loginView.getView(), 1200, 800);
-        primaryStage.setScene(loginScene);
-        primaryStage.show();
+
+        ViewManager viewManager = new ViewManager(primaryStage);
+        JavaFXUserAuthenticator authenticator = new JavaFXUserAuthenticator(primaryStage, viewManager);
+        authenticator.run();
     }
 
     /**

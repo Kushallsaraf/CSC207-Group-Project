@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 
-public class JavaFXUserAuthenticator implements Runnable{
+public class JavaFXUserAuthenticator{
 
     private JavaFXUserAuthenticationView view;
     private JavaFXUserAuthenticationController controller;
@@ -20,9 +20,10 @@ public class JavaFXUserAuthenticator implements Runnable{
     private ViewManager viewManager;
 
 
-    public JavaFXUserAuthenticator(Stage stage){
+    public JavaFXUserAuthenticator(Stage stage, ViewManager viewManager){
         view = new JavaFXUserAuthenticationView(stage);
-        viewManager = new ViewManager(stage, view);
+        this.viewManager = viewManager;
+        viewManager.setUserAuthenticationView(view);
 
 
         dataHandler = null;
@@ -41,8 +42,9 @@ public class JavaFXUserAuthenticator implements Runnable{
 
 
 
-    @Override
+
     public void run() {
         viewManager.showUserAuthenticationView();
     }
+
 }

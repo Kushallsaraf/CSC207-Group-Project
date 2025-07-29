@@ -59,8 +59,8 @@ public class Login extends Application {
             alert.setTitle("Login");
             alert.setHeaderText(null);
             if (result) {
-//                new GameCentral().start(stage);
-                alert.setContentText("*Shows GameCentral homepage, trust me");
+//                new com.csc207.group.MainApp.GameCentral().start(stage);
+                alert.setContentText("*Shows com.csc207.group.MainApp.GameCentral homepage, trust me");
             }
             else {
                 alert.setContentText("Login Failed");
