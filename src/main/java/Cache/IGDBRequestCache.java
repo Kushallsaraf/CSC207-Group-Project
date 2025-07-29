@@ -81,6 +81,12 @@ public class IGDBRequestCache {
      * can create the desired object from the string
      */
     public String getResponse(String requestType, String requestKey, String responseType) {
+        // TODO: If your api client function returns a new type of object, then you'll have to
+        //  add another case to this switch statement. For example if your function returns an integer,
+        //  then in this method you'll have to add a case IGDBApiClient.INTEGER and return a string
+        //  representation which importantly you'll have to convert back to an integer in the api client method
+        //
+
 
         if (!data.has(requestType)) return null;
         JsonObject section = data.getAsJsonObject(requestType);
