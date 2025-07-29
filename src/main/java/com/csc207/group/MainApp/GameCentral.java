@@ -1,5 +1,6 @@
+package com.csc207.group.MainApp;
+
 import UserAuthentication.JavaFX.JavaFXUserAuthenticator;
-import com.csc207.group.View.JavaFXUserAuthenticationView;
 import com.csc207.group.View.ViewManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,7 +13,6 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import views.GameDetailView;
 import com.csc207.group.View.HomeView;
-import com.csc207.group.View.LoginView;
 import views.MyListsView;
 import views.NewsView;
 

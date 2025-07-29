@@ -1,100 +1,72 @@
 package com.csc207.group.View;
 
-import UserAuthentication.Constants;
-import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.util.Arrays;
-import java.util.List;
-
+/**
+ * A JavaFX-based login view implementing the UserAuthenticationView interface.
+ * Provides login and sign-up functionality.
+ */
 public class JavaFXUserAuthenticationView implements UserAuthenticationView {
 
-    private TextField usernameField;
-    private PasswordField passwordField;
-    private Label messageLabel;
-    private Stage primaryStage;
-    private Button signupButton;
-    private Button loginButton;
+    private final VBox view;
+    private final TextField usernameField;
+    private final PasswordField passwordField;
+    private final Label messageLabel;
+    private final Button loginButton;
+    private final Button signUpButton;
 
-    public JavaFXUserAuthenticationView(Stage stage){
-        this.construct(stage);
-    }
-    private void construct(Stage stage) {
-        this.primaryStage = stage;
+    private final Stage stage;
 
-        Label logo = new Label("Game Central");
-        logo.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 30));
-        logo.setStyle("-fx-background-color: transparent");
+    public JavaFXUserAuthenticationView(Stage stage) {
+        this.stage = stage;
 
-        Label label = new Label("Login");
-        label.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 20));
-        label.setStyle("-fx-background-color: transparent;");
+        view = new VBox(15);
+        view.setStyle("-fx-background-color: #2c3e50; -fx-padding: 40;");
+        view.setAlignment(Pos.CENTER);
 
-        HBox user = new HBox(15);
-        Label username = new Label("Username");
-        username.setFont(Font.font("Bahnschrift", FontWeight.NORMAL, 12));
+        // --- Logo and Title ---
+        Text logo = new Text("Game Central");
+        logo.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 36));
+        logo.setFill(Color.WHITE);
+
+        Label prompt = new Label("Sign in to continue");
+        prompt.setFont(Font.font("Bahnschrift", 20));
+        prompt.setTextFill(Color.LIGHTGRAY);
+
+        // --- Input Fields ---
         usernameField = new TextField();
         usernameField.setPromptText("Username");
-        usernameField.setStyle("-fx-border-color: Black; -fx-border-width: 2");
-        user.getChildren().addAll(username, usernameField);
-        user.setAlignment(Pos.CENTER);
-        user.setStyle("-fx-background-color: transparent;");
+        usernameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 300px; -fx-padding: 10; -fx-background-color: #34495e; -fx-text-fill: white; -fx-border-color: #2c3e50;");
 
-        HBox password = new HBox(15);
-        Label passwordLabel = new Label("Password");
-        passwordLabel.setFont(Font.font("Bahnschrift", FontWeight.NORMAL, 12));
         passwordField = new PasswordField();
         passwordField.setPromptText("Password");
-        passwordField.setStyle("-fx-border-color: Black; -fx-border-width: 2");
-        password.getChildren().addAll(passwordLabel, passwordField);
-        password.setAlignment(Pos.CENTER);
-        password.setStyle("-fx-background-color: transparent;");
+        passwordField.setStyle("-fx-font-size: 14px; -fx-pref-width: 300px; -fx-padding: 10; -fx-background-color: #34495e; -fx-text-fill: white; -fx-border-color: #2c3e50;");
 
+        // --- Buttons ---
         loginButton = new Button("Login");
-        loginButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 14));
-        loginButton.setStyle("-fx-background-color: ROYALBLUE; -fx-border-color: Black; -fx-border-width: 2");
+        loginButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 16));
+        loginButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 300px; -fx-padding: 10;");
 
-        signupButton = new Button("Sign Up");
-        signupButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 14));
-        signupButton.setStyle("-fx-background-color: LIGHTGRAY; -fx-border-color: Black; -fx-border-width: 2");
+        signUpButton = new Button("Sign Up");
+        signUpButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 16));
+        signUpButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-pref-width: 300px; -fx-padding: 10;");
 
-        HBox buttonBox = new HBox(20);
-        buttonBox.getChildren().addAll(loginButton, signupButton);
-        buttonBox.setAlignment(Pos.CENTER);
-
+        // --- Message Label ---
         messageLabel = new Label();
-        messageLabel.setFont(Font.font("Bahnschrift", FontWeight.NORMAL, 12));
-        messageLabel.setStyle("-fx-text-fill: red;");
+        messageLabel.setTextFill(Color.RED);
+        messageLabel.setFont(Font.font("Bahnschrift", 14));
 
-        VBox top = new VBox(20);
-        top.setStyle("-fx-background-color: rgb(0,206,209);");
-        top.getChildren().addAll(logo, label, user, password, buttonBox, messageLabel);
-        top.setAlignment(Pos.TOP_CENTER);
-
-        Scene scene = new Scene(top, 640, 360);
-        stage.setScene(scene);
-        stage.setTitle("Login");
-
+        // --- Add all components to the view ---
+        view.getChildren().addAll(logo, prompt, usernameField, passwordField, loginButton, signUpButton, messageLabel);
     }
-
-    public Button getLoginButton(){
-        return this.loginButton;
-    }
-    public Button getSignupButton(){
-        return this.signupButton;
-    }
-
-
 
     @Override
     public String getUsernameInput() {
@@ -108,53 +80,42 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
 
     @Override
     public void display() {
-        if (primaryStage != null) {
-            primaryStage.show();
-        }
+        stage.setScene(new Scene(view, 600, 450));
+        stage.setTitle("Login - Game Central");
+        stage.show();
     }
 
     @Override
     public void updateMessageView(String message) {
         messageLabel.setText(message);
-        String[] usernameAndPasswordClearanceConditions = {Constants.INVALID_USERNAME, Constants.INVALID_INPUTS,
-                Constants.SUCCESSFUL_SIGNUP, Constants.USERNAME_TAKEN, Constants.FAILED_LOGIN_USERNAME,
-                Constants.SUCCESSFUL_LOGIN};
-        List<String> usernameAndPasswordClearanceConditionsList = Arrays.stream(usernameAndPasswordClearanceConditions)
-                .toList();
-        if (usernameAndPasswordClearanceConditionsList.contains(message)){
-            this.clearUsernameAndPasswordFields();
-        }else{this.clearPasswordField();}
-
-        PauseTransition pause = new PauseTransition(Duration.seconds(5));
-        pause.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                messageLabel.setText("");
-            }
-        });
-        pause.play();
-
-
     }
 
     @Override
     public void close() {
-        if (primaryStage != null) {
-            primaryStage.close();
-        }
+        stage.close();
     }
 
     @Override
     public void clearUsernameAndPasswordFields() {
-        this.usernameField.clear();
-        this.passwordField.clear();
+        usernameField.clear();
+        passwordField.clear();
     }
 
     @Override
     public void clearPasswordField() {
-        this.passwordField.clear();
-
+        passwordField.clear();
     }
 
+    /** Returns the login button for controller to attach action handler */
+    public Button getLoginButton() {
+        return loginButton;
+    }
+
+    /** Returns the sign up button for controller to attach action handler */
+    public Button getSignupButton() {
+        return signUpButton;
+    }
 }
+
+
 

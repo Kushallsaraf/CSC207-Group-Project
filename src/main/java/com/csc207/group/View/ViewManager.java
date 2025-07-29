@@ -10,9 +10,8 @@ public class ViewManager {
     private final Stage primaryStage;
     private JavaFXUserAuthenticationView javaFXUserAuthenticationView;
 
-    public ViewManager(Stage primaryStage, JavaFXUserAuthenticationView javaFXUserAuthenticationView) {
+    public ViewManager(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.javaFXUserAuthenticationView = javaFXUserAuthenticationView;
     }
 
     public void showUserAuthenticationView() {
@@ -20,6 +19,10 @@ public class ViewManager {
 
             javaFXUserAuthenticationView.display();
 
+    }
+
+    public void setUserAuthenticationView(JavaFXUserAuthenticationView javaFXUserAuthenticationView){
+        this.javaFXUserAuthenticationView = javaFXUserAuthenticationView;
     }
 
     /**this can be the entry point into the main app. As such, a User is passed in

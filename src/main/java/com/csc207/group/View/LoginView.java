@@ -1,23 +1,34 @@
-package views;
+package com.csc207.group.View;
 
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-public class LoginView {
+/**
+ * A JavaFX-based login view implementing the UserAuthenticationView interface.
+ * Provides login and sign-up functionality.
+ */
+public class LoginView implements UserAuthenticationView {
 
-    private VBox view;
-    // Hardcoded user credentials for demonstration
-    private final String[][] users = {{"Yash", "Yash123"}, {"Taabish", "Taabish123"}, {"pass", "pass"}};
+    private final VBox view;
+    private final TextField usernameField;
+    private final PasswordField passwordField;
+    private final Label messageLabel;
+    private final Button loginButton;
+    private final Button signUpButton;
 
-    public LoginView(Runnable onLoginSuccess) {
-        // Main container
-        view = new VBox(25);
+    private final Stage stage;
+
+    public LoginView(Stage stage) {
+        this.stage = stage;
+
+        view = new VBox(15);
         view.setStyle("-fx-background-color: #2c3e50; -fx-padding: 40;");
         view.setAlignment(Pos.CENTER);
 
@@ -26,60 +37,82 @@ public class LoginView {
         logo.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 36));
         logo.setFill(Color.WHITE);
 
-        Label label = new Label("Sign in to continue");
-        label.setFont(Font.font("Bahnschrift", 20));
-        label.setTextFill(Color.LIGHTGRAY);
+        Label prompt = new Label("Sign in to continue");
+        prompt.setFont(Font.font("Bahnschrift", 20));
+        prompt.setTextFill(Color.LIGHTGRAY);
 
         // --- Input Fields ---
-        TextField usernameField = new TextField();
+        usernameField = new TextField();
         usernameField.setPromptText("Username");
         usernameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 300px; -fx-padding: 10; -fx-background-color: #34495e; -fx-text-fill: white; -fx-border-color: #2c3e50;");
 
-        PasswordField passwordField = new PasswordField();
+        passwordField = new PasswordField();
         passwordField.setPromptText("Password");
         passwordField.setStyle("-fx-font-size: 14px; -fx-pref-width: 300px; -fx-padding: 10; -fx-background-color: #34495e; -fx-text-fill: white; -fx-border-color: #2c3e50;");
 
-        // --- Login Button ---
-        Button loginButton = new Button("Login");
+        // --- Buttons ---
+        loginButton = new Button("Login");
         loginButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 16));
         loginButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 300px; -fx-padding: 10;");
 
-        // --- Event Handler ---
-        loginButton.setOnAction(e -> {
-            boolean isAuthenticated = authenticate(usernameField.getText(), passwordField.getText());
-            if (isAuthenticated) {
-                // If login is successful, run the action provided by GameCentral
-                onLoginSuccess.run();
-            } else {
-                // Otherwise, show an error
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Login Failed");
-                alert.setHeaderText(null);
-                alert.setContentText("Invalid username or password. Please try again.");
-                alert.showAndWait();
-            }
-        });
+        signUpButton = new Button("Sign Up");
+        signUpButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 16));
+        signUpButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-pref-width: 300px; -fx-padding: 10;");
 
-        // Add all components to the view
-        view.getChildren().addAll(logo, label, usernameField, passwordField, loginButton);
+        // --- Message Label ---
+        messageLabel = new Label();
+        messageLabel.setTextFill(Color.RED);
+        messageLabel.setFont(Font.font("Bahnschrift", 14));
+
+        // --- Add all components to the view ---
+        view.getChildren().addAll(logo, prompt, usernameField, passwordField, loginButton, signUpButton, messageLabel);
     }
 
-    /**
-     * Authenticates the user against the hardcoded list.
-     */
-    private boolean authenticate(String username, String password) {
-        for (String[] user : users) {
-            if (user[0].equals(username) && user[1].equals(password)) {
-                return true;
-            }
-        }
-        return false;
+    @Override
+    public String getUsernameInput() {
+        return usernameField.getText();
     }
 
-    /**
-     * Returns the VBox container for this view.
-     */
-    public VBox getView() {
-        return view;
+    @Override
+    public String getPasswordInput() {
+        return passwordField.getText();
+    }
+
+    @Override
+    public void display() {
+        stage.setScene(new Scene(view, 600, 450));
+        stage.setTitle("Login - Game Central");
+        stage.show();
+    }
+
+    @Override
+    public void updateMessageView(String message) {
+        messageLabel.setText(message);
+    }
+
+    @Override
+    public void close() {
+        stage.close();
+    }
+
+    @Override
+    public void clearUsernameAndPasswordFields() {
+        usernameField.clear();
+        passwordField.clear();
+    }
+
+    @Override
+    public void clearPasswordField() {
+        passwordField.clear();
+    }
+
+    /** Returns the login button for controller to attach action handler */
+    public Button getLoginButton() {
+        return loginButton;
+    }
+
+    /** Returns the sign up button for controller to attach action handler */
+    public Button getSignUpButton() {
+        return signUpButton;
     }
 }
