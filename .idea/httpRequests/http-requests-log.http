@@ -1,0 +1,45 @@
+POST https://api.igdb.com/v4/games
+Client-ID: 8iht4bl3vlgdgy2j6jtp9l63ky4ee1
+Authorization: Bearer r7scsy47par3y00mi8wha41bayl6fm
+Accept: application/json
+Content-Length: 24
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.2.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+x-http2-scheme: https
+
+fields *; where id = 75;
+
+<> 2025-07-27T223519.200.json
+
+###
+
+POST https://api.igdb.com/v4/games
+Client-ID: 8iht4bl3vlgdgy2j6jtp9l63ky4ee1
+Authorization: Bearer r7scsy47par3y00mi8wha41bayl6fm
+Accept: application/json
+Content-Length: 55
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.2.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+x-http2-scheme: https
+
+fields name, genres, involved_companies; where id = 75;
+
+<> 2025-07-27T223410.200.json
+
+###
+
+POST https://api.igdb.com/v4/games
+Client-ID: 8iht4bl3vlgdgy2j6jtp9l63ky4ee1
+Authorization: Bearer r7scsy47par3y00mi8wha41bayl6fm
+Accept: application/json
+Content-Length: 59
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.2.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+x-http2-scheme: https
+
+fields name, genres, involved_companies; where id = 202174;
+
+<> 2025-07-27T223313.200.json
+
+###
+

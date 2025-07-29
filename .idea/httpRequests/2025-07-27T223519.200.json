@@ -1,0 +1,300 @@
+[
+  {
+    "id": 75,
+    "age_ratings": [
+      108071,
+      105825,
+      4667,
+      105823,
+      105573,
+      105824,
+      188429
+    ],
+    "aggregated_rating": 90.8125,
+    "aggregated_rating_count": 14,
+    "alternative_names": [
+      121221
+    ],
+    "artworks": [
+      168567,
+      168568,
+      168569,
+      168571,
+      168572,
+      168573,
+      168574,
+      4524,
+      4531,
+      5919,
+      168570
+    ],
+    "bundles": [
+      45181
+    ],
+    "category": 0,
+    "cover": 89702,
+    "created_at": 1298019712,
+    "dlcs": [
+      25299,
+      13911,
+      13690,
+      13912,
+      13910,
+      78460,
+      202313
+    ],
+    "external_games": [
+      1303817,
+      213811,
+      129856,
+      190162,
+      73939,
+      93449,
+      93251,
+      80758,
+      93252,
+      25324,
+      218785,
+      2082011,
+      402745,
+      245499,
+      2041789,
+      1930686,
+      2659970,
+      2631336,
+      2161435,
+      86910
+    ],
+    "first_release_date": 1330992000,
+    "franchises": [
+      1048
+    ],
+    "game_engines": [
+      351
+    ],
+    "game_modes": [
+      1,
+      2
+    ],
+    "genres": [
+      5,
+      12,
+      31
+    ],
+    "hypes": 1,
+    "involved_companies": [
+      46514,
+      46513,
+      290218
+    ],
+    "keywords": [
+      3,
+      465,
+      562,
+      563,
+      578,
+      923,
+      947,
+      962,
+      974,
+      1033,
+      1045,
+      1886,
+      1887,
+      1971,
+      2071,
+      3586,
+      4134,
+      4345,
+      4358,
+      4468,
+      4520,
+      4541,
+      4699,
+      4726,
+      4852,
+      4918,
+      5305,
+      5323,
+      5327,
+      5348,
+      5633,
+      5730,
+      6471,
+      7303,
+      7402,
+      7403,
+      8157,
+      9366,
+      11782
+    ],
+    "multiplayer_modes": [
+      765
+    ],
+    "name": "Mass Effect 3",
+    "platforms": [
+      9,
+      6,
+      12
+    ],
+    "player_perspectives": [
+      2
+    ],
+    "rating": 85.29132195190638,
+    "rating_count": 1759,
+    "release_dates": [
+      427916,
+      427917,
+      107959,
+      107958
+    ],
+    "screenshots": [
+      255,
+      252,
+      253,
+      254,
+      251,
+      182408,
+      182407,
+      182409,
+      182410,
+      182411,
+      182412
+    ],
+    "similar_games": [
+      73,
+      55038,
+      7349,
+      471,
+      113114,
+      36198,
+      3225,
+      78,
+      76,
+      1877
+    ],
+    "slug": "mass-effect-3",
+    "summary": "Earth is burning. The Reapers have taken over and other civilizations are falling like dominoes. Lead the final fight to save humanity and take back Earth from these terrifying machines, Commander Shepard. You'll need backup for these battles. Fortunately, the galaxy has a habit of sending unexpected species your way. Recruit team members and forge new alliances, but be prepared to say goodbye at any time as partners make the ultimate sacrifice. It's time for Commander Shepard to fight for the fate of the human race and save the galaxy. No pressure, Commander.\n\nFight smarter. Take advantage of new powers and combat moves. Shepard can now blind fire at enemies and build tougher melee attacks. Plus, when you fight as a team you can combine new biotic and tech powers to unleash devastating Power Combos.\n\nBuild the final force. Build a team from a variety of races and classes and combine their skills to overcome impossible odds. You'll be joined by newcomers like James Vega, a tough-as-nails soldier, as well as EDI, a trusted AI in a newly acquired physical form. Keep an eye out for beloved characters from your past, but beware. Some may not survive the final battle...\n\nFace off against friends. Enjoy an integrated co-op multiplayer mode and team up with friends online to liberate key conflict zones from increasingly tough opponents. Customize your warrior and earn new weapons, armor, and abilities to build war preparedness stats in your single player campaign.",
+    "tags": [
+      1,
+      18,
+      268435461,
+      268435468,
+      268435487,
+      536870915,
+      536871377,
+      536871474,
+      536871475,
+      536871490,
+      536871835,
+      536871859,
+      536871874,
+      536871886,
+      536871945,
+      536871957,
+      536872798,
+      536872799,
+      536872883,
+      536872983,
+      536874498,
+      536875046,
+      536875257,
+      536875270,
+      536875380,
+      536875432,
+      536875453,
+      536875611,
+      536875638,
+      536875764,
+      536875830,
+      536876217,
+      536876235,
+      536876239,
+      536876260,
+      536876545,
+      536876642,
+      536877383,
+      536878215,
+      536878314,
+      536878315,
+      536879069,
+      536880278,
+      536882694
+    ],
+    "themes": [
+      1,
+      18
+    ],
+    "total_rating": 88.05191097595319,
+    "total_rating_count": 1773,
+    "updated_at": 1753413911,
+    "url": "https://www.igdb.com/games/mass-effect-3",
+    "videos": [
+      10688,
+      10695,
+      10689,
+      10690,
+      10692,
+      10693,
+      10696,
+      10698,
+      10697,
+      10699,
+      10700,
+      10691,
+      119800,
+      141707
+    ],
+    "websites": [
+      799243,
+      18967,
+      18968,
+      18966,
+      332761,
+      18969,
+      18972,
+      179760,
+      18971
+    ],
+    "checksum": "ad71b937-f0b1-5a49-8d32-e073367dfcbd",
+    "remasters": [
+      245478
+    ],
+    "ports": [
+      21697
+    ],
+    "language_supports": [
+      161643,
+      161649,
+      161645,
+      161644,
+      161647,
+      161646,
+      161648,
+      161650,
+      161625,
+      161626,
+      161628,
+      161633,
+      161632,
+      161629,
+      161631,
+      161634,
+      161635,
+      161638,
+      161637,
+      161639,
+      161636,
+      161640,
+      161641,
+      161642
+    ],
+    "game_localizations": [
+      19141
+    ],
+    "collections": [
+      25
+    ],
+    "game_type": 0
+  }
+]

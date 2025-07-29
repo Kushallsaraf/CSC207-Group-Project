@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -9,7 +8,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import views.GameDetailView;
-import views.HomeView;
+import com.csc207.group.View.HomeView;
 import views.LoginView;
 import views.MyListsView;
 import views.NewsView;

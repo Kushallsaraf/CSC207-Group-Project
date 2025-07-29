@@ -1,4 +1,4 @@
-package views;
+package com.csc207.group.View;
 
 import components.GameCard;
 import javafx.event.EventHandler;

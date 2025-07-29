@@ -1,6 +1,9 @@
 package com.csc207.group.View;
 
 import UserAuthentication.User;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class ViewManager {
@@ -24,8 +27,15 @@ public class ViewManager {
      *
      */
     public void showHomepage(User user) {
-        GameCentralHomepageView gameCentralHomepageView = new GameCentralHomepageView(primaryStage);
-        gameCentralHomepageView.setUserInfo(user.getUsername());
-        gameCentralHomepageView.display();
+        EventHandler<MouseEvent> cardClickHandler = event -> {
+            // Define behavior when a card is clicked (e.g., open detail view)
+            System.out.println("Card clicked");
+        };
+
+        HomeView homeView = new HomeView(cardClickHandler);
+        Scene scene = new Scene(homeView.getView(), 800, 600); // Adjust size as needed
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Game Central - Home");
+        primaryStage.show();
     }
 }
