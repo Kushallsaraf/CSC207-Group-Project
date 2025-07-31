@@ -24,7 +24,7 @@ public class GameCard {
             gameImageView.setImage(image);
         } catch (Exception e) {
             System.err.println("Failed to load image: " + imageUrl);
-            Image placeholder = new Image("https://placehold.co/150x200/ff0000/ffffff?text=Error", 150, 200, false, true);
+            Image placeholder = new Image("", 150, 200, false, true);
             gameImageView.setImage(placeholder);
         }
 

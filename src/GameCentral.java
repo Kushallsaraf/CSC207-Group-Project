@@ -1,8 +1,10 @@
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -13,6 +15,8 @@ import views.HomeView;
 import views.LoginView;
 import views.MyListsView;
 import views.NewsView;
+import views.DeveloperView; // Import the new view
+
 
 public class GameCentral extends Application {
 
@@ -29,17 +33,12 @@ public class GameCentral extends Application {
         primaryStage.setTitle("Game Central");
 
         // --- Show Login View First ---
-        // This method will be called upon successful login.
         LoginView loginView = new LoginView(this::showMainApplication);
         Scene loginScene = new Scene(loginView.getView(), 1200, 800);
         primaryStage.setScene(loginScene);
         primaryStage.show();
     }
 
-    /**
-     * This method is called by the LoginView upon a successful login.
-     * It builds the main application UI and sets it as the current scene.
-     */
     private void showMainApplication() {
         mainLayout = new BorderPane();
         HBox topNav = createTopNav();
@@ -53,6 +52,7 @@ public class GameCentral extends Application {
     // --- Navigation Methods ---
 
     private void showHomeView() {
+        // Clicking a game card now correctly opens the detail view
         HomeView homeView = new HomeView(e -> showGameDetailView());
         mainLayout.setCenter(homeView.getView());
     }
@@ -63,7 +63,8 @@ public class GameCentral extends Application {
     }
 
     private void showGameDetailView() {
-        GameDetailView gameDetailView = new GameDetailView();
+        // The detail view now needs a handler for navigating to the developer's page
+        GameDetailView gameDetailView = new GameDetailView(devName -> showDeveloperView(devName));
         mainLayout.setCenter(gameDetailView.getView());
     }
 
@@ -71,6 +72,13 @@ public class GameCentral extends Application {
         MyListsView myListsView = new MyListsView();
         mainLayout.setCenter(myListsView.getView());
     }
+
+    // This new method displays the developer-specific view
+    private void showDeveloperView(String developerName) {
+        DeveloperView developerView = new DeveloperView(developerName, e -> showGameDetailView());
+        mainLayout.setCenter(developerView.getView());
+    }
+
 
     private HBox createTopNav() {
         HBox topNav = new HBox(15);
