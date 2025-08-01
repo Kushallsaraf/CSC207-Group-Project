@@ -1,10 +1,21 @@
 package com.csc207.group.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Achievement {
+    @JsonProperty("id")
     private int achievementId;
+
+    @JsonProperty("name")
     private String achievementName;
+
+    @JsonProperty("description")
     private String achievementDescription;
+
+    @JsonProperty("image")
     private String achievementImage;
+
+    @JsonProperty("percent")
     private String achievementCompletionPercentage;
 
     public Achievement() { /* empty so it works with jackson */ }
