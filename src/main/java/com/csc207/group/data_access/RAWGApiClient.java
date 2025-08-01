@@ -2,13 +2,18 @@ package com.csc207.group.data_access;
 import com.csc207.group.model.Achievement;
 import com.csc207.group.model.GameStore;
 import com.csc207.group.service.AchievementService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -46,6 +51,42 @@ public class RAWGApiClient {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(getResponse.body(), Map.class);
     }
+
+    public Integer findGameIdByName(String gameName) throws Exception{
+        // we have to encode the game name so it works for game names with spaces and other characters like colons
+        // this basically formats it as needed for the search request for the api -> so no issue with the request
+        String encodedGameName = URLEncoder.encode(gameName, StandardCharsets.UTF_8);
+
+        String url = BASE_URL + "games?key=" + API_KEY + "&search=" + encodedGameName;
+
+        // request
+        HttpRequest getRequest = HttpRequest.newBuilder()
+                .uri(new URI (url))
+                .GET()
+                .build();
+
+        // response
+        HttpResponse<String> getResponse = client.send(getRequest, HttpResponse
+                .BodyHandlers.ofString());
+
+        // now extracting the data
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode rootNode = mapper.readTree(getResponse.body());
+        JsonNode results = rootNode.get("results");
+        // now we need the id from results
+        if (results != null && results.size() > 0 && results.isArray()) {
+            // gets you the id
+            int id = results.get(0).get("id").asInt();
+            return id;
+        }
+        else {
+            return null;
+        }
+
+
+    }
+
 
     // this is for getting screenshots (not game covers)
     /*
