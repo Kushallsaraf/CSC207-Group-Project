@@ -8,7 +8,7 @@ public class Endpoints {
     // final string here that corresponds to it
 
     // IGDB Endpoints
-    public static final String GAMES_BY_NAME = "games-by-name";
+    public static final String IGDB_GAMES_BY_NAME = "games-by-name";
     public static final String GAMES_BY_ID = "games-by-id";
 
 
