@@ -17,6 +17,8 @@ import views.MyListsView;
 import views.NewsView;
 import views.DeveloperView; // Import the new view
 
+import java.io.FileNotFoundException;
+
 
 public class GameCentral extends Application {
 
@@ -28,7 +30,7 @@ public class GameCentral extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
         this.primaryStage = primaryStage; // Keep a reference to the stage
         primaryStage.setTitle("Game Central");
 

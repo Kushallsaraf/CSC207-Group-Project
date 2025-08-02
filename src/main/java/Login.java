@@ -22,7 +22,7 @@ public class Login extends Application {
     }
 
     public void start(Stage stage) throws FileNotFoundException {
-        UserDataHandler chk = new UserDataHandler("C:\\CSC207\\Grp Proj Exp\\src\\main\\java\\SignUp\\users.json");
+        UserDataHandler chk = new UserAuthentication.UserDataHandler("C:\\CSC207\\Grp Proj Exp\\src\\main\\java\\SignUp\\users.json");
 
         Label logo = new Label("Game Central");
         logo.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 30));

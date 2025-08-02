@@ -1,21 +1,26 @@
 package views;
 
+import User.User;
+import UserAuthentication.UserDataHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.io.FileNotFoundException;
+import java.util.Map;
 
 public class LoginView {
 
     private VBox view;
-    // Hardcoded user credentials for demonstration
-    private final String[][] users = {{"Yash", "Yash123"}, {"Taabish", "Taabish123"}, {"pass", "pass"}};
 
-    public LoginView(Runnable onLoginSuccess) {
+    public LoginView(Runnable onLoginSuccess) throws FileNotFoundException {
+        UserDataHandler chk = new UserAuthentication.UserDataHandler("C:\\CSC207\\CSC207-Group-Project\\src\\main\\java\\UserData\\users.json");
+
         // Main container
         view = new VBox(25);
         view.setStyle("-fx-background-color: #2c3e50; -fx-padding: 40;");
@@ -44,9 +49,14 @@ public class LoginView {
         loginButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 16));
         loginButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 300px; -fx-padding: 10;");
 
+        // --- Signup Button ---
+        Button registerButton = new Button("Don't have an account on GameCentral? Signup now!");
+        registerButton.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 16));
+        registerButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 600px; -fx-padding: 10;");
+
         // --- Event Handler ---
         loginButton.setOnAction(e -> {
-            boolean isAuthenticated = authenticate(usernameField.getText(), passwordField.getText());
+            boolean isAuthenticated = authen(chk.getUsers(),usernameField.getText(),passwordField.getText());
             if (isAuthenticated) {
                 // If login is successful, run the action provided by GameCentral
                 onLoginSuccess.run();
@@ -61,19 +71,17 @@ public class LoginView {
         });
 
         // Add all components to the view
-        view.getChildren().addAll(logo, label, usernameField, passwordField, loginButton);
+        view.getChildren().addAll(logo, label, usernameField, passwordField, loginButton, registerButton);
     }
 
     /**
      * Authenticates the user against the hardcoded list.
      */
-    private boolean authenticate(String username, String password) {
-        for (String[] user : users) {
-            if (user[0].equals(username) && user[1].equals(password)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean authen(Map<String, User> dct, String username, String password) {
+        boolean result = false;
+        String hscode = dct.get(username).getHashedPassword();
+        result = BCrypt.checkpw(password,hscode);
+        return result;
     }
 
     /**
