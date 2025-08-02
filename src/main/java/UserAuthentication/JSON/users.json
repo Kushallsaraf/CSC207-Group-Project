@@ -1,60 +1,46 @@
 {
-  "Users": [
-    {
-      "username": "alice",
+  "Users": {
+    "alice": {
       "pwd": "$2a$10$abcdefg1234567890hashedPasswordHere"
     },
-    {
-      "username": "bob",
+    "bob": {
       "pwd": "$2a$10$anotherHashedPasswordHere987654321"
     },
-    {
-      "username": "drake",
+    "drake": {
       "pwd": "$2a$10$c25o8DIWimMG6gyAGiYri.cmrGUHfabJ8nY0iHQs7DGl8la9LCt5C"
     },
-    {
-      "username": "gwyndolin",
+    "gwyndolin": {
       "pwd": "$2a$10$RhXDvry9BSQkMKEq68oUb.vaUCfqoRsqT.1scXYuq7BmxOd5o4G3u"
     },
-    {
-      "username": "jeff",
+    "jeff": {
       "pwd": "$2a$10$O9qztc6cy3HvPtTyKFNybuLDp3GMIy7IvzrA8.NPJdr8AxsvZUDha"
     },
-    {
-      "username": "HELIOS",
+    "HELIOS": {
       "pwd": "$2a$10$znTlNCPR4HF1sbZN6Jz3YuoEe/OiGqyZC110k6H1X1ZEQ4RMw6ah2"
     },
-    {
-      "username": "Toronto1984",
+    "Toronto1984": {
       "pwd": "$2a$10$qi9tlOZJjK4.vQEZlXlKGOHsi/kxLKv152laXWB.r3kuVLH5mjmzC"
     },
-    {
-      "username": "johndoe",
+    "johndoe": {
       "pwd": "$2a$10$qKI68VXLq4VTK20hcXe.OevABER0XSk6WNvAc0vVGejIpa4yxkuX6"
     },
-    {
-      "username": "tyrion",
+    "tyrion": {
       "pwd": "$2a$10$akN22Zyfrq01V3sifo.SWOVDDUrI.lulifOLK4yIEXH9BOdl9gTkK"
     },
-    {
-      "username": "leomessi",
+    "leomessi": {
       "pwd": "$2a$10$d4R7S3rJFro2BIw9BGRx3evpssNAV1.HjfCuyi49aurFM9DvpuFqO"
     },
-    {
-      "username": "LuisSuarez",
+    "LuisSuarez": {
       "pwd": "$2a$10$U8zSPqZgq7/XHlPd4jI5DuTCwYsCwPF99OHspjKCf8/Vs9VbzclFy"
     },
-    {
-      "username": "Luis_Suarez",
+    "Luis_Suarez": {
       "pwd": "$2a$10$j8J3sIR.Rb57fFtk9DmVM.U7gjmBkJEM2eACcvyK6GuiNDiz2qp2W"
     },
-    {
-      "username": "stephCurry",
+    "stephCurry": {
       "pwd": "$2a$10$SykhBuhhCKorifwobE9fYO.4FfLRgjyfT4Zu0r7SkTbwWr9ErSZDu"
     },
-    {
-      "username": "RobbStark",
+    "RobbStark": {
       "pwd": "$2a$10$4ImkKSlKzWO9EokZnI.siO0NCqNBAJPOfKMw6JXzJ8uCIJDW/TrMO"
     }
-  ]
+  }
 }

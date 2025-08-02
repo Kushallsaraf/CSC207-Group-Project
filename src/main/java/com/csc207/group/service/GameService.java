@@ -1,6 +1,6 @@
 package com.csc207.group.service;
 
-import Cache.IGDBRequestCache;
+import Cache.IGDBFirebaseAPICache;
 import com.csc207.group.model.Game;
 import data_access.IGDBApiClient;
 import kong.unirest.JsonNode;
@@ -12,8 +12,7 @@ import java.util.List;
 
 public class GameService {
 
-    private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBRequestCache(
-            "src/main/java/Cache/igdb_requests_cache.json"));
+    private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
 
     public int getGameIdByName(String name) {
         JsonNode json = apiClient.searchGamesByName(name);

@@ -1,37 +1,30 @@
 package data_access;
 
-import Cache.FilePaths;
-import Cache.IGDBRequestCache;
+import Cache.Endpoints;
+import Cache.IGDBFirebaseAPICache;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 public class IGDBApiClient {
-    private IGDBRequestCache cache;
+    private IGDBFirebaseAPICache cache;
 
     private static final String CLIENT_ID = "8iht4bl3vlgdgy2j6jtp9l63ky4ee1";
     private static final String ACCESS_TOKEN = "r7scsy47par3y00mi8wha41bayl6fm";
     private static final String BASE_URL = "https://api.igdb.com/v4/";
 
-    //Request types
-    public static final String GAMES_BY_NAME_REQUEST = "games-by-name"; //for searchGamesByName(String gameName)
 
-    //Response types
 
-    public static final String JSON_NODE_UNIREST = "json-node-unirest";
 
-    public IGDBApiClient(IGDBRequestCache cache){
+    public IGDBApiClient(IGDBFirebaseAPICache cache){
         this.cache = cache;
 
     }
     public JsonNode searchGamesByName(String gameName) {
         // checks if cache has the request stored already
-        if (this.cache.hasRequest(GAMES_BY_NAME_REQUEST, gameName)){
+        if (this.cache.hasRequest(Endpoints.IGDB_GAMES_BY_NAME, gameName)){
             System.out.println("request already in cache, returning value");
-             return new JsonNode(this.cache.getResponse(GAMES_BY_NAME_REQUEST, gameName, JSON_NODE_UNIREST));
+             return new JsonNode(this.cache.getResponse(Endpoints.IGDB_GAMES_BY_NAME, gameName));
          }
 
 
@@ -48,8 +41,9 @@ public class IGDBApiClient {
             throw new RuntimeException("Search failed with status: " + response.getStatus());
         }
         System.out.println("request not cached, calling API");
-        return cache.cacheResponse(GAMES_BY_NAME_REQUEST, gameName,
-                response.getBody());
+
+        cache.cacheJsonNode(Endpoints.IGDB_GAMES_BY_NAME, gameName, response.getBody());
+        return response.getBody();
     }
 
     public JsonNode getGameDetailsById(int id) {

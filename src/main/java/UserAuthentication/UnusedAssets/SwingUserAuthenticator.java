@@ -1,4 +1,4 @@
-package UserAuthentication.Swing;
+package UserAuthentication.UnusedAssets;
 
 import UserAuthentication.*;
 import UserAuthentication.JSON.JSONUserDataHandler;

@@ -1,4 +1,4 @@
-package UserAuthentication.Swing;
+package UserAuthentication.UnusedAssets;
 
 /**Run the app from here
  *

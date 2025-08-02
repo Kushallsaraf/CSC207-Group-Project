@@ -1,4 +1,4 @@
-package UserAuthentication.Swing;
+package UserAuthentication.UnusedAssets;
 
 import com.csc207.group.View.UserAuthenticationView;
 

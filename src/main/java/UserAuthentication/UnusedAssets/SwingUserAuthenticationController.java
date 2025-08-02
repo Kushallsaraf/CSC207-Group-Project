@@ -1,4 +1,4 @@
-package UserAuthentication.Swing;
+package UserAuthentication.UnusedAssets;
 
 import UserAuthentication.LoginInteractor;
 import UserAuthentication.SignupInteractor;
