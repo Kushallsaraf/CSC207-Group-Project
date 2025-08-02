@@ -1,7 +1,6 @@
 package com.csc207.group.MainApp;
 
 import UserAuthentication.JavaFX.JavaFXUserAuthenticator;
-import com.csc207.group.View.ViewManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -31,8 +30,8 @@ public class GameCentral extends Application {
         primaryStage.setTitle("Game Central");
 
 
-        ViewManager viewManager = new ViewManager(primaryStage);
-        JavaFXUserAuthenticator authenticator = new JavaFXUserAuthenticator(primaryStage, viewManager);
+        GameCentralController gameCentralController = new GameCentralController(primaryStage);
+        JavaFXUserAuthenticator authenticator = new JavaFXUserAuthenticator(primaryStage, gameCentralController);
         authenticator.run();
     }
 

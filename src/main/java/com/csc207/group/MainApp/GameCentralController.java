@@ -1,16 +1,18 @@
-package com.csc207.group.View;
+package com.csc207.group.MainApp;
 
 import UserAuthentication.User;
+import com.csc207.group.View.HomeView;
+import com.csc207.group.View.JavaFXUserAuthenticationView;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class ViewManager {
+public class GameCentralController {
     private final Stage primaryStage;
     private JavaFXUserAuthenticationView javaFXUserAuthenticationView;
 
-    public ViewManager(Stage primaryStage) {
+    public GameCentralController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
