@@ -4,7 +4,7 @@ import Cache.FirebaseRestClient;
 import Firebase.FirebaseUserDataHandler;
 import UserAuthentication.*;
 import com.csc207.group.View.JavaFXUserAuthenticationView;
-import com.csc207.group.View.ViewManager;
+import com.csc207.group.MainApp.GameCentralController;
 import javafx.stage.Stage;
 
 public class JavaFXUserAuthenticator{
@@ -16,13 +16,13 @@ public class JavaFXUserAuthenticator{
     private LoginInteractor loginInteractor;
     private SignupInteractor signupInteractor;
     private SignupPresenter signupPresenter;
-    private ViewManager viewManager;
+    private GameCentralController gameCentralController;
 
 
-    public JavaFXUserAuthenticator(Stage stage, ViewManager viewManager){
+    public JavaFXUserAuthenticator(Stage stage, GameCentralController gameCentralController){
         view = new JavaFXUserAuthenticationView(stage);
-        this.viewManager = viewManager;
-        viewManager.setUserAuthenticationView(view);
+        this.gameCentralController = gameCentralController;
+        gameCentralController.setUserAuthenticationView(view);
 
 
         FirebaseRestClient firebaseRestClient = new FirebaseRestClient();
@@ -32,14 +32,14 @@ public class JavaFXUserAuthenticator{
         loginInteractor = new LoginInteractor(dataHandler, loginPresenter);
         signupInteractor = new SignupInteractor(dataHandler, signupPresenter);
         controller = new JavaFXUserAuthenticationController(view, loginInteractor,
-                signupInteractor, viewManager);
+                signupInteractor, gameCentralController);
     }
 
 
 
 
     public void run() {
-        viewManager.showUserAuthenticationView();
+        gameCentralController.showUserAuthenticationView();
     }
 
 }

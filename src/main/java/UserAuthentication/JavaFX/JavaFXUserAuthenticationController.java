@@ -3,7 +3,7 @@ package UserAuthentication.JavaFX;
 import UserAuthentication.LoginInteractor;
 import UserAuthentication.SignupInteractor;
 import com.csc207.group.View.JavaFXUserAuthenticationView;
-import com.csc207.group.View.ViewManager;
+import com.csc207.group.MainApp.GameCentralController;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,14 +16,14 @@ public class JavaFXUserAuthenticationController {
     private JavaFXUserAuthenticationView view;
     private LoginInteractor loginInteractor;
     private SignupInteractor signupInteractor;
-    private ViewManager viewManager;
+    private GameCentralController gameCentralController;
 
     public JavaFXUserAuthenticationController(JavaFXUserAuthenticationView view, LoginInteractor loginInteractor,
-                                              SignupInteractor signupInteractor, ViewManager viewManager){
+                                              SignupInteractor signupInteractor, GameCentralController gameCentralController){
         this.view = view;
         this.loginInteractor = loginInteractor;
         this.signupInteractor = signupInteractor;
-        this.viewManager = viewManager;
+        this.gameCentralController = gameCentralController;
         connectLoginButton();
         connectSignupButton();
     }
@@ -48,7 +48,7 @@ public class JavaFXUserAuthenticationController {
                 @Override
                 public void handle(ActionEvent event) {
                     view.close();
-                    viewManager.showHomepage(loginInteractor.getUser(username)); // Replace with your actual navigation method
+                    gameCentralController.showHomepage(loginInteractor.getUser(username)); // Replace with your actual navigation method
                 }
             });
             delay.play();
