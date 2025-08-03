@@ -1,7 +1,10 @@
 package com.csc207.group.data_access;
 import com.csc207.group.model.Achievement;
 import com.csc207.group.model.GameStore;
+import com.csc207.group.model.Screenshot;
 import com.csc207.group.service.AchievementService;
+import com.csc207.group.service.GameStoreService;
+import com.csc207.group.service.ScreenshotService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,17 +29,18 @@ public class RAWGApiClient {
 
     static HttpClient client = HttpClient.newHttpClient();
 
-    /*
-    public static final Map<String, Integer> STORES_MAPPED_TO_IDS;
+
+    public static final Map<Integer, String> STORES_IDS_MAPPED_TO_NAMES;
 
     static {
         try {
-            STORES_MAPPED_TO_IDS = getStoreMappedToID();
+            STORES_IDS_MAPPED_TO_NAMES = getStoreIDsMappedtoNames();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    */
+
+
 
     public static Map<String, Object> getGamesByGenre(String genre) throws Exception{
         String url = BASE_URL + "games?key=" + API_KEY + "&genres=" + genre + "&page_size=40";
@@ -89,8 +93,8 @@ public class RAWGApiClient {
 
 
     // this is for getting screenshots (not game covers)
-    /*
-    public static Map<String, Object> getScreenshotsForGame(String gameID) throws Exception {
+
+    public static List<Screenshot> getScreenshotsForGame(String gameID) throws Exception {
         // so basically the api documentation notes -> https://api.rawg.io/api/games/{game_pk}/screenshots
         // this is the url for our http request
         // also note gameID is what is used in the code here in place of gamepk
@@ -107,13 +111,15 @@ public class RAWGApiClient {
         // bodyhandlers -> tells java to treat response as a string
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
         // we use the object mapper class to convert json into java objects
-        ObjectMapper mapper = new ObjectMapper();
+        // ObjectMapper mapper = new ObjectMapper();
         // now we make a map for the results part of the json which has a dict(map) of screenshots
         //return mapper.readValue(getResponse.body(), Map.class);
-        throw new UnsupportedOperationException("Not implemented yet.");
+        // throw new UnsupportedOperationException("Not implemented yet.");
+        System.out.println(getResponse.body());
+        return ScreenshotService.parseScreenshotsFromJson(getResponse.body());
     }
 
-     */
+
 
     // need to add game rating system -> need a request for that as well.
 
@@ -137,13 +143,13 @@ public class RAWGApiClient {
         return AchievementService.parseAchievementsFromJson(getResponse.body());
     }
 
-    // since get stores for game doesn't give us game name. decided to make another method that
+    // since get stores for game doesn't give us store name. decided to make another method that
     // instead gets all store details, it has no arguments so it has a constant result
     // which i will store in a qunique constant
-    /*
-    private static Map<String, Integer> getStoreMappedToID() throws Exception {
-            // TODO: fix the error here
-            String url = BASE_URL + "/stores" + "?key=" + API_KEY;
+    // returns a map of ids mapped to the name of their corresponding store
+    private static Map<Integer, String> getStoreIDsMappedtoNames() throws Exception {
+
+            String url = BASE_URL + "stores" + "?key=" + API_KEY;
 
             // creating request
             HttpRequest getRequest = HttpRequest.newBuilder()
@@ -153,23 +159,25 @@ public class RAWGApiClient {
 
             // response
             HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
+            // [DEBUG]
+            //System.out.println("Store API response:\n" + getResponse.body());
 
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> mapOfResponse = mapper.readValue(getResponse.body(), Map.class);
             List<Map<String, Object>> resultsFromResponse = (List<Map<String, Object>>) mapOfResponse.get("results");
 
             // now -> new map to store the data we return
-            Map<String, Integer> storeDetails = new HashMap<>();
+            Map<Integer, String> storeDetails = new HashMap<>();
 
             // now we iterate through and parse each store's id and name to add to the map
             for(Map<String, Object> result : resultsFromResponse) {
                 String storeName = (String) result.get("name");
                 Integer id = (Integer) result.get("id");
-                storeDetails.put(storeName, id);
+                storeDetails.put(id, storeName);
             }
-            //return storeDetails;
-        throw new UnsupportedOperationException("Not implemented yet.");
+            return storeDetails;
     }
+
 
     public static List<GameStore> getStoresForGame(String gameID) throws Exception {
         String url = BASE_URL + "games/" + gameID + "/stores" + "?key=" + API_KEY;
@@ -183,8 +191,9 @@ public class RAWGApiClient {
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse
                 .BodyHandlers.ofString());
         // still need to finish implmementation
+        return GameStoreService.parseGameStoresFromJson(getResponse.body());
     }
-    */
+
 
 
 }
