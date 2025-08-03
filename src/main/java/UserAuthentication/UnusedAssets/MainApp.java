@@ -1,7 +1,7 @@
 package UserAuthentication.UnusedAssets;
 
 
-import UserAuthentication.*;
+import UserLoading.User;
 
 /**
  * Just a placeholder mainapp.

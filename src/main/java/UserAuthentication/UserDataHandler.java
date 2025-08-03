@@ -1,5 +1,7 @@
 package UserAuthentication;
 
+import UserLoading.User;
+
 import java.io.IOException;
 
 /**Stores user data from data source and writes data to data source.

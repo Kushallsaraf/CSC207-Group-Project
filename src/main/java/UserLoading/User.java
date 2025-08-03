@@ -1,4 +1,4 @@
-package UserAuthentication;
+package UserLoading;
 
 public class User {
 
@@ -8,6 +8,7 @@ public class User {
     public User(String username, String hashedPassword){
         this.hashedPassword = hashedPassword;
         this.username = username;
+
     }
     public String getUsername() {
         return username;
@@ -15,5 +16,9 @@ public class User {
 
     public String getHashedPassword() {
         return hashedPassword;
+    }
+
+    public void setReviews() {
+        
     }
 }

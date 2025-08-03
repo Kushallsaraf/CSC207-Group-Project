@@ -1,6 +1,6 @@
 package com.csc207.group.MainApp;
 
-import UserAuthentication.User;
+import UserLoading.User;
 import com.csc207.group.View.HomeView;
 import com.csc207.group.View.JavaFXUserAuthenticationView;
 import javafx.event.EventHandler;

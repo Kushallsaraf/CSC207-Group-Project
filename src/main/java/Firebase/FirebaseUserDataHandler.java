@@ -1,7 +1,7 @@
 package Firebase;
 
 import Cache.FirebaseRestClient;
-import UserAuthentication.User;
+import UserLoading.User;
 import UserAuthentication.UserDataHandler;
 import kong.unirest.json.JSONObject;
 
@@ -41,6 +41,7 @@ public class FirebaseUserDataHandler implements UserDataHandler {
             String pwd = jsonObject.getString("pwd");
             return new User(usernameInput, pwd);
         }
+
 
         return null;
     }

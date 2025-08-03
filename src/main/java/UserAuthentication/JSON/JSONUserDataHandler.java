@@ -2,7 +2,7 @@ package UserAuthentication.JSON;
 
 import UserAuthentication.Constants;
 import UserAuthentication.JBCrypt.PasswordHasher;
-import UserAuthentication.User;
+import UserLoading.User;
 import UserAuthentication.UserDataHandler;
 import com.google.gson.*;
 
