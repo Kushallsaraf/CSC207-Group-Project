@@ -30,6 +30,7 @@ public class GameService {
         if (array.isEmpty()) return null;
 
         JSONObject gameJson = array.getJSONObject(0);
+        System.out.println(gameJson);
         String name = gameJson.optString("name", "Unknown");
 
         List<String> genres = new ArrayList<>();
@@ -48,6 +49,16 @@ public class GameService {
             }
         }
 
-        return new Game(name, genres, developer.toString());
+        double aggregate_rating = gameJson.optDouble("rating", 0);
+        double rating_count = gameJson.optDouble("rating_count", 0);
+
+        Game gameobj = new Game();
+        gameobj.setName(name);
+        gameobj.setGenres(genres);
+        gameobj.setDeveloper(developer.toString());
+        gameobj.setCritic_rating(aggregate_rating);
+        gameobj.setRating_count(rating_count);
+
+        return gameobj;
     }
 }

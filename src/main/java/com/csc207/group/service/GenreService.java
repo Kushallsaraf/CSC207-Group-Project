@@ -29,7 +29,10 @@ public class GenreService {
                 for (Map<String, Object> g : genreList) {
                     genres.add((String) g.get("name"));
                 }
-                games.add(new Game(game.get("name").toString(), genres, "Unknown"));
+                Game g = new Game();
+                g.setGenres(genres);
+                g.setName((String) game.get("name"));
+                games.add(g);
             }
         }
         return games;
