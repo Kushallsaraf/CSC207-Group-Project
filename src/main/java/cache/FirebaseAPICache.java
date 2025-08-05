@@ -44,4 +44,11 @@ public class FirebaseAPICache implements APICache{
         }
 
     }
+
+    @Override
+    public void cacheString(String requestType, String requestKey, String response) {
+        firebaseRestClient.putData(basePath + "/" + requestType + "/" + requestKey, response);
+
+
+    }
 }

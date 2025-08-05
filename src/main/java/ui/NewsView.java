@@ -1,6 +1,5 @@
 package ui;
 
-import components.NewsCard;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
