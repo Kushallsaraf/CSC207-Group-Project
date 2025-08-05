@@ -1,5 +1,6 @@
 package com.csc207.group.service;
 
+import Cache.IGDBFirebaseAPICache;
 import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.data_access.RAWGApiClient;
 import com.csc207.group.model.Game;
@@ -39,7 +40,7 @@ public class GenreService {
     }
 
     public String getGenresById(int id) {
-        final IGDBApiClient apiClient = new IGDBApiClient();
+        final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
         JsonNode response = apiClient.getGenresById(id);
         JSONArray array = response.getArray();
         JSONObject genreObject = array.getJSONObject(0);

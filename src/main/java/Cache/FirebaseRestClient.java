@@ -15,7 +15,7 @@ public class FirebaseRestClient {
 
     public void putData(String path, String jsonData) {
         String url = baseUrl + path + ".json";
-        RequestBody body = RequestBody.create(jsonData, MediaType.parse("application/json"));
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonData);
 
         Request request = new Request.Builder()
                 .url(url)

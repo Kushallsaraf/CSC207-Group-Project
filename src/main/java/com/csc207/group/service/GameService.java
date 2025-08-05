@@ -1,5 +1,6 @@
 package com.csc207.group.service;
 
+import Cache.IGDBFirebaseAPICache;
 import com.csc207.group.model.Game;
 import com.csc207.group.data_access.IGDBApiClient;
 import kong.unirest.JsonNode;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class GameService {
 
-    private final IGDBApiClient apiClient = new IGDBApiClient();
+    private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
 
     public int getGameIdByName(String name) {
         JsonNode json = apiClient.searchGamesByName(name);
@@ -155,4 +156,5 @@ public class GameService {
         JsonNode response = apiClient.getReleaseDateById(id);
         return response.getArray().getJSONObject(0).getString("human");
     }
+
 }
