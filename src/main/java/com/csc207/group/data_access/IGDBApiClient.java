@@ -57,6 +57,88 @@ public class IGDBApiClient {
         return response.getBody();
     }
 
+    public JsonNode getDevelopersById(int id) {
+        String body ="fields *; where id = " + id + ";";
+
+        HttpResponse<JsonNode> jsonResponse = Unirest.post("https://api.igdb.com/v4/involved_companies")
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Accept", "application/json")
+                .body(body)
+                .asJson();
+        if (jsonResponse.getStatus() != 200) {
+            throw new RuntimeException("Franchises fetch failed with status: " + jsonResponse.getStatus());
+        }
+
+        String body2 = "fields *; where id = " + jsonResponse.getBody().getArray().getJSONObject(0).get("company") + ";";
+
+        HttpResponse<JsonNode> finalResponse = Unirest.post("https://api.igdb.com/v4/companies")
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Accept", "application/json")
+                .body(body2)
+                .asJson();
+
+        return finalResponse.getBody();
+    }
+
+    public JsonNode getPlatformsById(int id) {
+        String body ="fields *; where id = " + id + ";";
+        HttpResponse<JsonNode> jsonResponse = Unirest.post("https://api.igdb.com/v4/platforms")
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Accept", "application/json")
+                .body(body)
+                .asJson();
+
+        return jsonResponse.getBody();
+    }
+
+    public JsonNode getCoverArtById(int id) {
+        String body ="fields *; where id = " + id + ";";
+        HttpResponse<JsonNode> jsonResponse = Unirest.post("https://api.igdb.com/v4/covers")
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Accept", "application/json")
+                .body(body)
+                .asJson();
+
+        return jsonResponse.getBody();
+    }
+
+    public JsonNode getAgeRatingById(int id) {
+        String body ="fields *; where id = " + id + ";";
+        HttpResponse<JsonNode> jsonResponse = Unirest.post("https://api.igdb.com/v4/age_ratings")
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Accept", "application/json")
+                .body(body)
+                .asJson();
+
+        int id2 = jsonResponse.getBody().getArray().getJSONObject(0).getInt("category");
+        String body2 = "fields *; where id = " + id2 + ";";
+        HttpResponse<JsonNode> finalResponse = Unirest.post("https://api.igdb.com/v4/age_rating_categories")
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Accept", "application/json")
+                .body(body2)
+                .asJson();
+
+        return finalResponse.getBody();
+    }
+
+    public JsonNode getReleaseDateById(int id) {
+        String body ="fields *; where id = " + id + ";";
+        HttpResponse<JsonNode> jsonResponse = Unirest.post("https://api.igdb.com/v4/release_dates")
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Accept", "application/json")
+                .body(body)
+                .asJson();
+
+        return jsonResponse.getBody();
+    }
+
     public void shutdown() {
         Unirest.shutDown();
     }
