@@ -7,11 +7,9 @@ import com.csc207.group.model.Screenshot;
 import com.csc207.group.service.AchievementService;
 import com.csc207.group.service.GameStoreService;
 import com.csc207.group.service.ScreenshotService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -29,10 +27,13 @@ public class RAWGApiClient {
 
     private static final String API_KEY = "e2ddd48d917c48e9938b54095923c9ba";
     private static final String BASE_URL = "https://api.rawg.io/api/";
-
-
     static HttpClient client = HttpClient.newHttpClient();
 
+    public RAWGApiClient(RAWGFirebaseAPICache cache) {
+
+        this.cache = cache;
+
+    }
 
     public static final Map<Integer, String> STORES_IDS_MAPPED_TO_NAMES;
 
@@ -58,10 +59,7 @@ public class RAWGApiClient {
 
         String url = BASE_URL + "games?key=" + API_KEY + "&genres=" + genre + "&page_size=40";
 
-        HttpRequest getRequest = HttpRequest.newBuilder()
-                .uri(new URI(url))
-                .GET()
-                .build();
+        HttpRequest getRequest = getHttpRequest(url);
 
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
 
@@ -75,15 +73,18 @@ public class RAWGApiClient {
         return mapper.readValue(getResponse.body(), Map.class);
     }
 
+    private static HttpRequest getHttpRequest(String url) throws URISyntaxException {
+
+        return HttpRequest.newBuilder().uri(new URI(url)).GET().build();
+
+    }
+
     public Integer findGameIdByName(String gameName) throws Exception{
         // adding cache check
         if (this.cache.hasRequest(Endpoints.RAWG_GAME_ID_BY_NAME, gameName)) {
             System.out.println("request already in cache, returning value");
             return Integer.parseInt(this.cache.getResponse(Endpoints.RAWG_GAME_ID_BY_NAME, gameName));
-
         }
-
-
 
         // we have to encode the game name so it works for game names with spaces and other characters like colons
         // this basically formats it as needed for the search request for the api -> so no issue with the request
@@ -92,10 +93,7 @@ public class RAWGApiClient {
         String url = BASE_URL + "games?key=" + API_KEY + "&search=" + encodedGameName;
 
         // request
-        HttpRequest getRequest = HttpRequest.newBuilder()
-                .uri(new URI (url))
-                .GET()
-                .build();
+        HttpRequest getRequest = getHttpRequest(url);
 
         // response
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse
@@ -143,10 +141,7 @@ public class RAWGApiClient {
         // takes in the url for the get request as a uri object
         // .GET method tells java it's a get request (for reading data)
         // .build ends the request and builds it
-        HttpRequest getRequest = HttpRequest.newBuilder()
-                .uri(new URI(url))
-                .GET()
-                .build();
+        HttpRequest getRequest = getHttpRequest(url);
         // bodyhandlers -> tells java to treat response as a string
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
         // we use the object mapper class to convert json into java objects
@@ -156,9 +151,9 @@ public class RAWGApiClient {
         // throw new UnsupportedOperationException("Not implemented yet.");
 
         // caching the response
-        kong.unirest.JsonNode node = new kong.unirest.JsonNode(getResponse.body());
+        //kong.unirest.JsonNode node = new kong.unirest.JsonNode(getResponse.body());
         System.out.println("request not in cache, calling API");
-        this.cache.cacheJsonNode(Endpoints.RAWG_SCREENSHOTS_FOR_GAMES_BY_ID, gameID, node);
+        this.cache.cacheJsonString(Endpoints.RAWG_SCREENSHOTS_FOR_GAMES_BY_ID, gameID, getResponse.body());
 
         return ScreenshotService.parseScreenshotsFromJson(getResponse.body());
     }
@@ -182,10 +177,7 @@ public class RAWGApiClient {
         String url = BASE_URL + "games/" + gameID + "/achievements" + "?key="
                 + API_KEY;
 
-        HttpRequest getRequest = HttpRequest.newBuilder()
-                .uri(new URI (url))
-                .GET()
-                .build();
+        HttpRequest getRequest = getHttpRequest(url);
 
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse
                 .BodyHandlers.ofString());
@@ -196,9 +188,9 @@ public class RAWGApiClient {
         // return (List<Map<String, Object>>) achievementsJson.get("results");
 
         // caching the response
-        kong.unirest.JsonNode node = new kong.unirest.JsonNode(getResponse.body());
+        // kong.unirest.JsonNode node = new kong.unirest.JsonNode(getResponse.body());
         System.out.println("request not in cache, calling API");
-        this.cache.cacheJsonNode(Endpoints.RAWG_ACHIEVEMENTS_FOR_GAMES_BY_ID, gameID, node);
+        this.cache.cacheJsonString(Endpoints.RAWG_ACHIEVEMENTS_FOR_GAMES_BY_ID, gameID, getResponse.body());
 
         return AchievementService.parseAchievementsFromJson(getResponse.body());
     }
@@ -209,15 +201,11 @@ public class RAWGApiClient {
     // returns a map of ids mapped to the name of their corresponding store
     private static Map<Integer, String> getStoreIDsMappedtoNames() throws Exception {
 
-            String url = BASE_URL + "stores" + "?key=" + API_KEY;
-
+        String url = BASE_URL + "stores" + "?key=" + API_KEY;
             // creating request
-            HttpRequest getRequest = HttpRequest.newBuilder()
-                    .uri(new URI (url))
-                    .GET()
-                    .build();
+        HttpRequest getRequest = getHttpRequest(url);
 
-            // response
+        // response
             HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
             // [DEBUG]
             //System.out.println("Store API response:\n" + getResponse.body());
@@ -241,9 +229,13 @@ public class RAWGApiClient {
 
     public List<GameStore> getStoresForGame(String gameID) throws Exception {
         // adding in cache check
+
         if (this.cache.hasRequest(Endpoints.RAWG_STORES_FOR_GAMES_BY_ID, gameID)) {
             System.out.println("request already in cache, returning value");
+
             String cachedJson = this.cache.getResponse(Endpoints.RAWG_STORES_FOR_GAMES_BY_ID, gameID);
+            System.out.println("Cached JSON: " + cachedJson);  // <--- DEBUG: see exactly what is stored
+
             return GameStoreService.parseGameStoresFromJson(cachedJson);
 
         }
@@ -252,20 +244,16 @@ public class RAWGApiClient {
         String url = BASE_URL + "games/" + gameID + "/stores" + "?key=" + API_KEY;
 
         // create the request
-        HttpRequest getRequest = HttpRequest.newBuilder()
-                .uri(new URI (url))
-                .GET()
-                .build();
+        HttpRequest getRequest = getHttpRequest(url);
 
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse
                 .BodyHandlers.ofString());
-        // still need to finish implmementation
 
         // caching the response
-        kong.unirest.JsonNode node = new kong.unirest.JsonNode(getResponse.body());
+        //kong.unirest.JsonNode node = new kong.unirest.JsonNode(getResponse.body());
         System.out.println("request not in cache, calling API");
-        this.cache.cacheJsonNode(Endpoints.RAWG_STORES_FOR_GAMES_BY_ID, gameID, node);
-
+        this.cache.cacheJsonString(Endpoints.RAWG_STORES_FOR_GAMES_BY_ID, gameID, getResponse.body());
+        System.out.println("Raw store JSON: " + getResponse.body());
         return GameStoreService.parseGameStoresFromJson(getResponse.body());
     }
 

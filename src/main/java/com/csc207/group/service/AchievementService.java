@@ -23,6 +23,12 @@ public class AchievementService {
         ObjectMapper mapper = new ObjectMapper();
         // this parses the json string into a navigatable tree like object
         JsonNode rootNode = mapper.readTree(json);
+
+        if (rootNode.isArray() && rootNode.size() > 0) {
+            rootNode = rootNode.get(0);
+        }
+
+
         JsonNode achievementsNode = rootNode.get("results");
         if (achievementsNode != null) {
             // looping over each node thats an achievement we parse each

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
+/*
 public class GenreService {
     public List<Game> getGamesByGenre(String genre) throws Exception {
         Map<String, Object> response = RAWGApiClient.getGamesByGenre(genre);
@@ -42,5 +42,8 @@ public class GenreService {
         JSONObject genreObject = array.getJSONObject(0);
         return genreObject.get("name").toString();
     }
+
+
 }
+*/
 

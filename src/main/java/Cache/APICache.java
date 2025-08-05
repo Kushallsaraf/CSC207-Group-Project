@@ -19,6 +19,7 @@ public interface APICache {
      */
     boolean hasRequest(String requestType, String requestKey);
     void cacheJsonNode(String requestType, String requestKey, JsonNode response);
+    void cacheJsonString(String requestType, String requestKey, String jsonString);
     void cacheInt(String requestType, String requestKey, int value);
     String getResponse(String requestType, String requestKey);
 }

@@ -23,6 +23,11 @@ public class ScreenshotService {
         // parsing into the root node and the screesnhots node
 
         JsonNode rootNode = mapper.readTree(json);
+
+        if (rootNode.isArray() && rootNode.size() > 0) {
+            rootNode = rootNode.get(0);
+        }
+
         JsonNode screenshotsNode = rootNode.get("results");
 
         if (screenshotsNode != null && screenshotsNode.isArray()) {
