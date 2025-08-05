@@ -26,13 +26,18 @@ public class GameService {
     public Game getGameById(int id) {
         JsonNode json = apiClient.getGameDetailsById(id);
         JSONArray array = json.getArray();
+        // Instantiating game object
+        Game gameobj = new Game();
 
         if (array.isEmpty()) return null;
 
+        //Setting Name
         JSONObject gameJson = array.getJSONObject(0);
         System.out.println(gameJson);
         String name = gameJson.optString("name", "Unknown");
+        gameobj.setName(name);
 
+        // Setting Genre ids
         List<String> genres = new ArrayList<>();
         if (gameJson.has("genres")) {
             JSONArray genreArray = gameJson.getJSONArray("genres");
@@ -40,7 +45,10 @@ public class GameService {
                 genres.add(String.valueOf(genreArray.getInt(i)));
             }
         }
+        gameobj.setGenres(genres);
 
+
+        // Setting Developers
         List<String> developers = new ArrayList<>();
         if (gameJson.has("involved_companies")) {
             JSONArray devArray = gameJson.getJSONArray("involved_companies");
@@ -51,10 +59,17 @@ public class GameService {
         else {
             developers.add("Unknown");
         }
+        gameobj.setDeveloper(developers);
 
+        // Setting Critic Ratings
         double aggregate_rating = gameJson.optDouble("total_rating", 0);
-        double rating_count = gameJson.optDouble("total_rating_count", 0);
+        gameobj.setCritic_rating(aggregate_rating);
 
+        // Setting Rating Count
+        double rating_count = gameJson.optDouble("total_rating_count", 0);
+        gameobj.setRating_count(rating_count);
+
+        // Setting Platforms the game is available on
         List<String> platforms = new ArrayList<>();
         if (gameJson.has("platforms")) {
             JSONArray platformArray = gameJson.getJSONArray("platforms");
@@ -65,7 +80,10 @@ public class GameService {
         else {
             platforms.add("Unknown");
         }
+        gameobj.setPlatforms(platforms);
 
+
+        // Setting Cover Image (for wishlist)
         String cover_page = "";
         if (gameJson.has("cover")) {
             cover_page = getCoverPageById(gameJson.optInt("cover", 0));
@@ -73,7 +91,10 @@ public class GameService {
         else {
             cover_page = "No cover page";
         }
+        gameobj.setCover_image(cover_page);
 
+
+        // Setting age ratings
         String rating = "";
         if (gameJson.has("age_ratings")) {
             JSONArray ageRatingArray = gameJson.getJSONArray("age_ratings");
@@ -82,8 +103,10 @@ public class GameService {
         else {
             rating = "age rating not found";
         }
+        gameobj.setAge_rating(rating);
 
 
+        // Setting release date
         String release_date = "";
         if (gameJson.has("release_dates")) {
             JSONArray releaseDateArray = gameJson.getJSONArray("release_dates");
@@ -92,19 +115,18 @@ public class GameService {
         else {
             release_date = "Release date not found";
         }
-
-
-
-        Game gameobj = new Game();
-        gameobj.setName(name);
-        gameobj.setGenres(genres);
-        gameobj.setDeveloper(developers);
-        gameobj.setCritic_rating(aggregate_rating);
-        gameobj.setRating_count(rating_count);
-        gameobj.setPlatforms(platforms);
-        gameobj.setCover_image(cover_page);
-        gameobj.setAge_rating(rating);
         gameobj.setRelease_date(release_date);
+
+
+        // Setting list of DLCs of a game
+        List<Integer> DLCs = new ArrayList<>();
+        if (gameJson.has("dlcs")) {
+            JSONArray dlcArray = gameJson.getJSONArray("dlcs");
+            for (int i = 0; i < dlcArray.length(); i++) {
+                DLCs.add(dlcArray.getInt(i));
+            }
+        }
+        gameobj.setDLCs(DLCs);
 
         return gameobj;
     }

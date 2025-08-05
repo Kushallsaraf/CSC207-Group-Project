@@ -1,5 +1,6 @@
 package com.csc207.group;
 
+import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.data_access.NewsClient;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.News;
@@ -11,13 +12,16 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-//        String gameName = "gta 5";
-//        GameService service = new GameService();
-//        int id = service.getGameIdByName(gameName);
-//
-//        Game game = service.getGameById(id);
-//        System.out.println(game);
-//        System.out.println("/n/n");
+        String gameName = "witcher 3";
+        GameService service = new GameService();
+        int id = service.getGameIdByName(gameName);
+        System.out.println(id);
+        Game game = service.getGameById(id);
+        System.out.println(game);
+        System.out.println("/n/n");
+//        System.out.println(new IGDBApiClient().getCoverArtById(123528));
+//        System.out.println(new IGDBApiClient().getAgeRatingById(90110));
+//        System.out.println(new IGDBApiClient().getReleaseDateById(84001));
 //
 //        GenreService genreService = new GenreService();
 //        String genre = "action";
@@ -31,9 +35,9 @@ public class Main {
 //        }
 //        NewsClient newsClient = new NewsClient();
 //        System.out.println(newsClient.getGamingNews());
-        NewsService newsService = new NewsService();
-        List<News> x = newsService.ArticleBuilder();
-        System.out.println(x.get(0).getTitle());
+//        NewsService newsService = new NewsService();
+//        List<News> x = newsService.ArticleBuilder();
+//        System.out.println(x.get(0).getTitle());
 
     }
 }
