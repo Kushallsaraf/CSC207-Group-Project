@@ -22,4 +22,6 @@ public class Endpoints {
 
 
     // RAWG Endpoints
+
+    public static final String RAWG_GAMES_BY_GENRE = "rawg-games-by-genre";
 }

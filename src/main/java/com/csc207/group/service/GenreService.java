@@ -1,6 +1,7 @@
 package com.csc207.group.service;
 
 import Cache.IGDBFirebaseAPICache;
+import Cache.RAWGFirebaseAPICache;
 import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.data_access.RAWGApiClient;
 import com.csc207.group.model.Game;
@@ -17,8 +18,9 @@ import java.util.Map;
 
 
 public class GenreService {
+    private final RAWGApiClient client = new RAWGApiClient(new RAWGFirebaseAPICache());
     public List<Game> getGamesByGenre(String genre) throws Exception {
-        Map<String, Object> response = RAWGApiClient.getGamesByGenre(genre);
+        Map<String, Object> response = client.getGamesByGenre(genre);
         List<Game> games = new ArrayList<>();
 
         List<Map<String, Object>> result = (List<Map<String, Object>>) response.get("results");
