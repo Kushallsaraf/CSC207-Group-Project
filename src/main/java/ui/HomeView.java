@@ -1,64 +1,76 @@
 package ui;
 
-import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 
-public class HomeView {
+import java.util.List;
 
-    private VBox view;
-    private EventHandler<MouseEvent> cardClickHandler;
-    private Label userLabel;  // New label to show the username
+public class HomeView implements View {
 
-    public HomeView(EventHandler<MouseEvent> cardClickHandler) {
-        this.cardClickHandler = cardClickHandler;
+    private final VBox layout;
+    private final VBox resultsContainer;
+    private final TextField searchField;
+    private final Button searchButton;
 
-        view = new VBox(20);
-        view.setStyle("-fx-padding: 20; -fx-background-color: #222;");
-        view.setAlignment(Pos.TOP_CENTER);
+    public HomeView() {
+        searchField = new TextField();
+        searchField.setPromptText("Search for a game...");
 
-        Label welcomeLabel = new Label("WELCOME TO GAME CENTRAL!");
-        welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
+        searchButton = new Button("Search");
 
-        Label subLabel = new Label("Start searching below to find new games.");
-        subLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #ccc;");
+        HBox searchBar = new HBox(10, searchField, searchButton);
+        searchBar.setPadding(new Insets(15));
+        searchBar.setAlignment(Pos.CENTER);
 
-        userLabel = new Label();  // Initially empty
-        userLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #00ffff;");
+        resultsContainer = new VBox(15);
+        resultsContainer.setPadding(new Insets(15));
 
-        Label rpgHeader = new Label("Here are some of the Best Recent RPGs");
-        rpgHeader.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
+        ScrollPane scrollPane = new ScrollPane(resultsContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(400);
 
-        GridPane gameGrid = createGameGrid();
-
-        view.getChildren().addAll(welcomeLabel, userLabel, subLabel, rpgHeader, gameGrid);
+        layout = new VBox(20, searchBar, scrollPane);
+        layout.setPadding(new Insets(20));
     }
 
-    private GridPane createGameGrid() {
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(20);
-        gridPane.setVgap(20);
-        gridPane.setAlignment(Pos.CENTER);
-
-        gridPane.add(new GameCard("Clair Obscur: Expedition 33", "Sandfall Interactive", "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSrUsfBxfPMYJN_au0TpmDpM-B7UKz0y-g4orgNCpcbjuddHyitTPb5BMPaYnbIxv6p_Tm0", cardClickHandler).getView(), 0, 0);
-        gridPane.add(new GameCard("The Witcher III", "CD Projekt Red", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgOPtH8lO6v8aRGGNpdEpaJgtR5GEO1UlnPv33E4-9hyPDQHa7", cardClickHandler).getView(), 1, 0);
-        gridPane.add(new GameCard("Skyrim", "Bethesda", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTlOmOTidO6ZLe8s4dhVR9f1G8-fKT5RpQrBr5rprMr9PrzLba9", cardClickHandler).getView(), 2, 0);
-        gridPane.add(new GameCard("CyberPunk 2077", "CD Projekt Red", "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSM0vv4cTvXHOMfYfmXSTPaasKG5HoqiDj4hlDizehQgBSBqzYX", cardClickHandler).getView(), 3, 0);
-        gridPane.add(new GameCard("Elden Ring", "FromSoftware", "https://m.media-amazon.com/images/M/MV5BZGQxMjYyOTUtNjYyMC00NzdmLWI4YmYtMDhiODU3Njc5ZDJkXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg", cardClickHandler).getView(), 4, 0);
-        gridPane.add(new GameCard("Baldur's Gate 3", "Larian Studios", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRmSeTi7xVt1FOA_NaILhSLFVvEI_VSCcGY1A6jPeI1H8ReA9E3Sq4kV18_qSAnSKkxs2lV", cardClickHandler).getView(), 5, 0);
-
-        return gridPane;
+    public void setSearchButtonHandler(javafx.event.EventHandler<javafx.event.ActionEvent> handler) {
+        searchButton.setOnAction(handler);
     }
 
-    public void setUsername(String username) {
-        userLabel.setText("Logged in as: " + username);
+    public String getSearchQuery() {
+        return searchField.getText().trim();
     }
 
-    public Pane getView() {
-        return view;
+    public void displayGameResults(List<Node> resultNodes) {
+        resultsContainer.getChildren().clear();
+
+        if (resultNodes.isEmpty()) {
+            resultsContainer.getChildren().add(new Label("No results found."));
+            return;
+        }
+
+        resultsContainer.getChildren().addAll(resultNodes);
+    }
+
+    @Override
+    public String getName() {
+        return "home";
+    }
+
+    @Override
+    public Parent getView() {
+        return layout;
+    }
+
+    @Override
+    public void onShow() {
+        searchField.clear();
+        resultsContainer.getChildren().clear();
     }
 }
+
+

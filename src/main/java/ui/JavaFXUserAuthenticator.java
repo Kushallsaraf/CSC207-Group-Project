@@ -5,6 +5,7 @@ import data_access.FirebaseUserDataHandler;
 import auth.*;
 import app.GameCentralController;
 import javafx.stage.Stage;
+import ui.controller.JavaFXUserAuthenticationController;
 
 public class JavaFXUserAuthenticator{
 
@@ -38,6 +39,7 @@ public class JavaFXUserAuthenticator{
 
 
     public void run() {
+
         gameCentralController.showUserAuthenticationView();
     }
 

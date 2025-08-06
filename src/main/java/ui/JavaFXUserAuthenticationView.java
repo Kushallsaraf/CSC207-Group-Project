@@ -5,6 +5,7 @@ import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -19,10 +20,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A JavaFX-based login view implementing the UserAuthenticationView interface.
+ * A JavaFX-based login view implementing the UserAuthenticationView and View interfaces.
  * Provides login and sign-up functionality.
  */
-public class JavaFXUserAuthenticationView implements UserAuthenticationView {
+public class JavaFXUserAuthenticationView implements UserAuthenticationView, View {
 
     private final VBox view;
     private final TextField usernameField;
@@ -76,6 +77,26 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
         view.getChildren().addAll(logo, prompt, usernameField, passwordField, loginButton, signUpButton, messageLabel);
     }
 
+    // --- View interface methods ---
+
+    @Override
+    public String getName() {
+        return "login";
+    }
+
+    @Override
+    public Parent getView() {
+        return view;
+    }
+
+    @Override
+    public void onShow() {
+        clearUsernameAndPasswordFields();  // optional: clear fields when shown
+        messageLabel.setText("");          // optional: clear messages
+    }
+
+    // --- UserAuthenticationView interface methods ---
+
     @Override
     public String getUsernameInput() {
         return usernameField.getText();
@@ -88,6 +109,7 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
 
     @Override
     public void display() {
+        // Not used with view-switching system anymore, but you could remove this if no longer needed.
         stage.setScene(new Scene(view, 600, 450));
         stage.setTitle("Login - Game Central");
         stage.show();
@@ -97,29 +119,27 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
     public void updateMessageView(String message) {
         messageLabel.setText(message);
         if (Constants.SUCCESSFUL_LOGIN.equals(message)) {
-            messageLabel.setStyle("-fx-text-fill: #00ff00;"); // Green
+            messageLabel.setStyle("-fx-text-fill: #00ff00;");
         } else if (Constants.SUCCESSFUL_SIGNUP.equals(message)){
             messageLabel.setStyle("-fx-text-fill: #00ff00;");
-
-        }else {
-            messageLabel.setStyle("-fx-text-fill: red;"); // Red (default)
+        } else {
+            messageLabel.setStyle("-fx-text-fill: red;");
         }
-        String[] usernameAndPasswordClearanceConditions = {Constants.INVALID_USERNAME, Constants.INVALID_INPUTS,
-                Constants.SUCCESSFUL_SIGNUP, Constants.USERNAME_TAKEN, Constants.FAILED_LOGIN_USERNAME,
-                Constants.SUCCESSFUL_LOGIN};
-        List<String> usernameAndPasswordClearanceConditionsList = Arrays.stream(usernameAndPasswordClearanceConditions)
-                .toList();
-        if (usernameAndPasswordClearanceConditionsList.contains(message)){
-            this.clearUsernameAndPasswordFields();
-        }else{this.clearPasswordField();}
+
+        List<String> resetTriggers = Arrays.asList(
+                Constants.INVALID_USERNAME, Constants.INVALID_INPUTS,
+                Constants.SUCCESSFUL_SIGNUP, Constants.USERNAME_TAKEN,
+                Constants.FAILED_LOGIN_USERNAME, Constants.SUCCESSFUL_LOGIN
+        );
+
+        if (resetTriggers.contains(message)) {
+            clearUsernameAndPasswordFields();
+        } else {
+            clearPasswordField();
+        }
 
         PauseTransition pause = new PauseTransition(Duration.seconds(5));
-        pause.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                messageLabel.setText("");
-            }
-        });
+        pause.setOnFinished(event -> messageLabel.setText(""));
         pause.play();
     }
 
@@ -139,12 +159,11 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView {
         passwordField.clear();
     }
 
-    /** Returns the login button for controller to attach action handler */
+    // --- Accessors for controller use ---
     public Button getLoginButton() {
         return loginButton;
     }
 
-    /** Returns the sign up button for controller to attach action handler */
     public Button getSignupButton() {
         return signUpButton;
     }

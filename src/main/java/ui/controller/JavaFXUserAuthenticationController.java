@@ -1,4 +1,4 @@
-package ui;
+package ui.controller;
 
 import auth.LoginInteractor;
 import auth.SignupInteractor;
@@ -7,6 +7,7 @@ import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
+import ui.JavaFXUserAuthenticationView;
 
 import java.io.IOException;
 
@@ -46,7 +47,7 @@ public class JavaFXUserAuthenticationController {
             delay.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    view.close();
+
                     gameCentralController.showHomepage(loginInteractor.getUser(username)); // Replace with your actual navigation method
                 }
             });

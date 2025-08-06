@@ -19,7 +19,7 @@ public class UserController {
         User loaded = firebaseHandler.getUser(username);
         if (loaded != null) {
             this.user = loaded;
-            this.interactor = new UserInteractor(user);
+            this.interactor = new UserInteractor(user, firebaseHandler);
             return true;
         }
         return false;
