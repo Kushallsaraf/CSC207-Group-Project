@@ -13,7 +13,6 @@ public class UserInteractor {
         this.dataHandler = dataHandler;
     }
 
-    // 1. Add to wishlist
     public boolean addToWishlist(int gameId) {
         if (!user.getWishlist().contains(gameId)) {
             user.getWishlist().add(gameId);
@@ -23,7 +22,6 @@ public class UserInteractor {
         return false;
     }
 
-    // 2. Remove from wishlist
     public boolean removeFromWishlist(int gameId) {
 
         user.getWishlist().remove(Integer.valueOf(gameId));
@@ -31,7 +29,6 @@ public class UserInteractor {
         return true;
     }
 
-    // 3. Add to library
     public boolean addToLibrary(int gameId) {
         if (!user.getLibrary().contains(gameId)) {
             user.getLibrary().add(gameId);
@@ -42,7 +39,6 @@ public class UserInteractor {
         return false;
     }
 
-    // 4. Leave or update a review
     public void voidMakeReview(int gameid, String content, double rating){
         Review review = new Review(user.getUsername(), content, gameid, rating);
         this.user.getReviews().put(gameid, review);
@@ -61,7 +57,6 @@ public class UserInteractor {
         dataHandler.saveUser(user);
     }
 
-    // 5. Remove review
     public boolean removeReview(int gameId) {
 
         Review removed =  user.getReviews().remove(gameId);
@@ -69,17 +64,14 @@ public class UserInteractor {
         return removed != null;
     }
 
-    // 6. Check if a game is reviewed
     public boolean hasReviewed(int gameId) {
         return user.getReviews().containsKey(gameId);
     }
 
-    // 7. Check if a game is in wishlist
     public boolean isInWishlist(int gameId) {
         return user.getWishlist().contains(gameId);
     }
 
-    // 8. Check if a game is in library
     public boolean isInLibrary(int gameId) {
         return user.getLibrary().contains(gameId);
     }

@@ -44,21 +44,21 @@ public class FirebaseUserDataHandler implements UserDataHandler {
 
             User user = new User(usernameInput, pwd);
 
-            // Parse wishlist
+
             if (jsonObject.has("wishlist")) {
                 for (Object id : jsonObject.getJSONArray("wishlist")) {
                     user.getWishlist().add((Integer) id);
                 }
             }
 
-            // Parse library
+
             if (jsonObject.has("library")) {
                 for (Object id : jsonObject.getJSONArray("library")) {
                     user.getLibrary().add((Integer) id);
                 }
             }
 
-            // Parse reviews
+
             if (jsonObject.has("reviews")) {
                 JSONObject reviewsJson = jsonObject.getJSONObject("reviews");
                 for (String gameIdStr : reviewsJson.keySet()) {
@@ -85,16 +85,16 @@ public class FirebaseUserDataHandler implements UserDataHandler {
     public void saveUser(User user) {
         JSONObject userJson = new JSONObject();
 
-        // Retain password
+
         userJson.put("pwd", user.getHashedPassword());
 
-        // Wishlist
+
         userJson.put("wishlist", user.getWishlist());
 
-        // Library
+
         userJson.put("library", user.getLibrary());
 
-        // Reviews
+
         JSONObject reviewsJson = new JSONObject();
         for (Map.Entry<Integer, Review> entry : user.getReviews().entrySet()) {
             JSONObject reviewJson = new JSONObject();
@@ -110,7 +110,7 @@ public class FirebaseUserDataHandler implements UserDataHandler {
 
         userJson.put("reviews", reviewsJson);
 
-        // Save to Firebase
+
         client.putData("Users/" + user.getUsername(), userJson.toString());
 
     }

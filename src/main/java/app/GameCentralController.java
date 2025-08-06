@@ -36,10 +36,11 @@ public class GameCentralController {
 
     public void setUserAuthenticationView(JavaFXUserAuthenticationView javaFXUserAuthenticationView) {
         this.javaFXUserAuthenticationView = javaFXUserAuthenticationView;
-        registerView(javaFXUserAuthenticationView); // Register it as a View
+        registerView(javaFXUserAuthenticationView);
     }
 
     public void showUserAuthenticationView() {
+
         switchToView("login");
     }
 
@@ -69,18 +70,15 @@ public class GameCentralController {
      * Call this after successful login. Sets up the homepage view and switches to it.
      */
     public void showHomepage(User user) {
-        // Create the HomeView
         HomeView homeView = new HomeView();
 
-        // Create the GameService (pass apiClient if required)
-        GameService gameService = new GameService(/* apiClient if needed */);
+        GameService gameService = new GameService();
 
-        // Hook up the controller
+
         FirebaseUserDataHandler firebaseUserDataHandler = new FirebaseUserDataHandler(new FirebaseRestClient());
         UserInteractor userInteractor = new UserInteractor(user, firebaseUserDataHandler);
         HomeController homeController = new HomeController(homeView, gameService, userInteractor);
 
-        // Register and switch to the view
         registerView(homeView);
         switchToView("home");
 

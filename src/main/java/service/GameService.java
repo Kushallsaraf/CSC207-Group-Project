@@ -129,7 +129,6 @@ public class GameService {
 
         String url = coverObj.getString("url");
 
-        // Normalize to full URL
         if (url.startsWith("//")) {
             url = "https:" + url;
         } else if (!url.startsWith("http")) {
