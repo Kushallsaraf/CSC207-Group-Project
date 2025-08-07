@@ -1,43 +1,17 @@
 package com.csc207.group;
 
-import com.csc207.group.data_access.IGDBApiClient;
-import com.csc207.group.data_access.NewsClient;
-import com.csc207.group.model.Game;
-import com.csc207.group.model.News;
-import com.csc207.group.service.GameService;
-import com.csc207.group.service.GenreService;
-import com.csc207.group.service.NewsService;
-
-import java.util.List;
-
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) throws Exception {
-        String gameName = "witcher 3";
-        GameService service = new GameService();
-        int id = service.getGameIdByName(gameName);
-        System.out.println(id);
-        Game game = service.getGameById(id);
-        System.out.println(game);
-        System.out.println("/n/n");
-//        System.out.println(new IGDBApiClient().getCoverArtById(123528));
-//        System.out.println(new IGDBApiClient().getAgeRatingById(90110));
-//        System.out.println(new IGDBApiClient().getReleaseDateById(84001));
-//
-//        GenreService genreService = new GenreService();
-//        String genre = "action";
-//        List<Game> games = genreService.getGamesByGenre(genre);
-//        for (Game g : games) {
-//            System.out.println(g);
-//        }
-//        List<String> genreids = game.getGenres();
-//        for (String genreid : genreids) {
-//            System.out.println(new GenreService().getGenresById(Integer.parseInt(genreid)));
-//        }
-//        NewsClient newsClient = new NewsClient();
-//        System.out.println(newsClient.getGamingNews());
-//        NewsService newsService = new NewsService();
-//        List<News> x = newsService.ArticleBuilder();
-//        System.out.println(x.get(0).getTitle());
+    public static void main(String[] args) {
+        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
+        // to see how IntelliJ IDEA suggests fixing it.
+        System.out.printf("Hello and welcome!");
 
+        for (int i = 1; i <= 5; i++) {
+            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
+            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
+            System.out.println("i = " + i);
+        }
     }
 }
