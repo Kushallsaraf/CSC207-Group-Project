@@ -1,16 +1,29 @@
 package com.csc207.group.Review;
 
+import com.csc207.group.model.Review;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class ReviewView extends Application {
+
+    private List<Review> reviewList;
+
+    public void setReviews(java.util.List<Review> reviews) {
+        this.reviewList = reviews;
+    }
 
     public void start(Stage stage) {
         VBox vbox = new VBox(10);
@@ -23,25 +36,6 @@ public class ReviewView extends Application {
         Label subtitle = new Label("See what others have to say, and tell others what you think!");
         subtitle.setStyle("-fx-font-size: 16px; -fx-text-fill: #ccc;");
 
-        GameReviews gameReviews = new GameReviews();
-        gameReviews.addReview(new Review("Yash","Good Review", 4.5));
-        gameReviews.addReview(new Review("Kushall","Everything good", 4.2));
-        gameReviews.addReview(new Review("Yash","Good Review", 4.8));
-        gameReviews.addReview(new Review("Yash123","Good Review 123", 4.8));
-        gameReviews.addReview(new Review("Yash","Good Review", 4.5));
-        gameReviews.addReview(new Review("Kushall","Everything good", 4.2));
-        gameReviews.addReview(new Review("Yash","Good Review", 4.8));
-        gameReviews.addReview(new Review("Yash123","Good Review 123", 4.8));
-        gameReviews.addReview(new Review("Yash","Good Review", 4.5));
-        gameReviews.addReview(new Review("Kushall","Everything good", 4.2));
-        gameReviews.addReview(new Review("Yash","Good Review", 4.8));
-        gameReviews.addReview(new Review("Yash123","Good Review 123", 4.8));
-        gameReviews.addReview(new Review("Yash","Good Review", 4.5));
-        gameReviews.addReview(new Review("Kushall","Everything good", 4.2));
-        gameReviews.addReview(new Review("Yash","Good Review", 4.8));
-        gameReviews.addReview(new Review("Yash123","Good Review 123", 4.8));
-
-
         GridPane reviews = new GridPane();
         reviews.setVgap(10);
         reviews.setHgap(10);
@@ -49,7 +43,7 @@ public class ReviewView extends Application {
         reviews.setAlignment(Pos.TOP_CENTER);
 
         Integer i = 0;
-        for (Review review : gameReviews.getReviews()) {
+        for (Review review : reviewList) {
             reviews.add(new ReviewCard(review).getCard(),i%2,i/2);
             i++;
         }
@@ -88,7 +82,7 @@ public class ReviewView extends Application {
         stage.show();
 
         post.setOnAction(e -> {
-            gameReviews.addReview(new Review("newuser",leave.getText(), 4.5));
+            reviewList.add(new Review("newuser",leave.getText(), 1234, 4.5));
         });
     }
 
