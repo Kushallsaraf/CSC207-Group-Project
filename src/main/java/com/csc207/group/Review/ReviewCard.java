@@ -1,5 +1,6 @@
 package com.csc207.group.Review;
 
+import com.csc207.group.model.Review;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -19,8 +20,8 @@ public class ReviewCard {
         card.setAlignment(Pos.TOP_LEFT);
         card.setPadding(new Insets(15));
 
-        Label user = new Label(review.getReviewAuth());
-        Label areview = new Label(review.getReview());
+        Label user = new Label(review.getUserid());
+        Label areview = new Label(review.getContent());
         user.setFont(Font.font("Bahnschrift", FontWeight.BOLD, 14));
         areview.setFont(Font.font("Bahnschrift", FontWeight.NORMAL, 12));
         user.setStyle("-fx-text-fill: #666;");

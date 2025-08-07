@@ -13,6 +13,7 @@ public class Game {
     private String age_rating;
     private String release_date;
     private List <Integer> DLCs;
+    private List <Review> reviews;
 
 
     public Game() {}
@@ -33,6 +34,11 @@ public class Game {
     public void setAge_rating(String age_rating) {this.age_rating = age_rating;}
     public void setRelease_date(String release_date) {this.release_date = release_date;}
     public void setDLCs(List <Integer> DLCs) {this.DLCs = DLCs;}
+
+
+    public void appendReview(Review review) {
+        reviews.add(review);
+    }
 
 
     public String getName() {
@@ -78,5 +84,9 @@ public class Game {
 
     public List <Integer> getDLCs() {
         return DLCs;
+    }
+
+    public List <Review> getReviews() {
+        return reviews;
     }
 }
