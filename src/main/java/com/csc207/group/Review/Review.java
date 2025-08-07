@@ -1,8 +1,10 @@
+package com.csc207.group.Review;
+
 public class Review {
     String username;
     String review;
     Double rating;
-    public Review(String username, String reviews,  Double rating) {
+    public Review(String username, String reviews, Double rating) {
         this.username = username;
         this.review = reviews;
         this.rating = rating;
