@@ -1,6 +1,6 @@
 package com.csc207.group.auth;
 
-import model.User;
+import com.csc207.group.model.User;
 
 import java.io.IOException;
 

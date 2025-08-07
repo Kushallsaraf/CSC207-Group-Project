@@ -1,9 +1,9 @@
 package com.csc207.group.service;
 
 import com.csc207.group.auth.UserDataHandler;
-import model.GamePreview;
-import model.Review;
-import model.User;
+import com.csc207.group.model.GamePreview;
+import com.csc207.group.model.Review;
+import com.csc207.group.model.User;
 
 import java.util.List;
 

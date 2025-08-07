@@ -6,10 +6,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import java.util.List;
 
-public class HomeView implements ui.View {
+public class HomeView implements View {
 
     private final VBox layout;
     private final VBox resultsContainer;
@@ -19,32 +21,44 @@ public class HomeView implements ui.View {
     private final Button profileButton;
 
     public HomeView() {
-        searchField = new TextField();
-        searchField.setPromptText("Search for a game...");
+        // Main container with dark theme
+        layout = new VBox(20);
+        layout.setStyle("-fx-padding: 20; -fx-background-color: #222;");
+        layout.setAlignment(Pos.TOP_CENTER);
 
-        searchButton = new Button("Search");
-
-        HBox navBar = new HBox(15);
-        navBar.setPadding(new Insets(10));
-
+        // Navigation Bar
         homeButton = new Button("Home");
         profileButton = new Button("Profile");
+        HBox navBar = new HBox(15, homeButton, profileButton);
+        navBar.setPadding(new Insets(10));
+        navBar.setAlignment(Pos.CENTER_LEFT);
 
-        navBar.getChildren().addAll(homeButton, profileButton);
+        // Welcome Message
+        Label welcomeLabel = new Label("WELCOME TO GAME CENTRAL!");
+        welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
 
+        Label subLabel = new Label("Start searching below to find new games.");
+        subLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #ccc;");
+
+        // Search Bar
+        searchField = new TextField();
+        searchField.setPromptText("Search for a game...");
+        searchField.setStyle("-fx-font-size: 14px; -fx-pref-width: 350px;");
+
+        searchButton = new Button("Search");
         HBox searchBar = new HBox(10, searchField, searchButton);
-        searchBar.setPadding(new Insets(15));
         searchBar.setAlignment(Pos.CENTER);
 
+        // Results Container
         resultsContainer = new VBox(15);
         resultsContainer.setPadding(new Insets(15));
-
         ScrollPane scrollPane = new ScrollPane(resultsContainer);
         scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: #333;");
         scrollPane.setPrefHeight(400);
 
-        layout = new VBox(20, navBar, searchBar, scrollPane);
-        layout.setPadding(new Insets(20));
+        // Add all components to the layout
+        layout.getChildren().addAll(navBar, welcomeLabel, subLabel, searchBar, scrollPane);
     }
 
     public void setSearchButtonHandler(javafx.event.EventHandler<javafx.event.ActionEvent> handler) {
@@ -59,7 +73,9 @@ public class HomeView implements ui.View {
         resultsContainer.getChildren().clear();
 
         if (resultNodes.isEmpty()) {
-            resultsContainer.getChildren().add(new Label("No results found."));
+            Label noResultsLabel = new Label("No results found.");
+            noResultsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+            resultsContainer.getChildren().add(noResultsLabel);
             return;
         }
 

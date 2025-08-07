@@ -22,7 +22,7 @@ import com.csc207.group.ui.controller.UserProfileController;
 
 import java.util.List;
 
-public class UserProfileView extends VBox implements ui.View {
+public class UserProfileView extends VBox implements View {
 
     private final Button homeButton = new Button("Home");
     private final Button profileButton = new Button("Profile");

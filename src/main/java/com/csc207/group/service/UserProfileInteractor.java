@@ -1,7 +1,7 @@
 package com.csc207.group.service;
-import model.GamePreview;
-import model.LibraryEntry;
-import model.Review;
+import com.csc207.group.model.GamePreview;
+import com.csc207.group.model.LibraryEntry;
+import com.csc207.group.model.Review;
 import com.csc207.group.service.GameService;
 import com.csc207.group.service.UserInteractor;
 

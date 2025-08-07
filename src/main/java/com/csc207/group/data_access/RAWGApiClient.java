@@ -1,5 +1,5 @@
 package com.csc207.group.data_access;
-import cache.RAWGFirebaseAPICache;
+import com.csc207.group.cache.RAWGFirebaseAPICache;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.URI;

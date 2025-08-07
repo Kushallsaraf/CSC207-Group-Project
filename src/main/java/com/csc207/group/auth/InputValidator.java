@@ -1,4 +1,4 @@
-package auth;
+package com.csc207.group.auth;
 
 import util.Constants;
 

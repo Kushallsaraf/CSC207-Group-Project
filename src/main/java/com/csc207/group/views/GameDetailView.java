@@ -1,4 +1,4 @@
-package views;
+package com.csc207.group.views;
 
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;

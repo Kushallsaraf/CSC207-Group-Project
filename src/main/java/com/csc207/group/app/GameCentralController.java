@@ -1,22 +1,21 @@
 package com.csc207.group.app;
 
-import cache.FirebaseRestClient;
-import com.csc207.group.data_access.FirebaseUserDataHandler;
 import com.csc207.group.auth.UserDataHandler;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import model.User;
+import com.csc207.group.cache.FirebaseRestClient;
+import com.csc207.group.data_access.FirebaseUserDataHandler;
+import com.csc207.group.model.User;
 import com.csc207.group.service.GameService;
 import com.csc207.group.service.UserInteractor;
 import com.csc207.group.service.UserProfileInteractor;
 import com.csc207.group.ui.HomeView;
-import ui.JavaFXUserAuthenticationView;
+import com.csc207.group.ui.JavaFXUserAuthenticationView;
 import com.csc207.group.ui.UserProfileView;
-import ui.View;
+import com.csc207.group.ui.View;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.UserProfileController;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,20 +25,18 @@ public class GameCentralController {
     private final Stage primaryStage;
     private final StackPane rootPane = new StackPane();
     private final Map<String, View> views = new HashMap<>();
-    private  UserProfileController userProfileController;
-    private  UserProfileInteractor userProfileInteractor;
-    private  UserInteractor userInteractor;
+    private UserProfileController userProfileController;
+    private UserProfileInteractor userProfileInteractor;
+    private UserInteractor userInteractor;
     private GameService gameService;
     private HomeController homeController;
-
 
     private JavaFXUserAuthenticationView javaFXUserAuthenticationView;
     private UserProfileView userProfileView;
 
     public GameCentralController(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
-        Scene scene = new Scene(rootPane, 800, 600);
+        Scene scene = new Scene(rootPane, 1200, 800); // Adjusted for a better window size
         primaryStage.setScene(scene);
         primaryStage.setTitle("Game Central");
         primaryStage.show();
@@ -47,11 +44,10 @@ public class GameCentralController {
 
     public void setUserAuthenticationView(JavaFXUserAuthenticationView javaFXUserAuthenticationView) {
         this.javaFXUserAuthenticationView = javaFXUserAuthenticationView;
-        registerView((View) javaFXUserAuthenticationView);
+        registerView(javaFXUserAuthenticationView);
     }
 
     public void showUserAuthenticationView() {
-
         switchToView("login");
     }
 
@@ -73,7 +69,6 @@ public class GameCentralController {
             if ("userProfile".equals(name) && userProfileController != null) {
                 userProfileController.refresh();
             }
-
             target.getView().setVisible(true);
             target.onShow();
         } else {
@@ -86,25 +81,15 @@ public class GameCentralController {
      */
     public void showHomepage(User user) {
         HomeView homeView = new HomeView();
-        homeView.getHomeButton().setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(javafx.event.ActionEvent event) {
-                switchToView("home");
-            }
+        homeView.getHomeButton().setOnAction(event -> switchToView("home"));
+        homeView.getProfileButton().setOnAction(event -> {
+            showUserProfile(user);
+            switchToView("userProfile");
         });
-
-        homeView.getProfileButton().setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(javafx.event.ActionEvent event) {
-                showUserProfile(user);
-                switchToView("userProfile");
-            }
-        });
-
 
         gameService = new GameService();
 
-
+        // Correctly initialize FirebaseUserDataHandler
         FirebaseUserDataHandler firebaseUserDataHandler = new FirebaseUserDataHandler(new FirebaseRestClient());
         userInteractor = new UserInteractor(user, firebaseUserDataHandler);
         userProfileView = new UserProfileView();
@@ -115,28 +100,18 @@ public class GameCentralController {
 
         registerView(homeView);
         switchToView("home");
-
     }
 
     public void showUserProfile(User user) {
+        // Ensure the profile view is registered before switching to it
+        if (!views.containsKey("userProfile")) {
+            registerView(userProfileView);
+        }
 
-        userProfileView.getHomeButton().setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(javafx.event.ActionEvent event) {
-                switchToView("home");
-            }
-        });
+        userProfileView.getHomeButton().setOnAction(event -> switchToView("home"));
+        userProfileView.getProfileButton().setOnAction(event -> switchToView("userProfile"));
 
-        userProfileView.getProfileButton().setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(javafx.event.ActionEvent event) {
-                switchToView("userProfile");
-            }
-        });
-
-        registerView(userProfileView);
+        userProfileController.refresh(); // Refresh data before showing
         switchToView("userProfile");
     }
-
-
 }

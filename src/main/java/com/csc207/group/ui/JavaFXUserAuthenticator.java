@@ -1,6 +1,6 @@
 package com.csc207.group.ui;
 
-import cache.FirebaseRestClient;
+import com.csc207.group.cache.FirebaseRestClient;
 import com.csc207.group.data_access.FirebaseUserDataHandler;
 import com.csc207.group.auth.*;
 import com.csc207.group.app.GameCentralController;
@@ -9,7 +9,7 @@ import com.csc207.group.ui.controller.JavaFXUserAuthenticationController;
 
 public class JavaFXUserAuthenticator{
 
-    private ui.JavaFXUserAuthenticationView view;
+    private JavaFXUserAuthenticationView view;
     private JavaFXUserAuthenticationController controller;
     private UserDataHandler dataHandler;
     private LoginPresenter loginPresenter;
@@ -20,7 +20,7 @@ public class JavaFXUserAuthenticator{
 
 
     public JavaFXUserAuthenticator(Stage stage, GameCentralController gameCentralController){
-        view = new ui.JavaFXUserAuthenticationView(stage);
+        view = new JavaFXUserAuthenticationView(stage);
         this.gameCentralController = gameCentralController;
         gameCentralController.setUserAuthenticationView(view);
 

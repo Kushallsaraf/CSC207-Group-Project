@@ -1,8 +1,8 @@
 package com.csc207.group.data_access;
 
-import cache.FirebaseRestClient;
-import model.Review;
-import model.User;
+import com.csc207.group.cache.FirebaseRestClient;
+import com.csc207.group.model.Review;
+import com.csc207.group.model.User;
 import com.csc207.group.auth.UserDataHandler;
 import kong.unirest.json.JSONObject;
 

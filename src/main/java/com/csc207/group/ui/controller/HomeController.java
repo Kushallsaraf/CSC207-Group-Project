@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import model.GamePreview;
+import com.csc207.group.model.GamePreview;
 import com.csc207.group.service.GameService;
 import com.csc207.group.service.UserInteractor;
 import com.csc207.group.ui.HomeView;

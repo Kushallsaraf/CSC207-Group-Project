@@ -1,4 +1,4 @@
-package ui;
+package com.csc207.group.ui;
 
 import util.Constants;
 import javafx.animation.PauseTransition;

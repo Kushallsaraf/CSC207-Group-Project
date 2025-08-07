@@ -17,9 +17,9 @@ public class SignupInteractor {
     public void handleSignup(String usernameInput, String passwordInput) throws IOException {
         if (this.handler.usernameExists(usernameInput)){
             presenter.updateView(Constants.USERNAME_TAKEN);
-        } else if (auth.InputValidator.validateInput(usernameInput, passwordInput).equals(Constants.SUCCESSFUL_SIGNUP)) {
+        } else if (InputValidator.validateInput(usernameInput, passwordInput).equals(Constants.SUCCESSFUL_SIGNUP)) {
             handler.registerUser(usernameInput, PasswordHasher.hashPassword(passwordInput));
-        }presenter.updateView(auth.InputValidator.validateInput(usernameInput,passwordInput));
+        }presenter.updateView(InputValidator.validateInput(usernameInput,passwordInput));
 
 
 

@@ -1,4 +1,4 @@
-package model;
+package com.csc207.group.model;
 
 import javafx.scene.image.Image;
 

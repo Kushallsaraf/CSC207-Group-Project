@@ -1,7 +1,7 @@
 package com.csc207.group.service;
 
-import cache.IGDBFirebaseAPICache;
-import cache.RAWGFirebaseAPICache;
+import com.csc207.group.cache.IGDBFirebaseAPICache;
+import com.csc207.group.cache.RAWGFirebaseAPICache;
 import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.data_access.RAWGApiClient;
 import com.csc207.group.model.Game;

@@ -1,10 +1,10 @@
 package com.csc207.group.service;
 
-import cache.IGDBFirebaseAPICache;
+import com.csc207.group.cache.IGDBFirebaseAPICache;
 import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.model.Game;
-import model.GamePreview;
-import model.LibraryEntry;
+import com.csc207.group.model.GamePreview;
+import com.csc207.group.model.LibraryEntry;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

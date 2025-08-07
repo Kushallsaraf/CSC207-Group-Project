@@ -1,7 +1,7 @@
 package com.csc207.group.data_access;
 
-import cache.Endpoints;
-import cache.IGDBFirebaseAPICache;
+import com.csc207.group.cache.Endpoints;
+import com.csc207.group.cache.IGDBFirebaseAPICache;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;

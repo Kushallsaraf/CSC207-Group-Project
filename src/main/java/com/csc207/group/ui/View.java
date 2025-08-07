@@ -1,4 +1,4 @@
-package ui;
+package com.csc207.group.ui;
 
 import javafx.scene.Parent;
 

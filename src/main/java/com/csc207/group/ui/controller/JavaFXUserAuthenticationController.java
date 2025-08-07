@@ -7,7 +7,7 @@ import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
-import ui.JavaFXUserAuthenticationView;
+import com.csc207.group.ui.JavaFXUserAuthenticationView;
 
 import java.io.IOException;
 
