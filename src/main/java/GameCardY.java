@@ -1,4 +1,5 @@
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,7 +23,12 @@ public class GameCardY {
         sum.setFont(Font.font("Bahnschrift", FontWeight.NORMAL, 12));
         title.setStyle("-fx-text-fill: #666");
         sum.setStyle("-fx-text-fill: #666");
-        card.getChildren().addAll(frame,title,sum);
+
+        Button view = new Button("View");
+        Button remove = new Button("Remove");
+
+
+        card.getChildren().addAll(frame,title,sum,view,remove);
         card.setAlignment(Pos.TOP_CENTER);
         card.setStyle("-fx-background-color: #222; -fx-border-color: Black; -fx-border-width: 6; -fx-border-radius: 20; -fx-background-radius: 20");
         card.setPrefSize(150,250);
