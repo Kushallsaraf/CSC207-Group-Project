@@ -52,7 +52,7 @@ public class RAWGApiClient {
 
     public Map<String, Object> getGamesByGenre(String genre) throws IOException,
             URISyntaxException, InterruptedException {
-        // cache check
+        // removed cache check as code is changed and must be taken from Kushalls branch for this method
         /*
         if (this.cache.hasRequest(Endpoints.RAWG_GAMES_BY_GENRE, genre)) {
             System.out.println(REQUEST_ALREADY_IN_CACHE_RETURNING_VALUE);
@@ -106,6 +106,12 @@ public class RAWGApiClient {
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse
                 .BodyHandlers.ofString());
 
+        // checking if call was successful
+        if (getResponse.statusCode() != 200) {
+            throw new RuntimeException("API call failed with status: " + getResponse.statusCode());
+        }
+
+
         // now extracting the data
         ObjectMapper mapper = new ObjectMapper();
 
@@ -152,8 +158,14 @@ public class RAWGApiClient {
         HttpRequest getRequest = getHttpRequest(url);
         // bodyhandlers -> tells java to treat response as a string
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
-        // we use the object mapper class to convert json into java objects
-        // now we make a map for the results part of the json which has a dict(map) of screenshots
+
+        // checking if call was successful
+        if (getResponse.statusCode() != 200) {
+            throw new RuntimeException("API call failed with status: " + getResponse.statusCode());
+        }
+
+
+
 
         // caching the response
         System.out.println(REQUEST_NOT_IN_CACHE_CALLING_API);
@@ -187,6 +199,12 @@ public class RAWGApiClient {
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse
                 .BodyHandlers.ofString());
 
+        // checking if call was successful
+        if (getResponse.statusCode() != 200) {
+            throw new RuntimeException("API call failed with status: " + getResponse.statusCode());
+        }
+
+
         // decided to create an Achievement class to return the items as a list of achievement objects
         // and for it to be easier to lay them out in the ui
 
@@ -208,9 +226,15 @@ public class RAWGApiClient {
         HttpRequest getRequest = getHttpRequest(url);
 
         // response
-            HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
 
-            ObjectMapper mapper = new ObjectMapper();
+        // checking if call was successful
+        if (getResponse.statusCode() != 200) {
+            throw new RuntimeException("API call failed with status: " + getResponse.statusCode());
+        }
+
+
+        ObjectMapper mapper = new ObjectMapper();
             Map mapOfResponse = mapper.readValue(getResponse.body(), Map.class);
             List<Map<String, Object>> resultsFromResponse = (List<Map<String, Object>>) mapOfResponse.get("results");
 
@@ -246,8 +270,15 @@ public class RAWGApiClient {
         // create the request
         HttpRequest getRequest = getHttpRequest(url);
 
+
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse
                 .BodyHandlers.ofString());
+
+        // checking if call was successful
+        if (getResponse.statusCode() != 200) {
+            throw new RuntimeException("API call failed with status: " + getResponse.statusCode());
+        }
+
 
         // caching the response
         System.out.println(REQUEST_NOT_IN_CACHE_CALLING_API);
