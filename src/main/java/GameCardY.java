@@ -12,9 +12,9 @@ public class GameCardY {
         card = new VBox(10);
         Image img =  new Image("https://www.psu.com/wp/wp-content/uploads/2020/09/The-Witcher-3-Wild-Hunt-PS4-Wallpaper-1920x1080_29.png",true);
         ImageView frame = new ImageView(img);
-//        frame.setFitHeight(200);
-//        frame.setFitWidth(150);
-//        frame.setPreserveRatio(true);
+        frame.setFitHeight(200);
+        frame.setFitWidth(150);
+        frame.setPreserveRatio(true);
 
         Label title = new Label("Witcher 3");
         Label sum = new Label(name);

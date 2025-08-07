@@ -1,3 +1,4 @@
+import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,7 +12,7 @@ import java.io.FileNotFoundException;
 
 import static javafx.application.Application.launch;
 
-public class WishList {
+public class WishList extends Application {
     public void start(Stage primaryStage) throws FileNotFoundException {
         VBox screen = new VBox(10);
         screen.setStyle("-fx-padding: 20; -fx-background-color: #222;");
