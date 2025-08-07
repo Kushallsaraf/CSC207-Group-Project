@@ -11,27 +11,29 @@ import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 import model.GamePreview;
+import model.LibraryEntry;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 public class GameService {
 
     private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
+    private final Map<Integer, GamePreview> previewCache = new HashMap<>();
 
     public int getGameIdByName(String name) {
         JsonNode json = apiClient.searchGamesByName(name);
         JSONArray array = json.getArray();
-        System.out.println(array);
-
         if (array.isEmpty()) return -1;
 
-        JSONObject firstMatch = array.getJSONObject(1);
+        JSONObject firstMatch = array.getJSONObject(0);
         return firstMatch.getInt("id");
     }
+
     public List<Integer> searchGame(String name) {
         List<Integer> gameIds = new ArrayList<>();
-
         JsonNode json = apiClient.searchGamesByName(name);
         JSONArray array = json.getArray();
 
@@ -41,94 +43,76 @@ public class GameService {
                 gameIds.add(gameObject.getInt("id"));
             }
         }
-
         return gameIds;
     }
 
-
-    public String getGameName(int id) {
-        JsonNode json = apiClient.getGameDetailsById(id);
-        if (json == null || json.getArray().isEmpty()) {
-            return "<name not found>";
-        }
-
-        JSONObject gameObject = json.getArray().getJSONObject(0);
-
-        if (!gameObject.has("name")) {
-            return "<name not found>";
-        }
-
-        return gameObject.getString("name");
-    }
-
-
-    public int getGameReleaseYear(int id) {
-        JsonNode json = apiClient.getGameDetailsById(id);
-        JSONArray array = json.getArray();
-
-        if (array.isEmpty()) return -1;
-
-        JSONObject game = array.getJSONObject(0);
-        if (!game.has("first_release_date")) return -1;
-
-        long unixTimestamp = game.getLong("first_release_date");
-        java.time.Instant instant = java.time.Instant.ofEpochSecond(unixTimestamp);
-        java.time.ZonedDateTime dateTime = instant.atZone(java.time.ZoneId.systemDefault());
-
-        return dateTime.getYear();
-
-    }
-
     public List<Integer> getSimilarGameIds(int gameId) {
-        JsonNode json = apiClient.getGameDetailsById(gameId);
-        JSONArray array = json.getArray();
+        JSONObject game = fetchGameData(gameId);
+        if (game == null || !game.has("similar_games")) return Collections.emptyList();
 
-        List<Integer> similarGameIds = new ArrayList<>();
-
-        if (array.isEmpty()) return similarGameIds;
-
-        JSONObject game = array.getJSONObject(0);
-
-        if (!game.has("similar_games")) return similarGameIds;
-
+        List<Integer> similarIds = new ArrayList<>();
         JSONArray similarArray = game.getJSONArray("similar_games");
         for (int i = 0; i < similarArray.length(); i++) {
-            similarGameIds.add(similarArray.getInt(i));
+            similarIds.add(similarArray.getInt(i));
         }
-
-        return similarGameIds;
+        return similarIds;
     }
 
-    public Image getCoverImageByGameId(int gameId) {
-        JsonNode gameJson = apiClient.getGameDetailsById(gameId);
-        JSONArray gameArray = gameJson.getArray();
-
-        if (gameArray.isEmpty()) {
-            return getPlaceholderImage();
+    public GamePreview getGamePreviewById(int gameId) {
+        if (previewCache.containsKey(gameId)) {
+            return previewCache.get(gameId);
         }
 
-        JSONObject gameObj = gameArray.getJSONObject(0);
+        JSONObject gameData = fetchGameData(gameId);
+        if (gameData == null) return null;
 
-        if (!gameObj.has("cover")) {
-            return getPlaceholderImage();
-        }
+        String title = gameData.optString("name", "<name not found>");
+        int releaseYear = extractReleaseYear(gameData);
+        Image coverImage = extractCoverImage(gameData);
 
-        int coverId = gameObj.getInt("cover");
+        GamePreview preview = new GamePreview(title, releaseYear, coverImage, gameId);
+        previewCache.put(gameId, preview);
+        return preview;
+    }
 
+    public LibraryEntry getLibraryEntryById(int gameId) {
+        JSONObject gameData = fetchGameData(gameId);
+        if (gameData == null) return null;
+
+        String title = gameData.optString("name", "<name not found>");
+        int releaseYear = extractReleaseYear(gameData);
+        Image coverImage = extractCoverImage(gameData);
+
+        return new LibraryEntry(title, releaseYear, coverImage, gameId);
+    }
+
+    private JSONObject fetchGameData(int gameId) {
+        JsonNode json = apiClient.getGameDetailsById(gameId);
+        JSONArray array = json.getArray();
+        if (array.isEmpty()) return null;
+        return array.getJSONObject(0);
+    }
+
+    private int extractReleaseYear(JSONObject game) {
+        if (!game.has("first_release_date")) return -1;
+        long timestamp = game.getLong("first_release_date");
+        ZonedDateTime dateTime = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault());
+        return dateTime.getYear();
+    }
+
+    private Image extractCoverImage(JSONObject gameData) {
+        if (!gameData.has("cover")) return getPlaceholderImage();
+
+        int coverId = gameData.getInt("cover");
         JsonNode coverJson = apiClient.getCoverArtById(coverId);
         JSONArray coverArray = coverJson.getArray();
 
-        if (coverArray.isEmpty()) {
-            return getPlaceholderImage();
-        }
+        if (coverArray.isEmpty()) return getPlaceholderImage();
 
         JSONObject coverObj = coverArray.getJSONObject(0);
-        if (!coverObj.has("url")) {
-            return getPlaceholderImage();
-        }
+        if (!coverObj.has("url")) return getPlaceholderImage();
 
         String url = coverObj.getString("url");
-
         if (url.startsWith("//")) {
             url = "https:" + url;
         } else if (!url.startsWith("http")) {
@@ -136,41 +120,22 @@ public class GameService {
         }
 
         return new Image(url, true);
-
-
     }
 
     private Image getPlaceholderImage() {
         Canvas canvas = new Canvas(75, 100);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK); // Or any fallback color
+        gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, 75, 100);
-
         WritableImage image = new WritableImage(75, 100);
         canvas.snapshot(null, image);
         return image;
     }
-    public GamePreview getGamePreviewById(int gameId) {
-        String title = getGameName(gameId);
-        int releaseYear = getGameReleaseYear(gameId);
-        Image coverImage = getCoverImageByGameId(gameId);
 
-        return new GamePreview(title, releaseYear, coverImage, gameId);
-    }
-
-
-    public static void main(String[] args) {
-        GameService g = new GameService();
-        System.out.println(g.getGameName(73));
-        System.out.println(g.getGameReleaseYear(73));
-        GameService gameService = new GameService();
-
-        int gameId = 73; // Mass Effect ID
-        List<Integer> similarGameNames = gameService.getSimilarGameIds(gameId);
-
-        System.out.println("Similar games to " + gameService.getGameName(gameId) + ":");
-        for (Integer name : similarGameNames) {
-            System.out.println("- " + g.getGameName(name));
+    public void preloadGamePreviews(List<Integer> gameIds) {
+        for (int id : gameIds) {
+            getGamePreviewById(id); // populates cache
         }
     }
-    }
+}
+

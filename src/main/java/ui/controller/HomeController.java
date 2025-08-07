@@ -23,11 +23,14 @@ public class HomeController {
     private final HomeView view;
     private final GameService gameService;
     private final UserInteractor userInteractor;
+    private final UserProfileController userProfileController;
 
-    public HomeController(HomeView view, GameService gameService, UserInteractor userInteractor) {
+    public HomeController(HomeView view, GameService gameService, UserInteractor userInteractor,
+                          UserProfileController userProfileController) {
         this.view = view;
         this.gameService = gameService;
         this.userInteractor = userInteractor;
+        this.userProfileController = userProfileController;
 
         view.setSearchButtonHandler(new EventHandler<ActionEvent>() {
             @Override
@@ -77,7 +80,12 @@ public class HomeController {
             libraryButton.setText("Add to Library");
         }
         libraryButton.setUserData(game);
-        libraryButton.setOnAction(this::handleLibraryButtonClick);
+        libraryButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                handleLibraryButtonClick(event);
+            }
+        });
 
         Button wishlistButton = new Button();
         if (userInteractor.isInWishlist(game.getGameid())) {
@@ -86,7 +94,12 @@ public class HomeController {
             wishlistButton.setText("Add to Wishlist");
         }
         wishlistButton.setUserData(game);
-        wishlistButton.setOnAction(this::handleWishlistButtonClick);
+        wishlistButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                handleWishlistButtonClick(actionEvent);
+            }
+        });
 
         VBox buttonBox = new VBox(5, libraryButton, wishlistButton);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
@@ -111,6 +124,7 @@ public class HomeController {
             userInteractor.addToLibrary(gameid);
             button.setText("Remove from Library");
         }
+        userProfileController.refresh();
     }
 
     private void handleWishlistButtonClick(ActionEvent event) {

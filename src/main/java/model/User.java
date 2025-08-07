@@ -12,6 +12,8 @@ public class User {
     private List<Integer> wishlist;
     private Map<Integer, Review> reviews;
     private List<Integer> library;
+    private String bio;
+    private String profilePictureURL;
 
 
     public User(String username, String hashedPassword){
@@ -20,6 +22,8 @@ public class User {
         this.reviews = new HashMap<>();
         this.wishlist = new ArrayList<>();
         this.library = new ArrayList<>();
+        this.bio = "";
+        this.profilePictureURL = null;
 
 
     }
@@ -43,5 +47,22 @@ public class User {
 
     public List<Integer> getLibrary() {
         return library;
+    }
+
+    public void setBio(String content){
+        this.bio = content;
+    }
+
+    public String getBio(){
+        return this.bio;
+    }
+
+
+    public void setProfilePictureURL(String profilePictureURL) {
+        this.profilePictureURL = profilePictureURL;
+    }
+
+    public String getProfilePictureURL(){
+        return this.profilePictureURL;
     }
 }

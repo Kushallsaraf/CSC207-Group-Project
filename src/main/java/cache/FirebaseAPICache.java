@@ -3,7 +3,7 @@ package cache;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 
-public class FirebaseAPICache implements APICache{
+public class FirebaseAPICache implements APICache {
     private final FirebaseRestClient firebaseRestClient;
     private final String basePath;
 

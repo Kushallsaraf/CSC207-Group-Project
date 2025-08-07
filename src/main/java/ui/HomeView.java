@@ -15,12 +15,22 @@ public class HomeView implements View {
     private final VBox resultsContainer;
     private final TextField searchField;
     private final Button searchButton;
+    private final Button homeButton;
+    private final Button profileButton;
 
     public HomeView() {
         searchField = new TextField();
         searchField.setPromptText("Search for a game...");
 
         searchButton = new Button("Search");
+
+        HBox navBar = new HBox(15);
+        navBar.setPadding(new Insets(10));
+
+        homeButton = new Button("Home");
+        profileButton = new Button("Profile");
+
+        navBar.getChildren().addAll(homeButton, profileButton);
 
         HBox searchBar = new HBox(10, searchField, searchButton);
         searchBar.setPadding(new Insets(15));
@@ -33,9 +43,8 @@ public class HomeView implements View {
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefHeight(400);
 
-        layout = new VBox(20, searchBar, scrollPane);
-        layout.setPadding(new Insets(20));
-    }
+        layout = new VBox(20, navBar, searchBar, scrollPane);
+        layout.setPadding(new Insets(20));}
 
     public void setSearchButtonHandler(javafx.event.EventHandler<javafx.event.ActionEvent> handler) {
         searchButton.setOnAction(handler);
@@ -70,6 +79,14 @@ public class HomeView implements View {
     public void onShow() {
         searchField.clear();
         resultsContainer.getChildren().clear();
+    }
+
+    public Button getHomeButton(){
+        return homeButton;
+    }
+
+    public Button getProfileButton(){
+        return profileButton;
     }
 }
 

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class GameCentral extends Application {
 
     private BorderPane mainLayout;
-    private Stage primaryStage; // Store the primary stage
+    private Stage primaryStage;
 
     public static void main(String[] args) {
         launch(args);
@@ -16,7 +16,7 @@ public class GameCentral extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage; // Keep a reference to the stage
+        this.primaryStage = primaryStage;
         primaryStage.setTitle("Game Central");
 
 

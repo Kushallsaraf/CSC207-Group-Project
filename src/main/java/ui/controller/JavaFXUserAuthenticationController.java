@@ -48,7 +48,7 @@ public class JavaFXUserAuthenticationController {
                 @Override
                 public void handle(ActionEvent event) {
 
-                    gameCentralController.showHomepage(loginInteractor.getUser(username)); // Replace with your actual navigation method
+                    gameCentralController.showHomepage(loginInteractor.getUser(username));
                 }
             });
             delay.play();

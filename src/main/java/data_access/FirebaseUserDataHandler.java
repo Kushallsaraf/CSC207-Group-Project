@@ -73,6 +73,12 @@ public class FirebaseUserDataHandler implements UserDataHandler {
                     user.getReviews().put(gameid, review);
                 }
             }
+            if (jsonObject.has("bio")) {
+                user.setBio(jsonObject.getString("bio"));
+            }
+            if (jsonObject.has("profile-picture-url")) {
+                user.setProfilePictureURL(jsonObject.getString("profile-picture-url"));
+            }
 
             return user;
         }
@@ -109,6 +115,8 @@ public class FirebaseUserDataHandler implements UserDataHandler {
         }
 
         userJson.put("reviews", reviewsJson);
+        userJson.put("bio", user.getBio());
+        userJson.put("profile-picture-url", user.getProfilePictureURL());
 
 
         client.putData("Users/" + user.getUsername(), userJson.toString());

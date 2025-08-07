@@ -19,7 +19,7 @@ public class Endpoints {
     public static final String IGDB_COMPANIES_BY_ID = "igdb-companies-by-id";
     public static final String IGDB_AGE_RATINGS_BY_ID = "igdb-age-ratings-by-id";
     public static final String IGDB_AGE_RATING_CATEGORIES_BY_ID = "igdb-age-rating-categories-by-id";
-
+    public static final String IGDB_MULTIPLE_COVERS_BY_IDS = "igdb-multiple-covers";
 
 
     // RAWG Endpoints

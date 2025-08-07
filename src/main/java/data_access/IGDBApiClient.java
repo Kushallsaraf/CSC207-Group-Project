@@ -6,6 +6,8 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 
+import java.util.List;
+
 public class IGDBApiClient {
     private IGDBFirebaseAPICache cache;
 
@@ -89,6 +91,27 @@ public class IGDBApiClient {
         System.out.println("request not found in cache, calling API...");
         cache.cacheJsonNode(endpoint, cacheKey, response.getBody());
         return response.getBody();
+    }
+
+    public JsonNode getCoverArtsByIds(List<Integer> coverIds) {
+        if (coverIds == null || coverIds.isEmpty()) {
+            throw new IllegalArgumentException("Cover ID list must not be null or empty.");
+        }
+
+        StringBuilder idListBuilder = new StringBuilder();
+        idListBuilder.append("(");
+        for (int i = 0; i < coverIds.size(); i++) {
+            idListBuilder.append(coverIds.get(i));
+            if (i < coverIds.size() - 1) {
+                idListBuilder.append(", ");
+            }
+        }
+        idListBuilder.append(")");
+
+        String body = "fields id, url, game; where id = " + idListBuilder.toString() + ";";
+        String cacheKey = "covers_batch_" + idListBuilder.toString();
+
+        return handleCacheAction(Endpoints.IGDB_MULTIPLE_COVERS_BY_IDS, cacheKey, body, "covers");
     }
 
     public void shutdown() {

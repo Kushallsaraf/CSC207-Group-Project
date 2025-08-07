@@ -1,6 +1,6 @@
 package cache;
 
-public class IGDBFirebaseAPICache extends FirebaseAPICache{
+public class IGDBFirebaseAPICache extends FirebaseAPICache {
     public IGDBFirebaseAPICache() {
         super("API/IGDB");
     }

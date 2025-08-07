@@ -1,8 +1,11 @@
 package service;
 
 import auth.UserDataHandler;
+import model.GamePreview;
 import model.Review;
 import model.User;
+
+import java.util.List;
 
 public class UserInteractor {
     private final User user;
@@ -11,6 +14,9 @@ public class UserInteractor {
     public UserInteractor(User user, auth.UserDataHandler dataHandler) {
         this.user = user;
         this.dataHandler = dataHandler;
+    }
+    public User getUser(){
+        return this.user;
     }
 
     public boolean addToWishlist(int gameId) {
@@ -82,6 +88,17 @@ public class UserInteractor {
         dataHandler.saveUser(user);
         return user.getLibrary().contains(gameid);
 
+
+    }
+
+    public void editBio(String updatedBio) {
+        this.user.setBio(updatedBio);
+        dataHandler.saveUser(user);
+    }
+
+    public void editProfilePicture(String updatedProfilePictureUrl){
+        this.user.setProfilePictureURL(updatedProfilePictureUrl);
+        dataHandler.saveUser(user);
 
     }
 }
