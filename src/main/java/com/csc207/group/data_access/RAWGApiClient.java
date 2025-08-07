@@ -164,19 +164,12 @@ public class RAWGApiClient {
             throw new RuntimeException("API call failed with status: " + getResponse.statusCode());
         }
 
-
-
-
         // caching the response
         System.out.println(REQUEST_NOT_IN_CACHE_CALLING_API);
         this.cache.cacheJsonString(Endpoints.RAWG_SCREENSHOTS_FOR_GAMES_BY_ID, gameID, getResponse.body());
 
         return ScreenshotService.parseScreenshotsFromJson(getResponse.body());
     }
-
-
-
-    // need to add game rating system -> need a request for that as well.
 
     public List<Achievement> getGameAchievements(String gameID) throws IOException, InterruptedException,
             URISyntaxException {
