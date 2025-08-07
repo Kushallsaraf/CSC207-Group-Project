@@ -14,6 +14,12 @@ public class FirebaseAPICache implements APICache {
         this.basePath = basePath;
 
     }
+
+    @Override
+    public void cacheJsonString(String requestType, String requestKey, String jsonString) {
+        firebaseRestClient.putData(basePath + "/" + requestType + "/" + requestKey, jsonString);
+    }
+
     @Override
     public boolean hasRequest(String requestType, String requestKey) {
         return firebaseRestClient.hasPath(basePath + "/" + requestType + "/" + requestKey);
