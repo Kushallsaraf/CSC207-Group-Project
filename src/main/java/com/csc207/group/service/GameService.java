@@ -1,6 +1,8 @@
 package com.csc207.group.service;
 
+import com.csc207.group.cache.FirebaseRestClient;
 import com.csc207.group.cache.IGDBFirebaseAPICache;
+import com.csc207.group.data_access.FirebaseGameDataHandler;
 import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.GamePreview;
@@ -20,6 +22,8 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class GameService {
+    private final FirebaseGameDataHandler firebaseGameDataHandler =
+            new FirebaseGameDataHandler(new FirebaseRestClient());
 
     private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
     private final Map<Integer, GamePreview> previewCache = new HashMap<>();
@@ -58,8 +62,18 @@ public class GameService {
         }
         return similarIds;
     }
+    /**Will save a game to the database.
+     *
+     */
+    public void saveGame(Game game){
+        firebaseGameDataHandler.saveGameData(game);
+    }
 
     public Game getGameById(int id) {
+        if (this.firebaseGameDataHandler.hasGame(id)){
+            return firebaseGameDataHandler.getCachedGame(id);
+        }
+
         JsonNode json = apiClient.getGameDetailsById(id);
         JSONArray array = json.getArray();
         if (array.isEmpty()) return null;
