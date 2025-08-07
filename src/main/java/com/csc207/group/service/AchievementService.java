@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * This class is used to parse the achievement objects from a Json
+ * This class is used to parse the achievement objects from a JSON
  */
 public class AchievementService {
     // this class can take the json objects and parse them to create a proper list
@@ -24,7 +24,7 @@ public class AchievementService {
         // this parses the json string into a navigatable tree like object
         JsonNode rootNode = mapper.readTree(json);
 
-        if (rootNode.isArray() && rootNode.size() > 0) {
+        if (rootNode.isArray() && !rootNode.isEmpty()) {
             rootNode = rootNode.get(0);
         }
 

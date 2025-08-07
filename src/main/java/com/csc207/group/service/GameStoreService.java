@@ -24,7 +24,7 @@ public class GameStoreService {
 
         // trying to fix caching issue with how json is cached and
         // how the service class deals with it => worked
-        if (rootNode.isArray() && rootNode.size() > 0) {
+        if (rootNode.isArray() && !rootNode.isEmpty()) {
             rootNode = rootNode.get(0);
         }
         JsonNode gameStoresNode = rootNode.get("results");

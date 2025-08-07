@@ -24,7 +24,7 @@ public class ScreenshotService {
 
         JsonNode rootNode = mapper.readTree(json);
 
-        if (rootNode.isArray() && rootNode.size() > 0) {
+        if (rootNode.isArray() && !rootNode.isEmpty()) {
             rootNode = rootNode.get(0);
         }
 
