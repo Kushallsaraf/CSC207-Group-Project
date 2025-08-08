@@ -23,16 +23,13 @@ public class RecommendationEngine {
     private static final String DEFAULT_MESSAGE = "Explore the best games:";
 
     private List<GameRecommendation> recommendations;
-    private String message;
     private Map<String, RecommendationStrategy> strategies;
     private User user;
     private RecommendationService service;
 
 
-    public RecommendationEngine(RecommendationService service, List<GameRecommendation> recommendations,
-                                String message, User user){
-        this.recommendations = recommendations;
-        this.message = message;
+    public RecommendationEngine(RecommendationService service, User user){
+
         this.user = user;
         this.service = service;
         this.strategies = new HashMap<>();
@@ -112,5 +109,38 @@ public class RecommendationEngine {
         return games;
     }
 
+//    public static void main(String[] args) {
+//        User user = new User("John", "1234");
+//        user.getWishlist().add(19560);
+//        user.getWishlist().add(7348);
+//        user.getWishlist().add(1985);
+//        user.getWishlist().add(375);
+//        user.getWishlist().add(21073);
+//        Review a = new Review("John", "great game", 73, 5.0);
+//        Review b = new Review("John", "good game", 140839, 4.0);
+//        Review c = new Review("John", "decent game", 75, 5.0);
+//        Review d = new Review("John", "bad game", 74, 4.0);
+//        Review e = new Review("John", "meh game", 2155, 2.0);
+//        user.getReviews().put(73, a);
+//        user.getReviews().put(140839, b);
+//        user.getReviews().put(75, c);
+//        user.getReviews().put(74, d);
+//        user.getReviews().put(2155, e);
+//        RecommendationService service = new RecommendationService();
+//
+//        RecommendationEngine engine = new RecommendationEngine(service, user);
+//        Recommendation r = engine.generateRecommendation();
+//        System.out.println("TESTING MESSAGE: " + r.getMessage());
+//        List<GameRecommendation> lst = r.getRecommendations();
+//        for (GameRecommendation rec: lst){
+//            System.out.println(rec.getTitle());
+//        }
 
-}
+
+
+
+
+
+
+    }
+
