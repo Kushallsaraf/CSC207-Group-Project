@@ -161,8 +161,11 @@ public class GameService {
         String title = gameData.optString("name", "<name not found>");
         int releaseYear = extractReleaseYear(gameData);
         Image coverImage = extractCoverImage(gameData);
+        // Fetch the summary to use as the description
+        String description = gameData.optString("summary", "No description available.");
 
-        GamePreview preview = new GamePreview(title, releaseYear, coverImage, gameId);
+        // Pass the description as the 5th argument
+        GamePreview preview = new GamePreview(title, releaseYear, coverImage, gameId, description);
         previewCache.put(gameId, preview);
         return preview;
     }
@@ -174,8 +177,11 @@ public class GameService {
         String title = gameData.optString("name", "<name not found>");
         int releaseYear = extractReleaseYear(gameData);
         Image coverImage = extractCoverImage(gameData);
+        // Fetch the summary to use as the description
+        String description = gameData.optString("summary", "No description available.");
 
-        return new LibraryEntry(title, releaseYear, coverImage, gameId);
+        // Pass the description as the 5th argument
+        return new LibraryEntry(title, releaseYear, coverImage, gameId, description);
     }
 
     private JSONObject fetchGameData(int gameId) {

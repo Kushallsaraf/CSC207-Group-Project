@@ -1,50 +1,77 @@
 package com.csc207.group.service;
 
-
 import com.csc207.group.cache.IGDBFirebaseAPICache;
 import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.model.GamePreview;
+import javafx.scene.image.Image;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
-
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GamePreviewService {
     private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
 
-    public List<Integer> getGameByName(String Name) {
-        JsonNode response = apiClient.searchGamesByName(Name);
-        JSONArray game_ids = response.getArray();
-        List<Integer> game_id_list = new ArrayList<>();
-        for (int i = 0; i < game_ids.length(); i++) {
-            game_id_list.add(game_ids.getInt(i));
+    public List<Integer> getGameByName(String name) {
+        JsonNode response = apiClient.searchGamesByName(name);
+        JSONArray gameIdsArray = response.getArray();
+        List<Integer> gameIdList = new ArrayList<>();
+        for (int i = 0; i < gameIdsArray.length(); i++) {
+            // Assuming the JSON objects have an "id" field
+            gameIdList.add(gameIdsArray.getJSONObject(i).getInt("id"));
         }
-        return game_id_list;
+        return gameIdList;
     }
 
     public GamePreview getGameById(int id) {
         JsonNode response = apiClient.getGameDetailsById(id);
         JSONArray array = response.getArray();
 
-        // setting name
+        if (array.isEmpty()) {
+            return null;
+        }
+
         JSONObject gameJson = array.getJSONObject(0);
+
+        // Extract all necessary data
         String name = gameJson.optString("name", "Unknown");
+        int year = extractReleaseYear(gameJson);
+        Image coverImage = extractCoverImage(gameJson);
+        String summary = gameJson.optString("summary", "No description available.");
 
-        // setting cover image url
-        String cover_page = "";
-        if (gameJson.has("cover")) {
-            cover_page = new GameService().getCoverPageById(gameJson.optInt("cover", 0));
+        // Create the GamePreview object with the correct parameters
+        return new GamePreview(name, year, coverImage, id, summary);
+    }
+
+    // Helper method to get the release year from the timestamp
+    private int extractReleaseYear(JSONObject game) {
+        if (!game.has("first_release_date")) return -1;
+        long timestamp = game.getLong("first_release_date");
+        ZonedDateTime dateTime = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault());
+        return dateTime.getYear();
+    }
+
+    // Helper method to get the cover image from its ID and URL
+    private Image extractCoverImage(JSONObject gameData) {
+        if (!gameData.has("cover")) return null; // Or return a placeholder image
+
+        int coverId = gameData.getInt("cover");
+        JsonNode coverJson = apiClient.getCoverArtById(coverId);
+        JSONArray coverArray = coverJson.getArray();
+
+        if (coverArray.isEmpty()) return null;
+
+        JSONObject coverObj = coverArray.getJSONObject(0);
+        if (!coverObj.has("url")) return null;
+
+        String url = coverObj.getString("url");
+        if (url.startsWith("//")) {
+            url = "https:" + url;
         }
-        else {
-            cover_page = "No cover page";
-        }
-
-        // setting description of the game
-        String summary = gameJson.optString("summary", "None");
-
-        return new GamePreview(name, cover_page, summary);
+        return new Image(url, true);
     }
 }
-
