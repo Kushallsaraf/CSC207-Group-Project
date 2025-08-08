@@ -4,7 +4,7 @@ package com.csc207.group.cache;
  *
  */
 public class Endpoints {
-    //TODO: anytime you call a new endpoint from an API, make a public static
+    // TODO: anytime you call a new endpoint from an API, make a public static
     // final string here that corresponds to it
 
 
@@ -21,6 +21,9 @@ public class Endpoints {
     public static final String IGDB_AGE_RATING_CATEGORIES_BY_ID = "igdb-age-rating-categories-by-id";
     public static final String IGDB_MULTIPLE_COVERS_BY_IDS = "igdb-multiple-covers";
 
+    public static final String IGDB_POPULAR_GAMES_TOP50 = "as";
+
+
 
     // RAWG Endpoints
 
@@ -30,4 +33,4 @@ public class Endpoints {
     public static final String RAWG_ACHIEVEMENTS_FOR_GAMES_BY_ID = "rawg-achievements-for-games-by-id";
     public static final String RAWG_STORES_FOR_GAMES_BY_ID = "rawg-store-for-games-by-id";
 
-}
+    }

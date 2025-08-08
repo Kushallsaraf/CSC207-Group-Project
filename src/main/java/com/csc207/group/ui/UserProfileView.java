@@ -24,9 +24,6 @@ import java.util.List;
 
 public class UserProfileView extends VBox implements View {
 
-    private final Button homeButton = new Button("Home");
-    private final Button profileButton = new Button("Profile");
-
     private final VBox wishlistContainer = new VBox(10);
     private final VBox libraryContainer = new VBox(10);
 
@@ -49,8 +46,6 @@ public class UserProfileView extends VBox implements View {
         newBio = "";
         newImageUrl = "";
 
-        // Nav bar
-        HBox navBar = new HBox(10, homeButton, profileButton);
 
         // Profile info section
         profileImageView.setFitWidth(100);
@@ -101,7 +96,7 @@ public class UserProfileView extends VBox implements View {
         VBox.setVgrow(contentBox, Priority.ALWAYS);
 
         // Final layout
-        this.getChildren().addAll(navBar, profileHeader, contentBox);
+        this.getChildren().addAll(profileHeader, contentBox);
     }
 
     public void setWishlistCards(List<javafx.scene.Node> cards) {
@@ -110,14 +105,6 @@ public class UserProfileView extends VBox implements View {
 
     public void setLibraryCards(List<javafx.scene.Node> cards) {
         libraryCardsBox.getChildren().setAll(cards);
-    }
-
-    public Button getHomeButton() {
-        return homeButton;
-    }
-
-    public Button getProfileButton() {
-        return profileButton;
     }
 
     @Override

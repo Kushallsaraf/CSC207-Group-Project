@@ -6,9 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import java.util.List;
 
 public class HomeView implements View {
@@ -17,21 +14,13 @@ public class HomeView implements View {
     private final VBox resultsContainer;
     private final TextField searchField;
     private final Button searchButton;
-    private final Button homeButton;
-    private final Button profileButton;
+    // Removed homeButton and profileButton
 
     public HomeView() {
         // Main container with dark theme
         layout = new VBox(20);
         layout.setStyle("-fx-padding: 20; -fx-background-color: #222;");
         layout.setAlignment(Pos.TOP_CENTER);
-
-        // Navigation Bar
-        homeButton = new Button("Home");
-        profileButton = new Button("Profile");
-        HBox navBar = new HBox(15, homeButton, profileButton);
-        navBar.setPadding(new Insets(10));
-        navBar.setAlignment(Pos.CENTER_LEFT);
 
         // Welcome Message
         Label welcomeLabel = new Label("WELCOME TO GAME CENTRAL!");
@@ -40,14 +29,8 @@ public class HomeView implements View {
         Label subLabel = new Label("Start searching below to find new games.");
         subLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #ccc;");
 
-        // Search Bar
-        searchField = new TextField();
-        searchField.setPromptText("Search for a game...");
-        searchField.setStyle("-fx-font-size: 14px; -fx-pref-width: 350px;");
-
-        searchButton = new Button("Search");
-        HBox searchBar = new HBox(10, searchField, searchButton);
-        searchBar.setAlignment(Pos.CENTER);
+        // The Search Bar is no longer in the top nav, so it remains here.
+        // If you want it in the top nav, remove it from here.
 
         // Results Container
         resultsContainer = new VBox(15);
@@ -57,8 +40,8 @@ public class HomeView implements View {
         scrollPane.setStyle("-fx-background-color: transparent; -fx-background: #333;");
         scrollPane.setPrefHeight(400);
 
-        // Add all components to the layout
-        layout.getChildren().addAll(navBar, welcomeLabel, subLabel, searchBar, scrollPane);
+        // Add all components to the layout (NavBar is removed)
+        layout.getChildren().addAll(welcomeLabel, subLabel, scrollPane);
     }
 
     public void setSearchButtonHandler(javafx.event.EventHandler<javafx.event.ActionEvent> handler) {
@@ -96,13 +79,5 @@ public class HomeView implements View {
     public void onShow() {
         searchField.clear();
         resultsContainer.getChildren().clear();
-    }
-
-    public Button getHomeButton() {
-        return homeButton;
-    }
-
-    public Button getProfileButton() {
-        return profileButton;
     }
 }

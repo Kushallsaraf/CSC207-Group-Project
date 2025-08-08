@@ -1,117 +1,126 @@
 package com.csc207.group.app;
 
-import com.csc207.group.auth.UserDataHandler;
-import com.csc207.group.cache.FirebaseRestClient;
-import com.csc207.group.data_access.FirebaseUserDataHandler;
+import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.User;
 import com.csc207.group.service.GameService;
+import com.csc207.group.service.NewsService;
 import com.csc207.group.service.UserInteractor;
 import com.csc207.group.service.UserProfileInteractor;
 import com.csc207.group.ui.HomeView;
-import com.csc207.group.ui.JavaFXUserAuthenticationView;
 import com.csc207.group.ui.UserProfileView;
 import com.csc207.group.ui.View;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.UserProfileController;
+import com.csc207.group.views.NewsView;
+import javafx.application.HostServices;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public class GameCentralController {
 
     private final Stage primaryStage;
-    private final StackPane rootPane = new StackPane();
-    private final Map<String, View> views = new HashMap<>();
+    private final BorderPane mainLayout = new BorderPane(); // Switched to BorderPane
     private UserProfileController userProfileController;
-    private UserProfileInteractor userProfileInteractor;
     private UserInteractor userInteractor;
     private GameService gameService;
-    private HomeController homeController;
-
-    private JavaFXUserAuthenticationView javaFXUserAuthenticationView;
     private UserProfileView userProfileView;
+    private HostServices hostServices;
 
-    public GameCentralController(Stage primaryStage) {
+    public GameCentralController(Stage primaryStage, HostServices hostServices) {
         this.primaryStage = primaryStage;
-        Scene scene = new Scene(rootPane, 1200, 800); // Adjusted for a better window size
+        this.hostServices = hostServices;
+        Scene scene = new Scene(mainLayout, 1200, 800);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Game Central");
         primaryStage.show();
     }
 
-    public void setUserAuthenticationView(JavaFXUserAuthenticationView javaFXUserAuthenticationView) {
-        this.javaFXUserAuthenticationView = javaFXUserAuthenticationView;
-        registerView(javaFXUserAuthenticationView);
-    }
-
-    public void showUserAuthenticationView() {
-        switchToView("login");
-    }
-
-    public void registerView(View view) {
-        if (!views.containsKey(view.getName())) {
-            views.put(view.getName(), view);
-            rootPane.getChildren().add(view.getView());
-            view.getView().setVisible(false);
-        }
-    }
-
-    public void switchToView(String name) {
-        for (View view : views.values()) {
-            view.getView().setVisible(false);
-        }
-
-        View target = views.get(name);
-        if (target != null) {
-            if ("userProfile".equals(name) && userProfileController != null) {
-                userProfileController.refresh();
-            }
-            target.getView().setVisible(true);
-            target.onShow();
-        } else {
-            System.err.println("View not found: " + name);
-        }
+    // This method is now simplified to just set the center content
+    public void setCenterView(Node view) {
+        mainLayout.setCenter(view);
     }
 
     /**
-     * Call this after successful login. Sets up the homepage view and switches to it.
+     * Called after login. Sets up the main UI with the navigation bar.
      */
-    public void showHomepage(User user) {
-        HomeView homeView = new HomeView();
-        homeView.getHomeButton().setOnAction(event -> switchToView("home"));
-        homeView.getProfileButton().setOnAction(event -> {
-            showUserProfile(user);
-            switchToView("userProfile");
-        });
-
+    public void showMainApp(User user) {
+        // Initialize services and controllers
         gameService = new GameService();
-
-        // Correctly initialize FirebaseUserDataHandler
-        FirebaseUserDataHandler firebaseUserDataHandler = new FirebaseUserDataHandler(new FirebaseRestClient());
-        userInteractor = new UserInteractor(user, firebaseUserDataHandler);
+        userInteractor = new UserInteractor(user, new com.csc207.group.data_access.FirebaseUserDataHandler(new com.csc207.group.cache.FirebaseRestClient()));
         userProfileView = new UserProfileView();
-        userProfileInteractor = new UserProfileInteractor(userInteractor, gameService);
+        UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService);
         userProfileController = new UserProfileController(userProfileInteractor, userInteractor, userProfileView);
         userProfileView.setController(userProfileController);
-        homeController = new HomeController(homeView, gameService, userInteractor, userProfileController);
 
-        registerView(homeView);
-        switchToView("home");
+        // Create and set the top navigation bar
+        mainLayout.setTop(createTopNav());
+
+        // Show the home page by default
+        showHomeView();
     }
 
-    public void showUserProfile(User user) {
-        // Ensure the profile view is registered before switching to it
-        if (!views.containsKey("userProfile")) {
-            registerView(userProfileView);
-        }
+    /**
+     * Creates the top navigation bar.
+     * @return HBox containing the navigation elements.
+     */
+    private HBox createTopNav() {
+        HBox topNav = new HBox(15);
+        topNav.setStyle("-fx-padding: 10 20; -fx-background-color: #333; -fx-alignment: center-left;");
 
-        userProfileView.getHomeButton().setOnAction(event -> switchToView("home"));
-        userProfileView.getProfileButton().setOnAction(event -> switchToView("userProfile"));
+        Button homeButton = new Button("Home");
+        Button newsButton = new Button("News");
 
-        userProfileController.refresh(); // Refresh data before showing
-        switchToView("userProfile");
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search...");
+        searchField.setStyle("-fx-font-size: 14px; -fx-pref-width: 350px;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button libraryButton = new Button("Your Library");
+        libraryButton.setStyle("-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 12; -fx-background-radius: 5;");
+
+        // --- Event Handlers for Navigation ---
+        homeButton.setOnAction(e -> showHomeView());
+        newsButton.setOnAction(e -> showNewsView());
+        libraryButton.setOnAction(e -> showUserProfileView());
+
+        // Style the navigation buttons
+        String buttonStyle = "-fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-size: 16px; -fx-cursor: hand;";
+        homeButton.setStyle(buttonStyle);
+        newsButton.setStyle(buttonStyle);
+
+        topNav.getChildren().addAll(homeButton, newsButton, searchField, spacer, libraryButton);
+        return topNav;
+    }
+
+    // --- Methods to Switch Views ---
+
+    private void showHomeView() {
+        // The HomeView is now much simpler and doesn't need navigation buttons
+        HomeView homeView = new HomeView();
+        HomeController homeController = new HomeController(homeView, gameService, userInteractor, userProfileController);
+        setCenterView(homeView.getView());
+    }
+
+    private void showNewsView() {
+        NewsService newsService = new NewsService();
+        NewsView newsView = new NewsView(newsService.ArticleBuilder(), url -> hostServices.showDocument(url));
+        setCenterView(newsView.getView());
+    }
+
+    private void showUserProfileView() {
+        userProfileController.refresh(); // Make sure data is up-to-date
+        setCenterView(userProfileView.getView());
     }
 }
