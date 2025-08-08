@@ -34,6 +34,7 @@ public class Game {
     public void setAge_rating(String age_rating) {this.age_rating = age_rating;}
     public void setRelease_date(String release_date) {this.release_date = release_date;}
     public void setDLCs(List <Integer> DLCs) {this.DLCs = DLCs;}
+    public void setReviews(List <Review> reviews) {this.reviews = reviews;}
 
 
     public void appendReview(Review review) {
