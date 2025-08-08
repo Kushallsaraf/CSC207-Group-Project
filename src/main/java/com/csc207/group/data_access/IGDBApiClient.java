@@ -6,6 +6,9 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class IGDBApiClient {
     private IGDBFirebaseAPICache cache;
 
@@ -27,6 +30,12 @@ public class IGDBApiClient {
         return handleCacheAction(Endpoints.IGDB_GAME_BY_ID, String.valueOf(id), body, "games");
     }
 
+
+    /**Get the name of a genre by the genre id
+     *
+     * @param id
+     * @return
+     */
     public JsonNode getGenresById(int id) {
         String body = "fields *; where id = " + id + ";";
         return handleCacheAction(Endpoints.IGDB_GENRES_BY_ID, String.valueOf(id), body, "genres");
@@ -40,6 +49,42 @@ public class IGDBApiClient {
     public JsonNode getPlatformsById(int id) {
         String body = "fields *; where id = " + id + ";";
         return handleCacheAction(Endpoints.IGDB_PLATFORMS_BY_ID, String.valueOf(id), body, "platforms");
+    }
+
+    /** Fetches game details for games that result from searching games by genre
+     *
+     * @param genreIds
+     * @param limit
+     * @return
+     */
+
+    public JsonNode getGamesByGenreIds(List<Integer> genreIds, int limit) {
+        if (genreIds == null || genreIds.isEmpty()) {
+            throw new IllegalArgumentException("genreIds must not be null or empty");
+        }
+        if (limit <= 0) limit = 20;
+
+        String ids = genreIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+
+        String body = "fields id, name, cover.image_id, first_release_date, rating;" +
+                " where genres = (" + ids + ");" +
+                " sort rating desc;" +
+                " limit " + limit + ";";
+
+        String cacheKey = "genres=" + ids + "&limit=" + limit;
+        return handleCacheAction(Endpoints.IGDB_GAMES_BY_GENRES, cacheKey, body, "games");
+    }
+
+    /**A default version of getGamesByGenreId when
+     * the limit is not defined
+     *
+     * @param genreIds
+     * @return
+     */
+    public JsonNode getGamesByGenreIds(List<Integer> genreIds) {
+        return getGamesByGenreIds(genreIds, 20);
     }
 
     public JsonNode getReleaseDateById(int id) {

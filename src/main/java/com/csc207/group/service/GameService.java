@@ -178,6 +178,8 @@ public class GameService {
         return new LibraryEntry(title, releaseYear, coverImage, gameId);
     }
 
+
+
     private JSONObject fetchGameData(int gameId) {
         JsonNode json = apiClient.getGameDetailsById(gameId);
         JSONArray array = json.getArray();
