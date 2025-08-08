@@ -51,17 +51,7 @@ public class GameService {
         return gameIds;
     }
 
-    public List<Integer> getSimilarGameIds(int gameId) {
-        JSONObject game = fetchGameData(gameId);
-        if (game == null || !game.has("similar_games")) return Collections.emptyList();
 
-        List<Integer> similarIds = new ArrayList<>();
-        JSONArray similarArray = game.getJSONArray("similar_games");
-        for (int i = 0; i < similarArray.length(); i++) {
-            similarIds.add(similarArray.getInt(i));
-        }
-        return similarIds;
-    }
     /**Will save a game to the database.
      *
      */

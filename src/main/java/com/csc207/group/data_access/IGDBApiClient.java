@@ -25,10 +25,36 @@ public class IGDBApiClient {
         return handleCacheAction(Endpoints.IGDB_GAMES_BY_NAME, gameName, body, "games");
     }
 
+    public JsonNode getTopPopularGames50() {
+        String body =
+                "fields id, name, cover.image_id, first_release_date, rating, popularity;" +
+                        " sort popularity desc;" +
+                        " limit 50;";
+
+        String cacheKey = "popular:top50";
+        return handleCacheAction(Endpoints.IGDB_POPULAR_GAMES_TOP50, cacheKey, body, "games");
+    }
+
     public JsonNode getGameDetailsById(int id) {
         String body = "fields *; where id = " + id + ";";
         return handleCacheAction(Endpoints.IGDB_GAME_BY_ID, String.valueOf(id), body, "games");
     }
+
+    public JsonNode getGamesByIds(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) {
+            throw new IllegalArgumentException("ids must not be null or empty");
+        }
+
+        String idCsv = ids.stream().map(String::valueOf).collect(Collectors.joining(","));
+        String body =
+                "fields id, name, cover.image_id, first_release_date, rating;" +
+                        " where id = (" + idCsv + ");" +
+                        " limit " + ids.size() + ";";
+
+        String cacheKey = "gamesByIds=" + idCsv;
+        return handleCacheAction(Endpoints.IGDB_GAMES_BY_IDS_MIN, cacheKey, body, "games");
+    }
+
 
 
     /**Get the name of a genre by the genre id
@@ -138,6 +164,7 @@ public class IGDBApiClient {
 
     public void shutdown() {
         Unirest.shutDown();
-    }
-}
+    }}
+
+
 
