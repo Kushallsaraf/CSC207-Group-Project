@@ -20,6 +20,9 @@ public class Endpoints {
     public static final String IGDB_AGE_RATINGS_BY_ID = "igdb-age-ratings-by-id";
     public static final String IGDB_AGE_RATING_CATEGORIES_BY_ID = "igdb-age-rating-categories-by-id";
     public static final String IGDB_MULTIPLE_COVERS_BY_IDS = "igdb-multiple-covers";
+    public static final String IGDB_GAMES_BY_GENRES = "igdb-games-by-genre" ;
+    public static final String IGDB_GAMES_BY_IDS_MIN = "igdb-games-by-id-min";
+    public static final String IGDB_POPULAR_GAMES_TOP50 = "igdb-top-50";
 
 
     // RAWG Endpoints
@@ -29,5 +32,7 @@ public class Endpoints {
     public static final String RAWG_SCREENSHOTS_FOR_GAMES_BY_ID = "rawg-screenshots-for-games-by-id";
     public static final String RAWG_ACHIEVEMENTS_FOR_GAMES_BY_ID = "rawg-achievements-for-games-by-id";
     public static final String RAWG_STORES_FOR_GAMES_BY_ID = "rawg-store-for-games-by-id";
+
+
 
 }

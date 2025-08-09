@@ -90,4 +90,7 @@ public class Game {
     public List <Review> getReviews() {
         return reviews;
     }
+
+    public void setReviews(List<Review> reviews) {
+    }
 }
