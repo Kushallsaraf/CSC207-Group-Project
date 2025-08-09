@@ -106,7 +106,9 @@ public class HomeController {
 
         HBox previewBox = new HBox(15, imageView, infoBox, buttonBox);
         previewBox.setPadding(new Insets(10));
-        previewBox.setStyle("-fx-border-color: lightgray; -fx-background-color: #f9f9f9;");
+        previewBox.setStyle("-fx-border-color: lightgray; -fx-background-color: #222;");
+
+
         previewBox.setAlignment(Pos.CENTER_LEFT);
 
         return previewBox;
