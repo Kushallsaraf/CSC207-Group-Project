@@ -44,7 +44,7 @@ public class GenreStrategy implements RecommendationStrategy{
 
         //get the genre ids for that game
         List<Integer> genreIds= service.getGameGenreIds(referenceGameId);
-        return service.getRecommendationsByGenres(genreIds, 5);
+        return service.getRecommendationsByGenres(genreIds, 10);
 
 
 

@@ -61,7 +61,6 @@ public class RecommendationEngine {
 
     private Recommendation getRecommendation(String key){
         List<GameRecommendation> recs = this.strategies.get(key).getRecommendations();
-        String message = key;
         return new Recommendation(recs, key);
 
     }
@@ -73,6 +72,8 @@ public class RecommendationEngine {
             this.strategies.put(RecommendationEngine.WISHLIST_MESSAGE, new WishlistStrategy(service, user));
 
         }
+
+
         List<GameRecommendation> fiveStarGames = service.getRecommendationsByIds(getGamesByRatingRange
                 (5.0, 5.1));
         List<GameRecommendation> fourStarGames = service.getRecommendationsByIds(getGamesByRatingRange

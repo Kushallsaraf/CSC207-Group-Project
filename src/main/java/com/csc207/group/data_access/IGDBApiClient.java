@@ -27,12 +27,14 @@ public class IGDBApiClient {
 
     public JsonNode getTopPopularGames50() {
         String body =
-                "fields id, name, cover.image_id, first_release_date, rating, popularity;" +
-                        " sort popularity desc;" +
-                        " limit 50;";
+                "fields id,name,cover.image_id,first_release_date,aggregated_rating,total_rating,total_rating_count;" + "\n" +
+                        "where category = 0 & version_parent = null & first_release_date != null;" + "\n" +
+                        "sort total_rating_count desc;" + "\n" +
+                        "limit 50;";
 
         String cacheKey = "popular:top50";
         return handleCacheAction(Endpoints.IGDB_POPULAR_GAMES_TOP50, cacheKey, body, "games");
+
     }
 
     public JsonNode getGameDetailsById(int id) {

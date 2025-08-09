@@ -6,6 +6,8 @@ import com.csc207.group.service.GameService;
 import com.csc207.group.service.NewsService;
 import com.csc207.group.service.UserInteractor;
 import com.csc207.group.service.UserProfileInteractor;
+import com.csc207.group.service.recommendation.RecommendationEngine;
+import com.csc207.group.service.recommendation.RecommendationService;
 import com.csc207.group.ui.*;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.UserProfileController;
@@ -34,10 +36,12 @@ public class GameCentralController {
     private UserProfileView userProfileView;
     private HostServices hostServices;
     private JavaFXUserAuthenticationView authView;
+    private RecommendationEngine recommendationEngine;
 
     public GameCentralController(Stage primaryStage, HostServices hostServices) {
         this.primaryStage = primaryStage;
         this.hostServices = hostServices;
+
         Scene scene = new Scene(mainLayout, 1200, 800);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Game Central");
@@ -55,7 +59,10 @@ public class GameCentralController {
     public void showMainApp(User user) {
         // Initialize services and controllers
         gameService = new GameService();
-        userInteractor = new UserInteractor(user, new com.csc207.group.data_access.FirebaseUserDataHandler(new com.csc207.group.cache.FirebaseRestClient()));
+        RecommendationService recommendationService = new RecommendationService();
+        recommendationEngine = new RecommendationEngine(recommendationService, user);
+        userInteractor = new UserInteractor(user, new com.csc207.group.data_access.FirebaseUserDataHandler
+                (new com.csc207.group.cache.FirebaseRestClient()));
         userProfileView = new UserProfileView();
         UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService);
         userProfileController = new UserProfileController(userProfileInteractor, userInteractor, userProfileView);
@@ -65,7 +72,7 @@ public class GameCentralController {
         mainLayout.setTop(createTopNav());
 
         // Show the home page by default
-        showHomeView();
+        showHomeView(recommendationEngine);
     }
 
     /**
@@ -90,7 +97,7 @@ public class GameCentralController {
         libraryButton.setStyle("-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 12; -fx-background-radius: 5;");
 
         // --- Event Handlers for Navigation ---
-        homeButton.setOnAction(e -> showHomeView());
+        homeButton.setOnAction(e -> showHomeView(recommendationEngine));
         newsButton.setOnAction(e -> showNewsView());
         libraryButton.setOnAction(e -> showUserProfileView());
 
@@ -106,10 +113,12 @@ public class GameCentralController {
 
     // --- Methods to Switch Views ---
 
-    private void showHomeView() {
+    private void showHomeView(RecommendationEngine engine) {
         // The HomeView is now much simpler and doesn't need navigation buttons
         HomeView homeView = new HomeView();
-        HomeController homeController = new HomeController(homeView, gameService, userInteractor, userProfileController);
+        HomeController homeController = new HomeController(homeView, gameService, userInteractor,
+                userProfileController, engine);
+        homeController.setRecommendations();
         setCenterView(homeView.getView());
     }
 

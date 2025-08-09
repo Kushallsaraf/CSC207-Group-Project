@@ -43,6 +43,9 @@ public class RecommendationService {
      * @return
      */
     public List<GameRecommendation> getRecommendationsByIds(List<Integer> gameIds) {
+        if (gameIds == null || gameIds.isEmpty()){
+            return Collections.emptyList();
+        }
         JsonNode resp = apiClient.getGamesByIds(gameIds);
         return parseRecommendations(resp);
     }

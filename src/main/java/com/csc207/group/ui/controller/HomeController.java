@@ -1,5 +1,8 @@
 package com.csc207.group.ui.controller;
 
+import com.csc207.group.model.GameRecommendation;
+import com.csc207.group.model.Recommendation;
+import com.csc207.group.service.recommendation.RecommendationEngine;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -24,13 +27,16 @@ public class HomeController {
     private final GameService gameService;
     private final UserInteractor userInteractor;
     private final UserProfileController userProfileController;
+    private final RecommendationEngine recommendationEngine;
+
 
     public HomeController(HomeView view, GameService gameService, UserInteractor userInteractor,
-                          UserProfileController userProfileController) {
+                          UserProfileController userProfileController, RecommendationEngine engine) {
         this.view = view;
         this.gameService = gameService;
         this.userInteractor = userInteractor;
         this.userProfileController = userProfileController;
+        this.recommendationEngine = engine;
 
         view.setSearchButtonHandler(new EventHandler<ActionEvent>() {
             @Override
@@ -39,6 +45,84 @@ public class HomeController {
             }
         });
     }
+
+    public void setRecommendations(){
+        List<Node> nodes = new ArrayList<Node>();
+
+        Recommendation recommendation = recommendationEngine.generateRecommendation();
+        if (recommendation == null) {
+            view.setRecommendations(nodes, "no recommendation");
+            return;
+        }
+
+        List<GameRecommendation> recs = recommendation.getRecommendations();
+        if (recs == null || recs.isEmpty()) {
+            view.setRecommendations(nodes, "no recommendations");
+            return;
+        }
+
+        for (int i = 0; i < recs.size(); i++) {
+            GameRecommendation r = recs.get(i);
+            javafx.scene.Node card = buildRecommendationNode(r);
+            if (card != null) {
+                nodes.add(card);
+            }
+        }
+
+        view.setRecommendations(nodes, recommendation.getMessage());
+
+
+
+    }
+
+    private Node buildRecommendationNode(GameRecommendation recommendation){
+        javafx.scene.layout.VBox card = new javafx.scene.layout.VBox(6);
+        card.setAlignment(javafx.geometry.Pos.TOP_CENTER);
+        card.setStyle("-fx-background-color: #333; -fx-padding: 8; -fx-background-radius: 10;");
+        card.setPrefWidth(150);
+        card.setMaxWidth(150);
+
+        // --- Cover image ---
+        javafx.scene.image.ImageView iv = new javafx.scene.image.ImageView(recommendation.getCoverImage());
+        iv.setFitWidth(134);   // fits nicely inside card width
+        iv.setFitHeight(135);  // reduced ~25% from original 180
+        iv.setPreserveRatio(true);
+        iv.setSmooth(true);
+        iv.setCache(true);
+
+        javafx.scene.layout.StackPane imgWrap = new javafx.scene.layout.StackPane(iv);
+        imgWrap.setStyle("-fx-background-color: #222; -fx-background-radius: 8;");
+        imgWrap.setPadding(new javafx.geometry.Insets(4));
+
+        // --- Title + year ---
+        String title = recommendation.getTitle();
+        String year = String.valueOf(recommendation.getYear());
+        Label titleLbl = new Label(title + " (" + year + ")");
+        titleLbl.setStyle("-fx-text-fill: #fff; -fx-font-size: 12px; -fx-font-weight: bold;");
+        titleLbl.setWrapText(true);
+        titleLbl.setMaxWidth(140);
+
+        // --- Numeric rating only ---
+        double raw = recommendation.getRating(); // Assuming already 0–100 or 0–10
+        String ratingText;
+        if (raw > 10.0) { // likely 0–100 scale
+            ratingText = String.format("%.1f/100", raw);
+        } else { // likely 0–10 scale
+            ratingText = String.format("%.1f/10", raw);
+        }
+
+        javafx.scene.control.Label numeric = new javafx.scene.control.Label(ratingText);
+        numeric.setStyle("-fx-text-fill: #bbb; -fx-font-size: 11px;");
+
+        // Assemble
+        card.getChildren().addAll(imgWrap, titleLbl, numeric);
+
+        return card;
+
+
+    }
+
+
 
     private void handleSearch() {
         String query = view.getSearchQuery();

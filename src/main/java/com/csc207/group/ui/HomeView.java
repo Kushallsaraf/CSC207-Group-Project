@@ -105,4 +105,50 @@ public class HomeView implements View {
         searchField.clear();
         resultsContainer.getChildren().clear();
     }
+
+    public void setRecommendations(List<Node> recNodes, String message) {
+        // Remove any existing recommendation section first
+        // This ensures we don't keep stacking old sections
+        layout.getChildren().removeIf(node -> node.getUserData() != null
+                && "recommendations-section".equals(node.getUserData()));
+
+        // Section container
+        VBox section = new VBox(10);
+        section.setUserData("recommendations-section"); // marker for easy removal
+        section.setAlignment(Pos.TOP_LEFT);
+
+        // Title label
+        Label title = new Label(message);
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
+
+        // Horizontal container for recommendation cards
+        HBox recContainer = new HBox(10);
+        recContainer.setPadding(new Insets(10));
+        recContainer.setAlignment(Pos.CENTER_LEFT);
+
+        if (recNodes != null && !recNodes.isEmpty()) {
+            recContainer.getChildren().addAll(recNodes);
+        } else {
+            Label noRec = new Label("No recommendations available.");
+            noRec.setStyle("-fx-text-fill: #ccc; -fx-font-size: 14px;");
+            recContainer.getChildren().add(noRec);
+        }
+
+        // ScrollPane for horizontal scrolling
+        ScrollPane scrollPane = new ScrollPane(recContainer);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle("-fx-background-color: transparent;");
+        scrollPane.setPannable(true);
+
+        section.getChildren().addAll(title, scrollPane);
+
+        // Add it at the bottom of the main layout
+        layout.getChildren().add(section);
+    }
+
+
+
+
 }
