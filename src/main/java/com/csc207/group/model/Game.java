@@ -91,6 +91,5 @@ public class Game {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
-    }
+
 }

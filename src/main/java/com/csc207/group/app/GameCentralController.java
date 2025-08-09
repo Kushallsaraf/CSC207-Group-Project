@@ -6,9 +6,7 @@ import com.csc207.group.service.GameService;
 import com.csc207.group.service.NewsService;
 import com.csc207.group.service.UserInteractor;
 import com.csc207.group.service.UserProfileInteractor;
-import com.csc207.group.ui.HomeView;
-import com.csc207.group.ui.UserProfileView;
-import com.csc207.group.ui.View;
+import com.csc207.group.ui.*;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.UserProfileController;
 import com.csc207.group.views.NewsView;
@@ -35,6 +33,7 @@ public class GameCentralController {
     private GameService gameService;
     private UserProfileView userProfileView;
     private HostServices hostServices;
+    private JavaFXUserAuthenticationView authView;
 
     public GameCentralController(Stage primaryStage, HostServices hostServices) {
         this.primaryStage = primaryStage;
@@ -104,6 +103,7 @@ public class GameCentralController {
         return topNav;
     }
 
+
     // --- Methods to Switch Views ---
 
     private void showHomeView() {
@@ -123,4 +123,27 @@ public class GameCentralController {
         userProfileController.refresh(); // Make sure data is up-to-date
         setCenterView(userProfileView.getView());
     }
+
+
+    public void showUserAuthenticationView() {
+        if (authView == null) {
+            throw new IllegalStateException("Auth view not set. Call setUserAuthenticationView(...) first.");
+        }
+        // Hide the top nav while unauthenticated (optional)
+        mainLayout.setTop(null);
+
+        // Let the view reset fields/messages
+        authView.onShow();
+
+        // IMPORTANT: do NOT call authView.display(); that replaces the Scene.
+        setCenterView(authView.getView());
+
+    }
+
+    public void setUserAuthenticationView(JavaFXUserAuthenticationView view) {
+        this.authView = view;
+    }
+
+
+
 }
