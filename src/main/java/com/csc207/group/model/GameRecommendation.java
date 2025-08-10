@@ -12,6 +12,7 @@ public class GameRecommendation {
     private double rating;
 
 
+
     public GameRecommendation(int gameid, String title, String coverImage, int year, double rating) {
         this.gameid = gameid;
         this.title = title;

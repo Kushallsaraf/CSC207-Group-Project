@@ -1,5 +1,6 @@
 package com.csc207.group.ui.controller;
 
+import com.csc207.group.app.GameCentralController;
 import com.csc207.group.model.GameRecommendation;
 import com.csc207.group.model.Recommendation;
 import com.csc207.group.service.recommendation.RecommendationEngine;
@@ -7,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,15 +30,18 @@ public class HomeController {
     private final UserInteractor userInteractor;
     private final UserProfileController userProfileController;
     private final RecommendationEngine recommendationEngine;
+    private final GameCentralController gameCentralController;
 
 
     public HomeController(HomeView view, GameService gameService, UserInteractor userInteractor,
-                          UserProfileController userProfileController, RecommendationEngine engine) {
+                          UserProfileController userProfileController,
+                          RecommendationEngine engine, GameCentralController gameCentralController) {
         this.view = view;
         this.gameService = gameService;
         this.userInteractor = userInteractor;
         this.userProfileController = userProfileController;
         this.recommendationEngine = engine;
+        this.gameCentralController = gameCentralController;
 
         view.setSearchButtonHandler(new EventHandler<ActionEvent>() {
             @Override
@@ -104,18 +109,27 @@ public class HomeController {
 
         // --- Numeric rating only ---
         double raw = recommendation.getRating(); // Assuming already 0–100 or 0–10
-        String ratingText;
-        if (raw > 10.0) { // likely 0–100 scale
-            ratingText = String.format("%.1f/100", raw);
-        } else { // likely 0–10 scale
-            ratingText = String.format("%.1f/10", raw);
-        }
 
-        javafx.scene.control.Label numeric = new javafx.scene.control.Label(ratingText);
+
+        javafx.scene.control.Label numeric = new javafx.scene.control.Label(String.valueOf(raw));
         numeric.setStyle("-fx-text-fill: #bbb; -fx-font-size: 11px;");
 
         // Assemble
         card.getChildren().addAll(imgWrap, titleLbl, numeric);
+        card.setCursor(Cursor.HAND);
+        card.setOnMouseEntered(e -> {
+            card.setStyle("-fx-background-color: #333; -fx-padding: 8; -fx-background-radius: 10; "
+                    + "-fx-border-color: #00ffff; -fx-border-width: 2; -fx-border-radius: 10; "
+                    + "-fx-effect: dropshadow(gaussian, #00ffff, 10, 0.8, 0, 0);");
+            card.setCursor(Cursor.HAND);
+        });
+
+        card.setOnMouseExited(e -> {
+            card.setStyle("-fx-background-color: #333; -fx-padding: 8; -fx-background-radius: 10;");
+            card.setCursor(Cursor.DEFAULT);
+        });
+
+        card.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
 
         return card;
 
@@ -194,6 +208,26 @@ public class HomeController {
 
 
         previewBox.setAlignment(Pos.CENTER_LEFT);
+        previewBox.setCursor(Cursor.HAND);
+        // Glow effect + click handler
+        previewBox.setOnMouseEntered(e -> {
+            previewBox.setCursor(Cursor.HAND);
+            previewBox.setStyle(
+                    "-fx-border-color: #00ffff; " + // cyan border
+                            "-fx-border-width: 2; " +
+                            "-fx-background-color: #222; " +
+                            "-fx-effect: dropshadow(gaussian, #00ffff, 10, 0.8, 0, 0);"
+            );
+        });
+
+        previewBox.setOnMouseExited(e -> {
+            previewBox.setCursor(Cursor.DEFAULT);
+            previewBox.setStyle("-fx-border-color: lightgray; -fx-background-color: #222;");
+        });
+
+// Click event to open game page
+        previewBox.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
+
 
         return previewBox;
     }

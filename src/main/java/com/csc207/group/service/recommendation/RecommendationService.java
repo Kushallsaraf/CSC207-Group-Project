@@ -105,10 +105,15 @@ public class RecommendationService {
                         .atZone(ZoneId.systemDefault())
                         .getYear();
             }
+            String ratingStr = obj.optString("rating", "0");
+            double rating = 0;
+            try {
+                rating = Double.parseDouble(ratingStr);
 
-            double rating = obj.optDouble("rating", 0);
+            } catch (NumberFormatException ignored) {}
 
-            recommendations.add(new GameRecommendation(gameId,name ,coverUrl , releaseYear, rating));
+
+            recommendations.add(new GameRecommendation(gameId,name ,coverUrl , releaseYear, Math.round(rating)));
         }
 
         return recommendations;
@@ -150,9 +155,14 @@ public class RecommendationService {
                 }
             }
 
-            double rating = obj.optDouble("rating", 0.0);
+            String ratingStr = obj.optString("rating", "0");
+            double rating = 0;
+            try {
+                rating = Double.parseDouble(ratingStr);
 
-            recommendations.add(new GameRecommendation(id, title, coverUrl, year, rating));
+            } catch (NumberFormatException ignored) {}
+
+            recommendations.add(new GameRecommendation(id, title, coverUrl, year, Math.round(rating)));
         }
         return recommendations;
     }

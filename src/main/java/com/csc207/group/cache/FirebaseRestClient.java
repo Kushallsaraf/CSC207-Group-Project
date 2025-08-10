@@ -56,6 +56,30 @@ public class FirebaseRestClient {
         return response != null && !response.equals("null");
     }
 
+    public boolean deleteData(String path) {
+        String url = baseUrl + path + ".json";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .delete()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            int code = response.code();
+            System.out.println("DELETE Response code: " + code);
+            if (response.body() != null) {
+                System.out.println("Response body: " + response.body().string());
+            }
+            // Firebase typically returns 200 on success (with body "null"); 204 is also OK.
+            return code == 200 || code == 204;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
 
 }
 

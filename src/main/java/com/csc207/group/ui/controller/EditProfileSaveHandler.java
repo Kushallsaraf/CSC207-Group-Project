@@ -6,6 +6,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import com.csc207.group.ui.controller.UserProfileController;
 
+/**Handles the logic for edit button press on user profile view
+ *
+ */
 public class EditProfileSaveHandler implements EventHandler<ActionEvent> {
 
     private final TextField bioField;

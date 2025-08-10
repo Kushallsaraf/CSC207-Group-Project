@@ -1,8 +1,10 @@
 package com.csc207.group.ui.controller;
 
+import com.csc207.group.app.GameCentralController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,16 +31,19 @@ public class UserProfileController {
     private final UserProfileInteractor profileInteractor;
     private final UserInteractor userInteractor;
     private UserProfileView view;
+    private final GameCentralController gameCentralController;
     private List<Node> previewCards;
     private List<Node> libraryCards;
 
 
 
     public UserProfileController(UserProfileInteractor profileInteractor, UserInteractor userInteractor,
-                                 UserProfileView view) {
+                                 UserProfileView view, GameCentralController gameCentralController) {
         this.profileInteractor = profileInteractor;
         this.userInteractor = userInteractor;
         this.view = view;
+        this.gameCentralController = gameCentralController;
+
 
     }
 
@@ -82,8 +87,30 @@ public class UserProfileController {
                 profileInteractor.removeEntry(gameId);
                 refresh();
             });
+            card.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
 
             card.getChildren().addAll(cover, name, removeButton);
+            card.setOnMouseEntered(e -> {
+                card.setCursor(Cursor.HAND);
+                card.setStyle(
+                        "-fx-border-color: #999; " + // slightly darker border
+                                "-fx-background-color: #f0f0f0; " + // a bit darker background
+                                "-fx-background-radius: 5; " +
+                                "-fx-border-radius: 5; " +
+                                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);" // soft shadow
+                );
+            });
+
+            card.setOnMouseExited(e -> {
+                card.setCursor(Cursor.DEFAULT);
+                card.setStyle(
+                        "-fx-border-color: #ccc; " +
+                                "-fx-background-color: #f9f9f9; " +
+                                "-fx-background-radius: 5; " +
+                                "-fx-border-radius: 5;"
+                );
+            });
+
             libraryCards.add(card);
         }
         }

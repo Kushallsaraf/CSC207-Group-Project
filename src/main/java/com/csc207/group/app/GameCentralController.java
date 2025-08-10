@@ -65,7 +65,7 @@ public class GameCentralController {
                 (new com.csc207.group.cache.FirebaseRestClient()));
         userProfileView = new UserProfileView();
         UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService);
-        userProfileController = new UserProfileController(userProfileInteractor, userInteractor, userProfileView);
+        userProfileController = new UserProfileController(userProfileInteractor, userInteractor, userProfileView, this);
         userProfileView.setController(userProfileController);
 
         // Create and set the top navigation bar
@@ -117,7 +117,7 @@ public class GameCentralController {
         // The HomeView is now much simpler and doesn't need navigation buttons
         HomeView homeView = new HomeView();
         HomeController homeController = new HomeController(homeView, gameService, userInteractor,
-                userProfileController, engine);
+                userProfileController, engine, this);
         homeController.setRecommendations();
         setCenterView(homeView.getView());
     }
@@ -146,6 +146,12 @@ public class GameCentralController {
 
         // IMPORTANT: do NOT call authView.display(); that replaces the Scene.
         setCenterView(authView.getView());
+
+    }
+
+    public void showGamePage(){
+        GamePageView gamePageView = new GamePageView();
+        setCenterView(gamePageView.getView());
 
     }
 
