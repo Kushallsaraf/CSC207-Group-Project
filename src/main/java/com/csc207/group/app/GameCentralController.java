@@ -1,5 +1,6 @@
 package com.csc207.group.app;
 
+import com.csc207.group.model.Game;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.User;
 import com.csc207.group.service.GameService;
@@ -150,13 +151,13 @@ public class GameCentralController {
 
     }
 
-    public void showGamePage(GamePreview preview){
-        int id = preview.getGameid();
-        GamePageController c = new GamePageController(gameService);
-        c.setGamePageView(id);
+    public void showGamePage(Integer gameid){
+
 
 
         GamePageView gamePageView = new GamePageView();
+        Game game = gameService.getGameById(gameid);
+        gamePageView.setTitle(game.getName());
         setCenterView(gamePageView.getView());
 
     }

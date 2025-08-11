@@ -110,6 +110,7 @@ public class UserProfileController {
                                 "-fx-border-radius: 5;"
                 );
             });
+            card.setUserData(gameId);
 
             libraryCards.add(card);
         }
@@ -177,6 +178,7 @@ public class UserProfileController {
             });
 
             card.getChildren().addAll(cover, name, removeButton);
+            card.setUserData(gameId);
             previewCards.add(card);
         }
     }
