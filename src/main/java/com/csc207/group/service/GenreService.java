@@ -41,9 +41,10 @@ public class GenreService {
         return games;
     }
 
-    public String getGenresById(int id) {
+    public String getGenresById(String id) {
+        int IntId = Integer.parseInt(id);
         final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
-        JsonNode response = apiClient.getGenresById(id);
+        JsonNode response = apiClient.getGenresById(IntId);
         JSONArray array = response.getArray();
         JSONObject genreObject = array.getJSONObject(0);
         return genreObject.get("name").toString();

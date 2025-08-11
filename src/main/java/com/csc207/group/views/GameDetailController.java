@@ -3,7 +3,11 @@ package com.csc207.group.views;
 import com.csc207.group.app.GameCentralController;
 import com.csc207.group.model.Game;
 import com.csc207.group.service.GameService;
+import com.csc207.group.service.GenreService;
 import javafx.scene.image.Image;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameDetailController {
     private GameCentralController gameCentralController;
@@ -16,6 +20,7 @@ public class GameDetailController {
         this.game = game;
     }
 
+    // This method initializes the view with data from the game and returns the view instance
     public GameDetailViewFunc setView() {
         setTitle();
         setGenre();
@@ -26,30 +31,43 @@ public class GameDetailController {
         return view;
     }
 
-
     public void setTitle() {
-        view.title.setText(game.getName());
+        view.setTitle(game.getName());
     }
-    public void setGenre(){
-        for (String genre : game.getGenres()) {
-            view.tags.add(view.createTag(genre));
+
+    public void setGenre() {
+//        view.setTags(game.getGenres());
+        List<String> genres = game.getGenres();
+        List<String> genreNames = new ArrayList<>();
+        for (String genre : genres) {
+            genreNames.add(new GenreService().getGenresById(genre));
+        }
+        view.setTags(genreNames);
+    }
+
+    public void setUserScore() {
+        view.setUserScore(game.getCritic_rating());
+    }
+
+    public void setImage() {
+        String coverUrl = game.getCover_image();
+        if (coverUrl != null && !coverUrl.isEmpty()) {
+            view.setImages(new Image(coverUrl), null);
         }
     }
-    public void setUserScore(){
-        view.scoreLabel.setText(String.valueOf(game.getCritic_rating())+"/5");
-    }
-    public void setImage(){view.imageView.setImage(new Image(game.getCover_image()));
-    }
-    public void setSynopsis(){
-        view.synopsisStr = game.getDescription();
-    }
-    public void setOverview(){
-        view.developer = String.join(",", game.getDeveloper());
-        view.releaseDate = game.getRelease_date();
-        view.ageRating = game.getAge_rating();
-        view.platforms = String.join(",", game.getPlatforms());
+
+    public void setSynopsis() {
+        view.setSynopsis(game.getDescription());
     }
 
+    public void setOverview() {
+        String devs = String.join(", ", game.getDeveloper());
+        view.setDeveloper(devs);
 
+        view.setReleaseDate(game.getRelease_date());
+        view.setAgeRating(game.getAge_rating());
 
+        String plats = String.join(", ", game.getPlatforms());
+        view.setPlatforms(plats);
+    }
 }
