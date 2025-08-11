@@ -130,6 +130,7 @@ public class HomeController {
         });
 
         card.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
+        card.setUserData(recommendation.getGameid());
 
         return card;
 
@@ -227,6 +228,7 @@ public class HomeController {
 
 // Click event to open game page
         previewBox.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
+        previewBox.setUserData(game.getGameid());
 
 
         return previewBox;

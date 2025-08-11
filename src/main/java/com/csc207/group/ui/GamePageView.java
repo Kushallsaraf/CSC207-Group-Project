@@ -6,12 +6,13 @@ import javafx.scene.layout.StackPane;
 
 public class GamePageView implements View {
     private final StackPane root;
+    private final Label mainLabel;
 
     public GamePageView() {
         root = new StackPane();
-        Label helloLabel = new Label("This is the gamepage");
-        helloLabel.setStyle("-fx-font-size: 24px;");
-        root.getChildren().add(helloLabel);
+        mainLabel = new Label("This is the gamepage");
+        mainLabel.setStyle("-fx-font-size: 24px;");
+        root.getChildren().add(mainLabel);
     }
 
     @Override
@@ -29,4 +30,9 @@ public class GamePageView implements View {
         // No special action needed when shown, but could log or refresh content here.
     }
 
+    public void setTitle(String name) {
+        mainLabel.setText("this is the gamepage of " +name);
+
+
+    }
 }
