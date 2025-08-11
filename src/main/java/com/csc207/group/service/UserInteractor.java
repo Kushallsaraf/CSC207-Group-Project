@@ -15,6 +15,11 @@ public class UserInteractor {
         this.user = user;
         this.dataHandler = dataHandler;
     }
+
+    public String getReviewerProfilePicture(String username){
+        return dataHandler.getUser(username).getProfilePictureURL();
+
+    }
     public User getUser(){
         return this.user;
     }
@@ -56,6 +61,7 @@ public class UserInteractor {
 
         if (review != null) {
             review.editReview(content, rating);
+
         } else {
             review = new Review(user.getUsername(), content, gameId, rating);
             user.getReviews().put(gameId, review);

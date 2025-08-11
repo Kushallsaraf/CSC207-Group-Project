@@ -23,7 +23,12 @@ public class FirebaseGameDataHandler implements GameDataHandler{
 
 
     @Override
-    public void saveGameData(Game game) {
+    public void saveGameData(int gameID, Game game) {
+        int gameid = game.getGameid();
+        if (gameid == 0){
+            gameid = gameID;
+        }
+
         JSONObject gameJson = new JSONObject();
 
         gameJson.put("name", game.getName());
@@ -48,7 +53,7 @@ public class FirebaseGameDataHandler implements GameDataHandler{
         }
         gameJson.put("reviews", reviewsArray);
 
-        client.putData("Games/" + game.hashCode(), gameJson.toString());
+        client.putData("Games/" + gameid, gameJson.toString());
 
 
     }
@@ -56,43 +61,57 @@ public class FirebaseGameDataHandler implements GameDataHandler{
     @Override
     public Game getCachedGame(Integer gameid) {
         String json = client.getData("Games/" + gameid);
-
-        if (json == null || json.equals("null")) {
+        if (json == null || "null".equals(json)) {
             return null;
         }
 
         JSONObject gameJson = new JSONObject(json);
-        Game game = new Game();
+        Game game = new Game(); // your Game() now initializes safe defaults
+        game.setGameid(gameid);
 
+        // Scalars & lists
         game.setName(gameJson.optString("name", ""));
         game.setGenres(jsonArrayToStringList(gameJson.optJSONArray("genres")));
         game.setDeveloper(jsonArrayToStringList(gameJson.optJSONArray("developer")));
-        game.setCritic_rating(gameJson.optDouble("critic_rating", 0));
-        game.setRating_count(gameJson.optDouble("rating_count", 0));
+        game.setCritic_rating(gameJson.optDouble("critic_rating", 0.0));
+        game.setRating_count(gameJson.optDouble("rating_count", 0.0));
         game.setPlatforms(jsonArrayToStringList(gameJson.optJSONArray("platforms")));
         game.setCover_image(gameJson.optString("cover_image", ""));
         game.setAge_rating(gameJson.optString("age_rating", ""));
         game.setRelease_date(gameJson.optString("release_date", ""));
         game.setDLCs(jsonArrayToIntList(gameJson.optJSONArray("DLCs")));
 
-
-        List<Review> reviews = new ArrayList<>();
+        // Reviews: accept either an array [...] or an object {pushId:{...}, ...}
+        List<Review> reviews = new ArrayList<Review>();
         if (gameJson.has("reviews") && !gameJson.isNull("reviews")) {
-            JSONArray reviewsArray = gameJson.getJSONArray("reviews");
-            for (int i = 0; i < reviewsArray.length(); i++) {
-                JSONObject reviewJson = reviewsArray.getJSONObject(i);
+            Object reviewsNode = gameJson.get("reviews");
 
-                String userid = reviewJson.getString("userid");
-                String content = reviewJson.getString("content");
-                int gid = reviewJson.getInt("gameid");
-                double rating = reviewJson.getDouble("rating");
-
-                reviews.add(new Review(userid, content, gid, rating));
+            if (reviewsNode instanceof JSONArray) {
+                JSONArray arr = (JSONArray) reviewsNode;
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject r = arr.getJSONObject(i);
+                    String userid = r.optString("userid", "unknown");
+                    String content = r.optString("content", "");
+                    int gid = r.optInt("gameid", gameid);
+                    double rating = r.optDouble("rating", 0.0);
+                    reviews.add(new Review(userid, content, gid, rating));
+                }
+            } else if (reviewsNode instanceof JSONObject) {
+                JSONObject obj = (JSONObject) reviewsNode;
+                for (String key : obj.keySet()) {
+                    JSONObject r = obj.getJSONObject(key);
+                    String userid = r.optString("userid", "unknown");
+                    String content = r.optString("content", "");
+                    int gid = r.optInt("gameid", gameid);
+                    double rating = r.optDouble("rating", 0.0);
+                    reviews.add(new Review(userid, content, gid, rating));
+                }
             }
         }
         game.setReviews(reviews);
 
         return game;
+
 
     }
 

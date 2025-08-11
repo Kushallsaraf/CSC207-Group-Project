@@ -3,10 +3,7 @@ package com.csc207.group.app;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.User;
-import com.csc207.group.service.GameService;
-import com.csc207.group.service.NewsService;
-import com.csc207.group.service.UserInteractor;
-import com.csc207.group.service.UserProfileInteractor;
+import com.csc207.group.service.*;
 import com.csc207.group.service.recommendation.RecommendationEngine;
 import com.csc207.group.service.recommendation.RecommendationService;
 import com.csc207.group.ui.*;
@@ -156,9 +153,14 @@ public class GameCentralController {
 
 
         GamePageView gamePageView = new GamePageView();
-        Game game = gameService.getGameById(gameid);
-        gamePageView.setTitle(game.getName());
+        GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
+        GamePageController gamePageController = new GamePageController(gameService, gamePageView,
+                gamePageInteractor, gameid);
+        gamePageController.setGamePageView();
+        gamePageView.onShow();
         setCenterView(gamePageView.getView());
+
+
 
     }
 

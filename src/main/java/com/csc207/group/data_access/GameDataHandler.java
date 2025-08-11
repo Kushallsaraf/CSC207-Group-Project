@@ -12,7 +12,7 @@ public interface GameDataHandler {
     /**Saves the gameData to the database
      *
      */
-    public void saveGameData(Game game);
+    public void saveGameData(int gameid, Game game);
 
     /** Instead of calling the API for a game, the GameService will check the database first.
      *

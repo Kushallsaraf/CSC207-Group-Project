@@ -7,6 +7,7 @@ import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.LibraryEntry;
+import com.csc207.group.model.Review;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -55,9 +56,6 @@ public class GameService {
     /**Will save a game to the database.
      *
      */
-    public void saveGame(Game game){
-        firebaseGameDataHandler.saveGameData(game);
-    }
 
     public Game getGameById(int id) {
         if (this.firebaseGameDataHandler.hasGame(id)){
@@ -69,7 +67,7 @@ public class GameService {
         if (array.isEmpty()) return null;
 
         JSONObject gameJson = array.getJSONObject(0);
-        Game gameobj = new Game();
+        Game gameobj = new Game(id);
 
         gameobj.setName(gameJson.optString("name", "Unknown"));
 
@@ -251,5 +249,24 @@ public class GameService {
     public String getRelease_date(int id) {
         JsonNode response = apiClient.getReleaseDateById(id);
         return response.getArray().getJSONObject(0).getString("human");
+    }
+
+    public static void main(String[] args) {
+        GameService g = new GameService();
+        Game game = g.getGameById(75);
+        if (game.getReviews() == null || game.getReviews().isEmpty()) {
+            System.out.println("No reviews found for game: " + game.getName());
+        } else {
+            System.out.println("Reviews for game: " + game.getName());
+            for (Review r : game.getReviews()) {
+                if (r != null) {
+                    System.out.println("User: " + r.getUserid());
+                    System.out.println("Rating: " + r.getRating());
+                    System.out.println("Content: " + r.getContent());
+                    System.out.println("---------------------------");
+                }
+            }
+        }
+
     }
 }
