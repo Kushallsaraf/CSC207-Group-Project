@@ -38,8 +38,7 @@ public class GameDetailController {
     public void setUserScore(){
         view.scoreLabel.setText(String.valueOf(game.getCritic_rating())+"/5");
     }
-    public void setImage(){
-        view.imageView.setImage(new Image(game.getCover_image()));
+    public void setImage(){view.imageView.setImage(new Image(game.getCover_image()));
     }
     public void setSynopsis(){
         view.synopsisStr = game.getDescription();

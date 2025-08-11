@@ -1,6 +1,5 @@
 package com.csc207.group.views;
 
-import com.csc207.group.model.Game;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -12,8 +11,8 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 
 
-import javafx.scene.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -44,6 +43,11 @@ public class GameDetailViewFunc extends VBox{
 
 
     public GameDetailViewFunc() {
+        title = new Label();
+        tags = new ArrayList<>();
+        imageView = new ImageView();
+        synopsis = new VBox();
+        overview = new VBox();
 
         title.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: white;");
         genre.getChildren().addAll(tags);
