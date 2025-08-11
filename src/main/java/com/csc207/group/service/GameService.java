@@ -135,6 +135,10 @@ public class GameService {
         }
         gameobj.setDLCs(DLCs);
 
+        // Description
+        String summary = gameJson.optString("summary", "No description available.");
+        gameobj.setDescription(summary);
+
         return gameobj;
     }
 
@@ -238,7 +242,16 @@ public class GameService {
 
     public String getCoverPageById(int id) {
         JsonNode response = apiClient.getCoverArtById(id);
-        return response.getArray().getJSONObject(0).getString("url");
+        if (response.getArray().isEmpty()) {
+            return null; // preferably return a placeholder image path
+        }
+        String url = response.getArray().getJSONObject(0).getString("url");
+        if (url.startsWith("//")) {
+            url = "https:" + url;
+        } else if (!url.startsWith("http")) {
+            url = "https://" + url;
+        }
+        return url;
     }
 
     public String getAgeRatingById(int id) {

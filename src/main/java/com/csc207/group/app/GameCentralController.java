@@ -3,13 +3,18 @@ package com.csc207.group.app;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.User;
-import com.csc207.group.service.*;
+import com.csc207.group.service.GameService;
+import com.csc207.group.service.NewsService;
+import com.csc207.group.service.UserInteractor;
+import com.csc207.group.service.UserProfileInteractor;
 import com.csc207.group.service.recommendation.RecommendationEngine;
 import com.csc207.group.service.recommendation.RecommendationService;
 import com.csc207.group.ui.*;
 import com.csc207.group.ui.controller.GamePageController;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.UserProfileController;
+import com.csc207.group.views.GameDetailController;
+import com.csc207.group.views.GameDetailViewFunc;
 import com.csc207.group.views.NewsView;
 import javafx.application.HostServices;
 import javafx.scene.Node;
@@ -148,20 +153,12 @@ public class GameCentralController {
 
     }
 
-    public void showGamePage(Integer gameid) {
-
-
-
-        GamePageView gamePageView = new GamePageView();
-        GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
-        GamePageController gamePageController = new GamePageController(gameService, gamePageView,
-                gamePageInteractor, gameid);
-        gamePageController.setGamePageView();
-        gamePageView.onShow();
-        setCenterView(gamePageView.getView());
-
-
-
+    public void showGamePage(Integer gameid){
+        Game game = gameService.getGameById(gameid);
+        GameDetailController gameDetailController = new GameDetailController(game);
+        GameDetailViewFunc populatedView = gameDetailController.setView();
+//        gamePageView.setTitle(game.getName());
+        setCenterView(populatedView);
     }
 
     public void setUserAuthenticationView(JavaFXUserAuthenticationView view) {

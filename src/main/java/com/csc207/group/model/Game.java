@@ -6,15 +6,17 @@ import java.util.List;
 public class Game {
     private String name;
     private List<String> genres;
-    private List<String> developer;
+    private List <String> developer;
     private double critic_rating;
     private double rating_count;
-    private List<String> platforms;
+    private List <String> platforms;
     private String cover_image;
     private String age_rating;
     private String release_date;
-    private List<Integer> DLCs;
-    private List<Review> reviews;
+    private List <Integer> DLCs;
+    private List <Review> reviews;
+    private String description; // adding a new attribute
+
     private int gameid;
 
     public Game(int gameid) {
@@ -75,6 +77,7 @@ public class Game {
     public void setPlatforms(List<String> platforms) {
         this.platforms = platforms != null ? platforms : new ArrayList<String>();
     }
+    public void setDescription(String description) {this.description = description;} // added a new setter for description
 
     public void setCover_image(String cover_image) {
         this.cover_image = cover_image != null ? cover_image : "";
@@ -101,6 +104,7 @@ public class Game {
             reviews.add(review);
         }
     }
+
 
     public String getName() {
         return name;
@@ -152,11 +156,15 @@ public class Game {
         return release_date;
     }
 
-    public List<Integer> getDLCs() {
+    public List <Integer> getDLCs() {
         return DLCs;
     }
 
-    public List<Review> getReviews() {
+    public List <Review> getReviews() {
         return reviews;
     }
+
+    public String getDescription() {return description;} // added a new getter for description
+
+
 }
