@@ -41,6 +41,7 @@ public class FirebaseGameDataHandler implements GameDataHandler{
         gameJson.put("age_rating", game.getAge_rating());
         gameJson.put("release_date", game.getRelease_date());
         gameJson.put("DLCs", game.getDLCs());
+        gameJson.put("description", game.getDescription());
 
         JSONArray reviewsArray = new JSONArray();
         for (Review review : game.getReviews()) {
@@ -76,10 +77,14 @@ public class FirebaseGameDataHandler implements GameDataHandler{
         game.setCritic_rating(gameJson.optDouble("critic_rating", 0.0));
         game.setRating_count(gameJson.optDouble("rating_count", 0.0));
         game.setPlatforms(jsonArrayToStringList(gameJson.optJSONArray("platforms")));
+        String cover = gameJson.optString("cover_image", "");
+        cover = normalizeURL(cover);
+        game.setCover_image(cover);
         game.setCover_image(gameJson.optString("cover_image", ""));
         game.setAge_rating(gameJson.optString("age_rating", ""));
         game.setRelease_date(gameJson.optString("release_date", ""));
         game.setDLCs(jsonArrayToIntList(gameJson.optJSONArray("DLCs")));
+
 
         // Reviews: accept either an array [...] or an object {pushId:{...}, ...}
         List<Review> reviews = new ArrayList<Review>();
@@ -112,6 +117,20 @@ public class FirebaseGameDataHandler implements GameDataHandler{
 
         return game;
 
+
+    }
+
+    private String normalizeURL(String cover) {
+        if (cover == null){
+            return null;
+
+        }
+
+        cover = cover.trim();
+        if (cover.startsWith("//")) {
+            cover = "https:" + cover;
+        }
+        return cover;
 
     }
 

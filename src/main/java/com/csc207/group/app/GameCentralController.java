@@ -3,10 +3,7 @@ package com.csc207.group.app;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.User;
-import com.csc207.group.service.GameService;
-import com.csc207.group.service.NewsService;
-import com.csc207.group.service.UserInteractor;
-import com.csc207.group.service.UserProfileInteractor;
+import com.csc207.group.service.*;
 import com.csc207.group.service.recommendation.RecommendationEngine;
 import com.csc207.group.service.recommendation.RecommendationService;
 import com.csc207.group.ui.*;
@@ -155,10 +152,11 @@ public class GameCentralController {
 
     public void showGamePage(Integer gameid){
         Game game = gameService.getGameById(gameid);
-        GameDetailController gameDetailController = new GameDetailController(game);
-        GameDetailViewFunc populatedView = gameDetailController.setView();
-//        gamePageView.setTitle(game.getName());
-        setCenterView(populatedView);
+        GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
+        GameDetailController controller = new GameDetailController(game, gamePageInteractor);
+        GameDetailViewFunc view = controller.setView();
+        setCenterView(view);
+
     }
 
     public void setUserAuthenticationView(JavaFXUserAuthenticationView view) {

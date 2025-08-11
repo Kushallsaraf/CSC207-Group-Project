@@ -5,6 +5,9 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -28,7 +31,6 @@ public class GameDetailViewFunc extends VBox {
     private VBox overviewBox;
     private HBox footerButtons;
 
-    // Game info variables
     private String developer;
     private String releaseDate;
     private String platforms;
@@ -36,19 +38,41 @@ public class GameDetailViewFunc extends VBox {
     private String synopsisStr;
     private String titleStr;
     private List<String> tags = new ArrayList<>();
-    private double userScore; // e.g. 4.2
+    private double userScore;
     private Image imageUrl1;
     private Image imageUrl2;
 
-    // Developer click handler, default to no-op
     private Consumer<String> developerClickHandler = s -> {};
 
+    private TextArea reviewArea;
+    private TextField ratingField;
+    private Button submitReviewButton;
+    private VBox reviewsContainer;
+
+    // NEW: scroll container and content VBox
+    private ScrollPane scroll;
+    private VBox content;
+
     public GameDetailViewFunc() {
-        this.setSpacing(25);
-        this.setStyle("-fx-background-color: #1a1a1a; -fx-padding: 30;");
+        this.setStyle("-fx-background-color: #1a1a1a;");
         this.setAlignment(Pos.TOP_CENTER);
 
+        scroll = new ScrollPane();
+        scroll.setFitToWidth(true);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setStyle("-fx-background-color: transparent;");
+
+        content = new VBox(25);
+        content.setStyle("-fx-background-color: #1a1a1a; -fx-padding: 30;");
+        content.setAlignment(Pos.TOP_CENTER);
+
+        scroll.setContent(content);
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
         buildUI();
+
+        this.getChildren().setAll(scroll);
     }
 
     public void setDeveloperClickHandler(Consumer<String> handler) {
@@ -57,7 +81,7 @@ public class GameDetailViewFunc extends VBox {
     }
 
     private void buildUI() {
-        // Header Section
+        // --- Header ---
         HBox headerSection = new HBox(20);
         headerSection.setAlignment(Pos.CENTER_LEFT);
 
@@ -67,7 +91,6 @@ public class GameDetailViewFunc extends VBox {
 
         tagsBox = new HBox(8);
         updateTags();
-
         titleAndTags.getChildren().addAll(title, tagsBox);
 
         Region spacer = new Region();
@@ -83,9 +106,9 @@ public class GameDetailViewFunc extends VBox {
         starIcon.setFill(Color.GOLD);
 
         userScoreBox.getChildren().addAll(scoreLabel, starIcon);
-
         headerSection.getChildren().addAll(titleAndTags, spacer, userScoreBox);
 
+        // --- Main (images + actions) ---
         HBox mainContent = new HBox(30);
 
         HBox imagesBox = new HBox(15);
@@ -95,9 +118,7 @@ public class GameDetailViewFunc extends VBox {
         image2 = new ImageView();
         image2.setPreserveRatio(true);
         image2.setFitHeight(250);
-
         updateImages();
-
         imagesBox.getChildren().addAll(image1, image2);
 
         actionButtons = new VBox(10);
@@ -113,13 +134,35 @@ public class GameDetailViewFunc extends VBox {
 
         mainContent.getChildren().addAll(imagesBox, actionButtons);
 
-        // Synopsis Section
+        // --- Synopsis ---
         synopsisBox = createSection("Synopsis:", synopsisStr != null ? synopsisStr : "No synopsis available.");
 
-        // Overview Section
+        // --- Overview ---
         overviewBox = createOverviewSection();
 
-        // Footer Buttons
+        // --- Review input ---
+        Label reviewLabel = new Label("Your Review:");
+        reviewLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+        ratingField = new TextField();
+        ratingField.setPromptText("Enter a number from 1 to 5");
+        reviewArea = new TextArea();
+        reviewArea.setPromptText("Write your review here...");
+        reviewArea.setWrapText(true);
+        reviewArea.setPrefRowCount(4);
+        submitReviewButton = new Button("Submit Review");
+        submitReviewButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white;");
+        VBox reviewInputBox = new VBox(8, reviewLabel, ratingField, reviewArea, submitReviewButton);
+        reviewInputBox.setAlignment(Pos.CENTER_LEFT);
+
+        // --- Reviews list ---
+        Label reviewsHeader = new Label("Reviews");
+        reviewsHeader.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
+        reviewsContainer = new VBox(10);
+        reviewsContainer.setAlignment(Pos.TOP_LEFT);
+        VBox reviewsSection = new VBox(10, reviewsHeader, reviewsContainer);
+        reviewsSection.setAlignment(Pos.CENTER_LEFT);
+
+        // --- Footer ---
         footerButtons = new HBox(20);
         footerButtons.setAlignment(Pos.CENTER);
         Button buyButton = new Button("Buy Now");
@@ -131,7 +174,16 @@ public class GameDetailViewFunc extends VBox {
         moreButton.setStyle(footerButtonStyle);
         footerButtons.getChildren().addAll(buyButton, addButton, moreButton);
 
-        this.getChildren().setAll(headerSection, mainContent, synopsisBox, overviewBox, footerButtons);
+        // put EVERYTHING into the scrollable content
+        content.getChildren().setAll(
+                headerSection,
+                mainContent,
+                synopsisBox,
+                overviewBox,
+                reviewInputBox,
+                reviewsSection,
+                footerButtons
+        );
     }
 
     private void updateTags() {
@@ -189,23 +241,16 @@ public class GameDetailViewFunc extends VBox {
         return label;
     }
 
-    private Label createClickableOverviewRow(String text) {
-        Label label = new Label(text);
-        label.setStyle("-fx-font-size: 14px; -fx-text-fill: #A0C5E5; -fx-underline: true;");
-        return label;
-    }
-
     private void rebuildOverview() {
         if (overviewBox != null) {
-            this.getChildren().remove(overviewBox);
+            content.getChildren().remove(overviewBox);
             overviewBox = createOverviewSection();
-            int synopsisIndex = this.getChildren().indexOf(synopsisBox);
-            this.getChildren().add(synopsisIndex + 1, overviewBox);
+            int synopsisIndex = content.getChildren().indexOf(synopsisBox);
+            content.getChildren().add(synopsisIndex + 1, overviewBox);
         }
     }
 
-    // --- Setter methods to update data dynamically ---
-
+    // --- Setters ---
     public void setTitle(String title) {
         this.titleStr = title;
         if (title != null && this.title != null) this.title.setText(title);
@@ -254,5 +299,31 @@ public class GameDetailViewFunc extends VBox {
             synopsisBox.getChildren().clear();
             synopsisBox.getChildren().addAll(createSection("Synopsis:", synopsis).getChildren());
         }
+    }
+
+    public TextArea getReviewArea() {
+        return reviewArea;
+    }
+
+    public TextField getRatingField() {
+        return ratingField;
+    }
+
+    public Button getSubmitReviewButton() {
+        return submitReviewButton;
+    }
+
+    public void setReviewNodes(List<Node> nodes) {
+        reviewsContainer.getChildren().clear();
+        if (nodes == null || nodes.isEmpty()) {
+            reviewsContainer.getChildren().add(new Label("No reviews yet."));
+        } else {
+            reviewsContainer.getChildren().addAll(nodes);
+        }
+    }
+
+    public void clearReviewFields() {
+        if (ratingField != null) ratingField.clear();
+        if (reviewArea != null) reviewArea.clear();
     }
 }
