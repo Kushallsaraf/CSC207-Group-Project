@@ -1,5 +1,6 @@
 package com.csc207.group.views;
 
+import com.csc207.group.views.Components.DLCcard;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -41,6 +42,9 @@ public class GameDetailViewFunc extends VBox {
     private double userScore;
     private Image imageUrl1;
     private Image imageUrl2;
+
+    private HBox DLCbox;
+    private ScrollPane DLCScrollPane;
 
     private Consumer<String> developerClickHandler = s -> {};
 
@@ -140,6 +144,10 @@ public class GameDetailViewFunc extends VBox {
         // --- Overview ---
         overviewBox = createOverviewSection();
 
+        // --- DLCs ---
+        DLCbox = new HBox(10);
+        DLCScrollPane = createDLCSection(DLCbox);
+
         // --- Review input ---
         Label reviewLabel = new Label("Your Review:");
         reviewLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
@@ -180,6 +188,7 @@ public class GameDetailViewFunc extends VBox {
                 mainContent,
                 synopsisBox,
                 overviewBox,
+                DLCScrollPane,
                 reviewInputBox,
                 reviewsSection,
                 footerButtons
@@ -241,6 +250,22 @@ public class GameDetailViewFunc extends VBox {
         return label;
     }
 
+    private ScrollPane createDLCSection(HBox DLCbox) {
+
+        ScrollPane scrollPane = new ScrollPane(DLCbox);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Always show horizontal bar
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);  // No vertical bar
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle("-fx-background-color: #1a1a1a; -fx-padding: 30;");
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        scrollPane.setPannable(true);
+
+
+
+        return scrollPane;
+
+    }
+
     private void rebuildOverview() {
         if (overviewBox != null) {
             content.getChildren().remove(overviewBox);
@@ -299,6 +324,14 @@ public class GameDetailViewFunc extends VBox {
             synopsisBox.getChildren().clear();
             synopsisBox.getChildren().addAll(createSection("Synopsis:", synopsis).getChildren());
         }
+    }
+
+    public void setDLCs(List<VBox> dlcs) {
+        DLCbox.getChildren().clear();
+        for (VBox dlc : dlcs) {
+            DLCbox.getChildren().add(dlc);
+        }
+        DLCbox.setStyle("-fx-background-color: #1a1a1a; -fx-padding: 30;");
     }
 
     public TextArea getReviewArea() {

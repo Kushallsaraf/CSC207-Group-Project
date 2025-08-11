@@ -1,11 +1,14 @@
 package com.csc207.group.views;
 
 import com.csc207.group.app.GameCentralController;
+import com.csc207.group.model.DLC;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
+import com.csc207.group.service.DLCService;
 import com.csc207.group.service.GamePageInteractor;
 import com.csc207.group.service.GameService;
 import com.csc207.group.service.GenreService;
+import com.csc207.group.views.Components.DLCcard;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -23,6 +26,7 @@ public class GameDetailController {
     private GameDetailViewFunc view;
     private GameService gameService;
     private GamePageInteractor gamePageInteractor;
+    private DLCService dlcService;
 
     public GameDetailController(Game game, GamePageInteractor gamePageInteractor) {
         this.view = new GameDetailViewFunc();
@@ -38,6 +42,7 @@ public class GameDetailController {
         setImage();
         setSynopsis();
         setOverview();
+        setDLCs();
         setupReviewHandlers();
         updateReviewDisplay();
         return view;
@@ -83,6 +88,19 @@ public class GameDetailController {
 
         String plats = String.join(", ", game.getPlatforms());
         view.setPlatforms(plats);
+    }
+
+    public void setDLCs() {
+        List<DLC> dlcs = new ArrayList<>();
+        for (Integer id : game.getDLCs()) {
+            dlcs.add(new DLCService().getDLCById(id));
+        }
+        List<VBox> dlccards = new ArrayList<>();
+        for (DLC dlc : dlcs) {
+            dlccards.add(new DLCcard(dlc).getCard());
+        }
+        view.setDLCs(dlccards);
+
     }
 
     private void setupReviewHandlers() {
