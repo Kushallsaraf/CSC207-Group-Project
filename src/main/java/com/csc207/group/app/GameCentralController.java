@@ -9,6 +9,7 @@ import com.csc207.group.service.UserProfileInteractor;
 import com.csc207.group.service.recommendation.RecommendationEngine;
 import com.csc207.group.service.recommendation.RecommendationService;
 import com.csc207.group.ui.*;
+import com.csc207.group.ui.controller.GamePageController;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.UserProfileController;
 import com.csc207.group.views.NewsView;
@@ -149,7 +150,12 @@ public class GameCentralController {
 
     }
 
-    public void showGamePage(){
+    public void showGamePage(GamePreview preview){
+        int id = preview.getGameid();
+        GamePageController c = new GamePageController(gameService);
+        c.setGamePageView(id);
+
+
         GamePageView gamePageView = new GamePageView();
         setCenterView(gamePageView.getView());
 
