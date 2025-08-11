@@ -151,7 +151,7 @@ public class GameCentralController {
 
     }
 
-    public void showGamePage(Integer gameid){
+    public void showGamePage(Integer gameid) {
 
 
 
