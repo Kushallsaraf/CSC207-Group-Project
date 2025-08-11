@@ -2,17 +2,31 @@ package com.csc207.group.views;
 
 import com.csc207.group.app.GameCentralController;
 import com.csc207.group.model.Game;
+import com.csc207.group.service.GameService;
 import javafx.scene.image.Image;
 
 public class GameDetailController {
     private GameCentralController gameCentralController;
     private Game game;
     private GameDetailViewFunc view;
-    public GameDetailController(GameCentralController gameCentralController, Game game,  GameDetailViewFunc view) {
-        this.gameCentralController = gameCentralController;
+    private GameService gameService;
+
+    public GameDetailController(Game game) {
+        this.view = new GameDetailViewFunc();
         this.game = game;
-        this.view = view;
     }
+
+    public GameDetailViewFunc setView() {
+        setTitle();
+        setGenre();
+        setUserScore();
+        setImage();
+        setSynopsis();
+        setOverview();
+        return view;
+    }
+
+
     public void setTitle() {
         view.title.setText(game.getName());
     }

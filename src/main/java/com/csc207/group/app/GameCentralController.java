@@ -13,6 +13,8 @@ import com.csc207.group.ui.*;
 import com.csc207.group.ui.controller.GamePageController;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.UserProfileController;
+import com.csc207.group.views.GameDetailController;
+import com.csc207.group.views.GameDetailViewFunc;
 import com.csc207.group.views.NewsView;
 import javafx.application.HostServices;
 import javafx.scene.Node;
@@ -152,14 +154,11 @@ public class GameCentralController {
     }
 
     public void showGamePage(Integer gameid){
-
-
-
-        GamePageView gamePageView = new GamePageView();
         Game game = gameService.getGameById(gameid);
-        gamePageView.setTitle(game.getName());
-        setCenterView(gamePageView.getView());
-
+        GameDetailController gameDetailController = new GameDetailController(game);
+        GameDetailViewFunc populatedView = gameDetailController.setView();
+//        gamePageView.setTitle(game.getName());
+        setCenterView(populatedView);
     }
 
     public void setUserAuthenticationView(JavaFXUserAuthenticationView view) {

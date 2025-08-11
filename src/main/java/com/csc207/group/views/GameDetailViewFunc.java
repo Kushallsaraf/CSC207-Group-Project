@@ -44,6 +44,7 @@ public class GameDetailViewFunc extends VBox{
 
 
     public GameDetailViewFunc() {
+
         title.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: white;");
         genre.getChildren().addAll(tags);
         titleAndTags.getChildren().addAll(title, genre);
