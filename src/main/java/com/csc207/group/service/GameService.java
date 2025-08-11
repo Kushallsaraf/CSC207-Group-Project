@@ -137,6 +137,10 @@ public class GameService {
         }
         gameobj.setDLCs(DLCs);
 
+        // Description
+        String summary = gameJson.optString("summary", "No description available.");
+        gameobj.setDescription(summary);
+
         return gameobj;
     }
 

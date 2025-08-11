@@ -14,6 +14,7 @@ public class Game {
     private String release_date;
     private List <Integer> DLCs;
     private List <Review> reviews;
+    private String description; // adding a new attribute
 
 
     public Game() {}
@@ -35,6 +36,7 @@ public class Game {
     public void setRelease_date(String release_date) {this.release_date = release_date;}
     public void setDLCs(List <Integer> DLCs) {this.DLCs = DLCs;}
     public void setReviews(List <Review> reviews) {this.reviews = reviews;}
+    public void setDescription(String description) {this.description = description;} // added a new setter for description
 
 
     public void appendReview(Review review) {
@@ -90,6 +92,8 @@ public class Game {
     public List <Review> getReviews() {
         return reviews;
     }
+
+    public String getDescription() {return description;} // added a new getter for description
 
 
 }
