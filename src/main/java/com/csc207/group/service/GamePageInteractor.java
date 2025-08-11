@@ -24,10 +24,14 @@ public class GamePageInteractor {
 
     public void saveReview(double rating, String content, int gameid, Game game){
 
-        userInteractor.leaveOrUpdateReview(gameid, content, rating);
-        Review review = new Review(userInteractor.getUser().getUsername(), content, gameid, rating);
-        game.appendReview(review);
-
+        if (userInteractor.getUser().getAllGames().contains(gameid)){
+            System.out.println("Only 1 review allowed");
+        }
+        else {
+            userInteractor.leaveOrUpdateReview(gameid, content, rating);
+            Review review = new Review(userInteractor.getUser().getUsername(), content, gameid, rating);
+            game.appendReview(review);
+        }
 
         dataHandler.saveGameData(gameid, game);
 

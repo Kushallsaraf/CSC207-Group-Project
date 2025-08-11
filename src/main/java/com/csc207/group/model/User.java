@@ -40,6 +40,14 @@ public class User {
         
     }
 
+    public List<Integer> getAllGames(){
+        List<Integer> gameIds = new ArrayList<>();
+        for (Review review : this.getReviews().values()) {
+            gameIds.add(review.getGameid());
+        }
+        return gameIds;
+    }
+
     public List<Integer> getWishlist() {
         return this.wishlist;
     }
