@@ -61,6 +61,9 @@ public class UserInteractor {
 
     }
     public void leaveOrUpdateReview(int gameId, String content, double rating) {
+        if (hasReviewed(gameId)){
+            return;
+        }
         Review review = user.getReviews().get(gameId);
 
         if (review != null) {
