@@ -1,15 +1,13 @@
 package com.csc207.group.app;
 
 import com.csc207.group.model.Game;
-import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.User;
 import com.csc207.group.service.*;
 import com.csc207.group.service.recommendation.RecommendationEngine;
 import com.csc207.group.service.recommendation.RecommendationService;
 import com.csc207.group.ui.*;
-import com.csc207.group.ui.controller.GamePageController;
 import com.csc207.group.ui.controller.HomeController;
-import com.csc207.group.ui.controller.UserProfileController;
+import com.csc207.group.ui.controller.PersonalProfileController;
 import com.csc207.group.views.GameDetailController;
 import com.csc207.group.views.GameDetailViewFunc;
 import com.csc207.group.views.NewsView;
@@ -23,18 +21,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 public class GameCentralController {
 
     private final Stage primaryStage;
     private final BorderPane mainLayout = new BorderPane(); // Switched to BorderPane
-    private UserProfileController userProfileController;
+    private PersonalProfileController personalProfileController;
     private UserInteractor userInteractor;
     private GameService gameService;
-    private UserProfileView userProfileView;
+    private PersonalProfileView personalProfileView;
     private HostServices hostServices;
     private JavaFXUserAuthenticationView authView;
     private RecommendationEngine recommendationEngine;
@@ -64,10 +59,10 @@ public class GameCentralController {
         recommendationEngine = new RecommendationEngine(recommendationService, user);
         userInteractor = new UserInteractor(user, new com.csc207.group.data_access.FirebaseUserDataHandler
                 (new com.csc207.group.cache.FirebaseRestClient()));
-        userProfileView = new UserProfileView();
+        personalProfileView = new PersonalProfileView();
         UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService);
-        userProfileController = new UserProfileController(userProfileInteractor, userInteractor, userProfileView, this);
-        userProfileView.setController(userProfileController);
+        personalProfileController = new PersonalProfileController(userProfileInteractor, userInteractor, personalProfileView, this);
+        personalProfileView.setController(personalProfileController);
 
         // Create and set the top navigation bar
         mainLayout.setTop(createTopNav());
@@ -100,7 +95,7 @@ public class GameCentralController {
         // --- Event Handlers for Navigation ---
         homeButton.setOnAction(e -> showHomeView(recommendationEngine));
         newsButton.setOnAction(e -> showNewsView());
-        libraryButton.setOnAction(e -> showUserProfileView());
+        libraryButton.setOnAction(e -> showPersonalProfileView());
 
         // Style the navigation buttons
         String buttonStyle = "-fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-size: 16px; -fx-cursor: hand;";
@@ -118,7 +113,7 @@ public class GameCentralController {
         // The HomeView is now much simpler and doesn't need navigation buttons
         HomeView homeView = new HomeView();
         HomeController homeController = new HomeController(homeView, gameService, userInteractor,
-                userProfileController, engine, this);
+                personalProfileController, engine, this);
         homeController.setRecommendations();
         setCenterView(homeView.getView());
     }
@@ -129,9 +124,14 @@ public class GameCentralController {
         setCenterView(newsView.getView());
     }
 
-    private void showUserProfileView() {
-        userProfileController.refresh(); // Make sure data is up-to-date
-        setCenterView(userProfileView.getView());
+    private void showPersonalProfileView() {
+        personalProfileController.refresh(); // Make sure data is up-to-date
+        setCenterView(personalProfileView.getView());
+    }
+
+    public void showUserProfileView(){
+        UserProfileView userProfileView = new UserProfileView();
+
     }
 
 

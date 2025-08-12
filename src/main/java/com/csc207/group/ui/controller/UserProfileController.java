@@ -1,192 +1,47 @@
 package com.csc207.group.ui.controller;
 
-import com.csc207.group.app.GameCentralController;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import com.csc207.group.model.GamePreview;
-import com.csc207.group.model.LibraryEntry;
-import com.csc207.group.service.GameService;
-import com.csc207.group.service.UserProfileInteractor;
+import com.csc207.group.model.User;
 import com.csc207.group.service.UserInteractor;
+import com.csc207.group.social.FollowCommand;
+import com.csc207.group.social.UnfollowCommand;
 import com.csc207.group.ui.UserProfileView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class UserProfileController {
 
-
-    private final UserProfileInteractor profileInteractor;
     private final UserInteractor userInteractor;
-    private UserProfileView view;
-    private final GameCentralController gameCentralController;
-    private List<Node> previewCards;
-    private List<Node> libraryCards;
+    private final UserProfileView view;
+    private final String targetUsername; //
 
-
-
-    public UserProfileController(UserProfileInteractor profileInteractor, UserInteractor userInteractor,
-                                 UserProfileView view, GameCentralController gameCentralController) {
-        this.profileInteractor = profileInteractor;
+    public UserProfileController(UserInteractor userInteractor, UserProfileView view, String targetUsername) {
         this.userInteractor = userInteractor;
         this.view = view;
-        this.gameCentralController = gameCentralController;
+        this.targetUsername = targetUsername;
 
-
+        initialize();
     }
 
-    private void loadLibraryCards(){
-        Map<Integer, LibraryEntry> entries = profileInteractor.getEntries();
-        libraryCards = new ArrayList<>();
+    private void initialize() {
+        User targetUser = userInteractor.getUserByUsername(targetUsername);
+        User loggedInUser = userInteractor.getUser();
 
-        for (Map.Entry<Integer, LibraryEntry> entry : entries.entrySet()) {
-            Integer gameId = entry.getKey();
-            LibraryEntry libraryEntry = entry.getValue();
+        // Set up view with initial data
+        view.setUsername(targetUser.getUsername());
+        view.setBio(targetUser.getBio());
+        view.setProfileImage(targetUser.getProfilePictureURL());
+        view.setFollowersCount(targetUser.getFollowers().size());
+        view.setFollowingCount(targetUser.getFollowing().size());
 
-            HBox card = new HBox(5);
-            card.setPadding(new Insets(10));
-            card.setStyle("-fx-border-color: #ccc; -fx-background-color: #f9f9f9; -fx-background-radius: 5;" +
-                    " -fx-border-radius: 5;");
-            card.setUserData(gameId);
-
-            ImageView cover = new ImageView();
-            cover.setFitWidth(50);
-            cover.setFitHeight(50);
-            String imageUrl = libraryEntry.getCoverImage().getUrl();
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                try {
-                    cover.setImage(new Image(imageUrl, true));
-                } catch (Exception e) {
-                    System.err.println("Failed to load image for gameId " + gameId + ": " + imageUrl);
-                }
-            }
-
-            Label name = new Label(libraryEntry.getTitle() + " (" + libraryEntry.getYear() + ")");
-
-
-            Button removeButton = new Button("Remove");
-            removeButton.setMaxWidth(Region.USE_PREF_SIZE);
-            removeButton.setMinWidth(Region.USE_PREF_SIZE);
-            removeButton.setPrefWidth(120);
-            removeButton.setMaxHeight(Region.USE_PREF_SIZE);
-            removeButton.setMinHeight(Region.USE_PREF_SIZE);
-            removeButton.setOnAction(e -> {
-                userInteractor.removeFromLibrary(gameId);
-                profileInteractor.removeEntry(gameId);
-                refresh();
-            });
-            card.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
-
-            card.getChildren().addAll(cover, name, removeButton);
-            card.setOnMouseEntered(e -> {
-                card.setCursor(Cursor.HAND);
-                card.setStyle(
-                        "-fx-border-color: #999; " + // slightly darker border
-                                "-fx-background-color: #f0f0f0; " + // a bit darker background
-                                "-fx-background-radius: 5; " +
-                                "-fx-border-radius: 5; " +
-                                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);" // soft shadow
-                );
-            });
-
-            card.setOnMouseExited(e -> {
-                card.setCursor(Cursor.DEFAULT);
-                card.setStyle(
-                        "-fx-border-color: #ccc; " +
-                                "-fx-background-color: #f9f9f9; " +
-                                "-fx-background-radius: 5; " +
-                                "-fx-border-radius: 5;"
-                );
-            });
-            card.setUserData(gameId);
-
-            libraryCards.add(card);
-        }
+        // Decide initial follow button state
+        if (loggedInUser.isFollowing(targetUsername)) {
+            view.getFollowButton().setText("Unfollow");
+        } else {
+            view.getFollowButton().setText("Follow");
         }
 
-    public void refresh() {
-        view.setController(this);
-        view.setProfileImage(profileInteractor.getProfilePictureUrl());
-        view.setBio(profileInteractor.getBio());
 
-        view.getEditProfileButton().setOnAction(e -> {
-            String currentBio = profileInteractor.getBio();
-            String currentImageUrl = profileInteractor.getProfilePictureUrl();
-            view.showEditProfilePopup(currentBio, currentImageUrl);
-        });
 
-        view.setUsername(profileInteractor.getUsername());
-        profileInteractor.reload();
-        loadLibraryCards();
-        loadPreviewCards();
-        view.setLibraryCards(libraryCards);
-        view.setWishlistCards(previewCards);
+        view.getFollowButton().setOnAction(new FollowButtonHandler(userInteractor, loggedInUser, targetUsername, view));
     }
 
 
-
-    private void loadPreviewCards() {
-        Map<Integer, GamePreview> entries = profileInteractor.getPreviews();
-        previewCards = new ArrayList<>();
-
-        for (Map.Entry<Integer, GamePreview> entry : entries.entrySet()) {
-            Integer gameId = entry.getKey();
-            GamePreview preview = entry.getValue();
-
-            HBox card = new HBox(5);
-            card.setPadding(new Insets(10));
-            card.setStyle("-fx-border-color: #ccc; -fx-background-color: #f9f9f9; -fx-background-radius: 5;" +
-                    " -fx-border-radius: 5;");
-            card.setUserData(gameId);
-
-            ImageView cover = new ImageView();
-            cover.setFitWidth(50);
-            cover.setFitHeight(50);
-            String imageUrl = preview.getCoverImage().getUrl();
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                try {
-                    cover.setImage(new Image(imageUrl, true));
-                } catch (Exception e) {
-                    System.err.println("Failed to load image for gameId " + gameId + ": " + imageUrl);
-                }
-            }
-
-            Label name = new Label(preview.getTitle() + " (" + preview.getYear() + ")");
-
-            Button removeButton = new Button("Remove");
-            removeButton.setMaxWidth(Region.USE_PREF_SIZE);
-            removeButton.setMinWidth(Region.USE_PREF_SIZE);
-            removeButton.setPrefWidth(120);
-            removeButton.setMaxHeight(Region.USE_PREF_SIZE);
-            removeButton.setMinHeight(Region.USE_PREF_SIZE);
-            removeButton.setOnAction(e -> {
-                userInteractor.removeFromWishlist(gameId);
-                profileInteractor.removePreview(gameId);
-                refresh();
-            });
-
-            card.getChildren().addAll(cover, name, removeButton);
-            card.setUserData(gameId);
-            previewCards.add(card);
-        }
-    }
-
-    public void handleProfileUpdate(String newBio, String newImageUrl) {
-        this.userInteractor.editProfilePicture(newImageUrl);
-        this.userInteractor.editBio(newBio);
-        this.view.setBio(newBio);
-        this.view.setProfileImage(newImageUrl);
-    }
 }

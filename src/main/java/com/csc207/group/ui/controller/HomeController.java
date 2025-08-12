@@ -28,18 +28,18 @@ public class HomeController {
     private final HomeView view;
     private final GameService gameService;
     private final UserInteractor userInteractor;
-    private final UserProfileController userProfileController;
+    private final PersonalProfileController personalProfileController;
     private final RecommendationEngine recommendationEngine;
     private final GameCentralController gameCentralController;
 
 
     public HomeController(HomeView view, GameService gameService, UserInteractor userInteractor,
-                          UserProfileController userProfileController,
+                          PersonalProfileController personalProfileController,
                           RecommendationEngine engine, GameCentralController gameCentralController) {
         this.view = view;
         this.gameService = gameService;
         this.userInteractor = userInteractor;
-        this.userProfileController = userProfileController;
+        this.personalProfileController = personalProfileController;
         this.recommendationEngine = engine;
         this.gameCentralController = gameCentralController;
 
@@ -246,7 +246,7 @@ public class HomeController {
             userInteractor.addToLibrary(gameid);
             button.setText("Remove from Library");
         }
-        userProfileController.refresh();
+        personalProfileController.refresh();
     }
 
     private void handleWishlistButtonClick(ActionEvent event) {
