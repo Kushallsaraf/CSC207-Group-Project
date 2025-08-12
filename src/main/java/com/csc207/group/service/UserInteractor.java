@@ -119,6 +119,4 @@ public class UserInteractor {
         dataHandler.saveUser(user);
     }
 
-
-
 }

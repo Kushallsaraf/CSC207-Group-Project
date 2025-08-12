@@ -6,8 +6,7 @@ import kong.unirest.JsonNode;
  *
  */
 
-//TODO: Expand this interface for new return types (if needed). For example add <cacheString>
-// to the interface and implement it where applicable
+
 
 public interface APICache {
 
