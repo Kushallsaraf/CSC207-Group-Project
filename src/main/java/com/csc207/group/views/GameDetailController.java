@@ -3,6 +3,7 @@ package com.csc207.group.views;
 import com.csc207.group.app.GameCentralController;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
+import com.csc207.group.model.User;
 import com.csc207.group.service.GamePageInteractor;
 import com.csc207.group.service.GameService;
 import com.csc207.group.service.GenreService;
@@ -21,13 +22,17 @@ public class GameDetailController {
     private GameCentralController gameCentralController;
     private Game game;
     private GameDetailViewFunc view;
-    private GameService gameService;
     private GamePageInteractor gamePageInteractor;
+    private User user;
 
-    public GameDetailController(Game game, GamePageInteractor gamePageInteractor) {
+    public GameDetailController(Game game, GamePageInteractor gamePageInteractor,
+                                GameCentralController gameCentralController, User user) {
         this.view = new GameDetailViewFunc();
         this.game = game;
         this.gamePageInteractor = gamePageInteractor;
+        this.gameCentralController = gameCentralController;
+        this.user = user;
+
     }
 
     // This method initializes the view with data from the game and returns the view instance
@@ -132,6 +137,21 @@ public class GameDetailController {
 
             Label userLabel = new Label(userId);
             userLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
+            userLabel.setCursor(javafx.scene.Cursor.HAND);
+            userLabel.setOnMouseEntered(e -> userLabel.setStyle(
+                    "-fx-font-weight: bold; -fx-text-fill: #00aaff; -fx-underline: true;"
+            ));
+            userLabel.setOnMouseExited(e -> userLabel.setStyle(
+                    "-fx-font-weight: bold; -fx-text-fill: white;"
+            ));
+
+            if (!userId.equals(user.getUsername())){
+
+            userLabel.setOnMouseClicked(e -> {
+                if (gameCentralController != null) {
+                    gameCentralController.showUserProfileView(userId);
+                }
+            });}
 
             Label ratingLabel = new Label("Rating: " + String.format("%.1f", r.getRating()) + " / 5");
             ratingLabel.setStyle("-fx-text-fill: #ccc;");
@@ -141,6 +161,12 @@ public class GameDetailController {
             contentLabel.setStyle("-fx-text-fill: white;");
 
             VBox textBox = new VBox(userLabel, ratingLabel, contentLabel);
+
+            if (userId.equals(user.getUsername())) {
+                javafx.scene.control.Button editButton = new javafx.scene.control.Button("Edit");
+
+                textBox.getChildren().add(editButton);
+            }
             HBox row = new HBox(10, avatar, textBox);
             row.setPadding(new Insets(8));
             row.setStyle("-fx-background-color: #2a2a2a; -fx-background-radius: 5;");

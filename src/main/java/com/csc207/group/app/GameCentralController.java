@@ -8,6 +8,7 @@ import com.csc207.group.service.recommendation.RecommendationService;
 import com.csc207.group.ui.*;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.PersonalProfileController;
+import com.csc207.group.ui.controller.UserProfileController;
 import com.csc207.group.views.GameDetailController;
 import com.csc207.group.views.GameDetailViewFunc;
 import com.csc207.group.views.NewsView;
@@ -60,8 +61,8 @@ public class GameCentralController {
         userInteractor = new UserInteractor(user, new com.csc207.group.data_access.FirebaseUserDataHandler
                 (new com.csc207.group.cache.FirebaseRestClient()));
         personalProfileView = new PersonalProfileView();
-        UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService);
-        personalProfileController = new PersonalProfileController(userProfileInteractor, userInteractor, personalProfileView, this);
+        PersonalProfileInteractor personalProfileInteractor = new PersonalProfileInteractor(userInteractor, gameService);
+        personalProfileController = new PersonalProfileController(personalProfileInteractor, userInteractor, personalProfileView, this);
         personalProfileView.setController(personalProfileController);
 
         // Create and set the top navigation bar
@@ -129,8 +130,13 @@ public class GameCentralController {
         setCenterView(personalProfileView.getView());
     }
 
-    public void showUserProfileView(){
+    public void showUserProfileView(String targetUsername){
         UserProfileView userProfileView = new UserProfileView();
+        UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService,
+                targetUsername);
+        UserProfileController userProfileController = new UserProfileController(userInteractor,
+                userProfileInteractor,userProfileView, targetUsername, this);
+        setCenterView(userProfileView.getView());
 
     }
 
@@ -153,7 +159,8 @@ public class GameCentralController {
     public void showGamePage(Integer gameid){
         Game game = gameService.getGameById(gameid);
         GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
-        GameDetailController controller = new GameDetailController(game, gamePageInteractor);
+        GameDetailController controller = new GameDetailController(game, gamePageInteractor, this
+                , userInteractor.getUser());
         GameDetailViewFunc view = controller.setView();
         setCenterView(view);
 

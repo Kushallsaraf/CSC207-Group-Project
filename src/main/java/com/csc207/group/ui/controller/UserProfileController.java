@@ -1,47 +1,207 @@
 package com.csc207.group.ui.controller;
 
+import com.csc207.group.app.GameCentralController;
+import com.csc207.group.model.GamePreview;
+import com.csc207.group.model.LibraryEntry;
 import com.csc207.group.model.User;
+import com.csc207.group.service.GameService;
 import com.csc207.group.service.UserInteractor;
-import com.csc207.group.social.FollowCommand;
-import com.csc207.group.social.UnfollowCommand;
+import com.csc207.group.service.UserProfileInteractor;
 import com.csc207.group.ui.UserProfileView;
+import javafx.geometry.Insets;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserProfileController {
 
-    private final UserInteractor userInteractor;
-    private final UserProfileView view;
-    private final String targetUsername; //
+    private final UserInteractor userInteractor;             // provides logged-in + lookup
+    private final UserProfileInteractor profileInteractor;   // gives us GameService
+    private final UserProfileView view;                      // UI for other users' profiles
+    private final String targetUsername;                     // whose profile we’re viewing
+    private final GameCentralController gameCentralController;
 
-    public UserProfileController(UserInteractor userInteractor, UserProfileView view, String targetUsername) {
+    private List<Node> libraryCards;
+    private List<Node> wishlistCards;
+
+    public UserProfileController(UserInteractor userInteractor,
+                                 UserProfileInteractor profileInteractor,
+                                 UserProfileView view,
+                                 String targetUsername,
+                                 GameCentralController gameCentralController) {
         this.userInteractor = userInteractor;
+        this.profileInteractor = profileInteractor;
         this.view = view;
         this.targetUsername = targetUsername;
-
+        this.gameCentralController = gameCentralController;
         initialize();
     }
 
     private void initialize() {
         User targetUser = userInteractor.getUserByUsername(targetUsername);
         User loggedInUser = userInteractor.getUser();
+        GameService gameService = profileInteractor.getGameService();
 
-        // Set up view with initial data
+        // Header
         view.setUsername(targetUser.getUsername());
         view.setBio(targetUser.getBio());
         view.setProfileImage(targetUser.getProfilePictureURL());
-        view.setFollowersCount(targetUser.getFollowers().size());
-        view.setFollowingCount(targetUser.getFollowing().size());
+        view.setFollowersCount(targetUser.getFollowers().size(), targetUsername);
+        view.setFollowingCount(targetUser.getFollowing().size(), targetUsername);
 
-        // Decide initial follow button state
-        if (loggedInUser.isFollowing(targetUsername)) {
-            view.getFollowButton().setText("Unfollow");
-        } else {
-            view.getFollowButton().setText("Follow");
-        }
+        // Clickable Followers / Following labels → open popup with user nodes
+        view.getFollowersLabel().setCursor(Cursor.HAND);
+        view.getFollowersLabel().setOnMouseClicked(e ->
+                view.showUsersPopup("Followers of " + targetUser.getUsername(),
+                        makeNodesFromFollowers(targetUser))
+        );
 
+        view.getFollowingLabel().setCursor(Cursor.HAND);
+        view.getFollowingLabel().setOnMouseClicked(e ->
+                view.showUsersPopup("Following by " + targetUser.getUsername(),
+                        makeNodesFromFollowing(targetUser))
+        );
 
-
+        // Follow button state + handler
+        view.getFollowButton().setText(loggedInUser.isFollowing(targetUsername) ? "Unfollow" : "Follow");
         view.getFollowButton().setOnAction(new FollowButtonHandler(userInteractor, loggedInUser, targetUsername, view));
+
+        // Build cards from TARGET user (no Remove buttons)
+        buildLibraryCards(targetUser, gameService);
+        buildWishlistCards(targetUser, gameService);
+
+        view.setLibraryCards(libraryCards);
+        view.setWishlistCards(wishlistCards);
     }
 
+    // ---------- NEW: build popup node lists ----------
+    private List<Node> makeNodesFromFollowers(User targetUser) {
+        List<Node> nodes = new ArrayList<>();
+        for (String followerUsername : targetUser.getFollowers()) {
+            User u = userInteractor.getUserByUsername(followerUsername);
+            nodes.add(userRow(u != null ? u.getUsername() : followerUsername,
+                    u != null ? u.getProfilePictureURL() : null));
+        }
+        return nodes;
+    }
 
+    private List<Node> makeNodesFromFollowing(User targetUser) {
+        List<Node> nodes = new ArrayList<>();
+        for (String followingUsername : targetUser.getFollowing()) {
+            User u = userInteractor.getUserByUsername(followingUsername);
+            nodes.add(userRow(u != null ? u.getUsername() : followingUsername,
+                    u != null ? u.getProfilePictureURL() : null));
+        }
+        return nodes;
+    }
+
+    // Small helper to render an avatar + username row, clickable to open profile
+    private HBox userRow(String username, String avatarUrl) {
+        HBox row = new HBox(8);
+        row.setPadding(new Insets(6));
+        row.setStyle("-fx-background-color: #f7f7f7; -fx-background-radius: 5; -fx-border-color: #ddd; -fx-border-radius: 5;");
+
+        ImageView avatar = new ImageView();
+        avatar.setFitWidth(32);
+        avatar.setFitHeight(32);
+        avatar.setPreserveRatio(false);
+        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+            try { avatar.setImage(new Image(avatarUrl, true)); } catch (Exception ignored) {}
+        }
+
+        Label name = new Label(username);
+        name.setStyle("-fx-font-weight: bold;");
+
+        row.getChildren().addAll(avatar, name);
+
+        // Hover / click → open that user's profile
+        if (!username.equals(userInteractor.getUser().getUsername())){
+        row.setOnMouseEntered(ev -> row.setCursor(Cursor.HAND));
+        row.setOnMouseClicked(ev -> {
+            if (gameCentralController != null && username != null && !username.isEmpty()) {
+                gameCentralController.showUserProfileView(username);
+            }
+        });}
+
+        return row;
+    }
+    // --------------------------------------------------
+
+    private void buildLibraryCards(User targetUser, GameService gameService) {
+        libraryCards = new ArrayList<>();
+        for (Integer gameId : targetUser.getLibrary()) {
+            LibraryEntry entry = gameService.getLibraryEntryById(gameId);
+            if (entry == null) continue;
+
+            HBox card = baseCard(gameId);
+
+            ImageView cover = new ImageView();
+            cover.setFitWidth(50);
+            cover.setFitHeight(50);
+            String url = entry.getCoverImage() != null ? entry.getCoverImage().getUrl() : null;
+            if (url != null && !url.isEmpty()) {
+                try { cover.setImage(new Image(url, true)); } catch (Exception ignored) {}
+            }
+
+            Label name = new Label(entry.getTitle() + " (" + entry.getYear() + ")");
+            card.getChildren().addAll(cover, name);
+            card.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
+            libraryCards.add(card);
+        }
+    }
+
+    private void buildWishlistCards(User targetUser, GameService gameService) {
+        wishlistCards = new ArrayList<>();
+        for (Integer gameId : targetUser.getWishlist()) {
+            GamePreview preview = gameService.getGamePreviewById(gameId);
+            if (preview == null) continue;
+
+            HBox card = baseCard(gameId);
+
+            ImageView cover = new ImageView();
+            cover.setFitWidth(50);
+            cover.setFitHeight(50);
+            String url = preview.getCoverImage() != null ? preview.getCoverImage().getUrl() : null;
+            if (url != null && !url.isEmpty()) {
+                try { cover.setImage(new Image(url, true)); } catch (Exception ignored) {}
+            }
+
+            Label name = new Label(preview.getTitle() + " (" + preview.getYear() + ")");
+            card.getChildren().addAll(cover, name);
+            card.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
+            wishlistCards.add(card);
+        }
+    }
+
+    private HBox baseCard(Integer gameId) {
+        HBox card = new HBox(5);
+        card.setPadding(new Insets(10));
+        card.setStyle("-fx-border-color:#ccc; -fx-background-color:#f9f9f9; -fx-background-radius:5; -fx-border-radius:5;");
+        card.setUserData(gameId);
+
+        card.setOnMouseEntered(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+                card.setCursor(Cursor.HAND);
+                card.setStyle("-fx-border-color:#999; -fx-background-color:#f0f0f0; -fx-background-radius:5; -fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
+            }
+        });
+        card.setOnMouseExited(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+                card.setCursor(Cursor.DEFAULT);
+                card.setStyle("-fx-border-color:#ccc; -fx-background-color:#f9f9f9; -fx-background-radius:5; -fx-border-radius:5;");
+            }
+        });
+
+        return card;
+    }
 }
+
+

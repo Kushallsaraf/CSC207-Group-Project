@@ -2,6 +2,7 @@ package com.csc207.group.ui;
 
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -9,12 +10,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.List;
 
-/**Builds the common aspects of UserProfileView and PersonalProfileView
- *
- */
+/** Builds the common aspects of UserProfileView and PersonalProfileView */
 public class AbstractProfileView extends VBox implements View {
 
     // Containers
@@ -132,4 +133,50 @@ public class AbstractProfileView extends VBox implements View {
     public void setFollowingCount(int count) {
         followingLabel.setText("Following: " + count);
     }
+
+    // ---- New getters for labels ----
+    public Label getFollowersLabel() {
+        return followersLabel;
+    }
+
+    public Label getFollowingLabel() {
+        return followingLabel;
+    }
+
+    // ---- Popup to show a scrollable list of user nodes ----
+    public void showUsersPopup(String title, List<javafx.scene.Node> userNodes) {
+        Stage popupStage = new Stage();
+        popupStage.setTitle(title);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+
+        VBox listBox = new VBox(8);
+        listBox.setPadding(new Insets(10));
+        if (userNodes != null) {
+            listBox.getChildren().setAll(userNodes);
+        }
+
+        ScrollPane scroll = new ScrollPane(listBox);
+        scroll.setFitToWidth(true);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+        VBox root = new VBox(10, scroll);
+        root.setPadding(new Insets(10));
+
+        Scene scene = new Scene(root, 380, 500);
+        popupStage.setScene(scene);
+        popupStage.showAndWait();
+    }
+
+    public void setFollowersCount(int count, String username) {
+        followersLabel.setText("Followers: " + count);
+        followersLabel.setUserData(username); // store username for event handling
+    }
+
+    public void setFollowingCount(int count, String username) {
+        followingLabel.setText("Following: " + count);
+        followingLabel.setUserData(username); // store username for event handling
+    }
+
+
 }
