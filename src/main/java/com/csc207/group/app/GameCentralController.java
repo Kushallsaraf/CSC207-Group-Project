@@ -111,7 +111,6 @@ public class GameCentralController {
     // --- Methods to Switch Views ---
 
     private void showHomeView(RecommendationEngine engine) {
-        // The HomeView is now much simpler and doesn't need navigation buttons
         HomeView homeView = new HomeView();
         HomeController homeController = new HomeController(homeView, gameService, userInteractor,
                 personalProfileController, engine, this);
@@ -145,13 +144,12 @@ public class GameCentralController {
         if (authView == null) {
             throw new IllegalStateException("Auth view not set. Call setUserAuthenticationView(...) first.");
         }
-        // Hide the top nav while unauthenticated (optional)
+        // Hide the top nav while unauthenticated
         mainLayout.setTop(null);
 
         // Let the view reset fields/messages
         authView.onShow();
 
-        // IMPORTANT: do NOT call authView.display(); that replaces the Scene.
         setCenterView(authView.getView());
 
     }
@@ -169,7 +167,5 @@ public class GameCentralController {
     public void setUserAuthenticationView(JavaFXUserAuthenticationView view) {
         this.authView = view;
     }
-
-
 
 }
