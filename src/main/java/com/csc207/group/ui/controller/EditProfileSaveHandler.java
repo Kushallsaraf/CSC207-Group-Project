@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import com.csc207.group.ui.controller.UserProfileController;
 
 /**Handles the logic for edit button press on user profile view
  *
@@ -14,10 +13,10 @@ public class EditProfileSaveHandler implements EventHandler<ActionEvent> {
     private final TextField bioField;
     private final TextField imageField;
     private final Stage popupStage;
-    private final UserProfileController controller;
+    private final PersonalProfileController controller;
 
     public EditProfileSaveHandler(TextField bioField, TextField imageField, Stage popupStage,
-                                  UserProfileController controller) {
+                                  PersonalProfileController controller) {
         this.bioField = bioField;
         this.imageField = imageField;
         this.popupStage = popupStage;

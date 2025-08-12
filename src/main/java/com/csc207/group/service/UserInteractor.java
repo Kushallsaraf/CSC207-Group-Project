@@ -20,6 +20,10 @@ public class UserInteractor {
         return dataHandler.getUser(username).getProfilePictureURL();
 
     }
+
+    public User getUserByUsername(String username){
+        return dataHandler.getUser(username);
+    }
     public User getUser(){
         return this.user;
     }
@@ -107,4 +111,11 @@ public class UserInteractor {
         dataHandler.saveUser(user);
 
     }
+
+    public void saveUser(User user){
+        dataHandler.saveUser(user);
+    }
+
+
+
 }

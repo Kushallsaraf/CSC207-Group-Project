@@ -7,6 +7,8 @@ import com.csc207.group.auth.UserDataHandler;
 import kong.unirest.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class FirebaseUserDataHandler implements UserDataHandler {
@@ -51,6 +53,22 @@ public class FirebaseUserDataHandler implements UserDataHandler {
                 }
             }
 
+            if (jsonObject.has("followers") && !jsonObject.isNull("followers")) {
+                List<String> followersList = new ArrayList<>();
+                for (Object u : jsonObject.getJSONArray("followers")) {
+                    followersList.add((String) u);
+                }
+                user.setFollowers(followersList);
+            }
+
+            if (jsonObject.has("following") && !jsonObject.isNull("following")) {
+                List<String> followingList = new ArrayList<>();
+                for (Object u : jsonObject.getJSONArray("following")) {
+                    followingList.add((String) u);
+                }
+                user.setFollowing(followingList);
+            }
+
 
             if (jsonObject.has("library")) {
                 for (Object id : jsonObject.getJSONArray("library")) {
@@ -90,8 +108,10 @@ public class FirebaseUserDataHandler implements UserDataHandler {
     @Override
     public void saveUser(User user) {
         JSONObject userJson = new JSONObject();
-
-
+        List<String> following = user.getFollowing();
+        List<String> followers = user.getFollowers();
+        userJson.put("followers", followers);
+        userJson.put("following", following);
         userJson.put("pwd", user.getHashedPassword());
 
 

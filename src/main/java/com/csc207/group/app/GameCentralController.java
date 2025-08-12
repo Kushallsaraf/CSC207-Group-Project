@@ -1,14 +1,13 @@
 package com.csc207.group.app;
 
 import com.csc207.group.model.Game;
-import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.User;
 import com.csc207.group.service.*;
 import com.csc207.group.service.recommendation.RecommendationEngine;
 import com.csc207.group.service.recommendation.RecommendationService;
 import com.csc207.group.ui.*;
-import com.csc207.group.ui.controller.GamePageController;
 import com.csc207.group.ui.controller.HomeController;
+import com.csc207.group.ui.controller.PersonalProfileController;
 import com.csc207.group.ui.controller.UserProfileController;
 import com.csc207.group.views.GameDetailController;
 import com.csc207.group.views.GameDetailViewFunc;
@@ -23,18 +22,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 public class GameCentralController {
 
     private final Stage primaryStage;
     private final BorderPane mainLayout = new BorderPane(); // Switched to BorderPane
-    private UserProfileController userProfileController;
+    private PersonalProfileController personalProfileController;
     private UserInteractor userInteractor;
     private GameService gameService;
-    private UserProfileView userProfileView;
+    private PersonalProfileView personalProfileView;
     private HostServices hostServices;
     private JavaFXUserAuthenticationView authView;
     private RecommendationEngine recommendationEngine;
@@ -64,10 +60,10 @@ public class GameCentralController {
         recommendationEngine = new RecommendationEngine(recommendationService, user);
         userInteractor = new UserInteractor(user, new com.csc207.group.data_access.FirebaseUserDataHandler
                 (new com.csc207.group.cache.FirebaseRestClient()));
-        userProfileView = new UserProfileView();
-        UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService);
-        userProfileController = new UserProfileController(userProfileInteractor, userInteractor, userProfileView, this);
-        userProfileView.setController(userProfileController);
+        personalProfileView = new PersonalProfileView();
+        PersonalProfileInteractor personalProfileInteractor = new PersonalProfileInteractor(userInteractor, gameService);
+        personalProfileController = new PersonalProfileController(personalProfileInteractor, userInteractor, personalProfileView, this);
+        personalProfileView.setController(personalProfileController);
 
         // Create and set the top navigation bar
         mainLayout.setTop(createTopNav());
@@ -100,7 +96,7 @@ public class GameCentralController {
         // --- Event Handlers for Navigation ---
         homeButton.setOnAction(e -> showHomeView(recommendationEngine));
         newsButton.setOnAction(e -> showNewsView());
-        libraryButton.setOnAction(e -> showUserProfileView());
+        libraryButton.setOnAction(e -> showPersonalProfileView());
 
         // Style the navigation buttons
         String buttonStyle = "-fx-background-color: transparent; -fx-text-fill: #FFFFFF; -fx-font-size: 16px; -fx-cursor: hand;";
@@ -115,10 +111,9 @@ public class GameCentralController {
     // --- Methods to Switch Views ---
 
     private void showHomeView(RecommendationEngine engine) {
-        // The HomeView is now much simpler and doesn't need navigation buttons
         HomeView homeView = new HomeView();
         HomeController homeController = new HomeController(homeView, gameService, userInteractor,
-                userProfileController, engine, this);
+                personalProfileController, engine, this);
         homeController.setRecommendations();
         setCenterView(homeView.getView());
     }
@@ -129,9 +124,19 @@ public class GameCentralController {
         setCenterView(newsView.getView());
     }
 
-    private void showUserProfileView() {
-        userProfileController.refresh(); // Make sure data is up-to-date
+    private void showPersonalProfileView() {
+        personalProfileController.refresh(); // Make sure data is up-to-date
+        setCenterView(personalProfileView.getView());
+    }
+
+    public void showUserProfileView(String targetUsername){
+        UserProfileView userProfileView = new UserProfileView();
+        UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService,
+                targetUsername);
+        UserProfileController userProfileController = new UserProfileController(userInteractor,
+                userProfileInteractor,userProfileView, targetUsername, this);
         setCenterView(userProfileView.getView());
+
     }
 
 
@@ -139,13 +144,12 @@ public class GameCentralController {
         if (authView == null) {
             throw new IllegalStateException("Auth view not set. Call setUserAuthenticationView(...) first.");
         }
-        // Hide the top nav while unauthenticated (optional)
+        // Hide the top nav while unauthenticated
         mainLayout.setTop(null);
 
         // Let the view reset fields/messages
         authView.onShow();
 
-        // IMPORTANT: do NOT call authView.display(); that replaces the Scene.
         setCenterView(authView.getView());
 
     }
@@ -153,7 +157,8 @@ public class GameCentralController {
     public void showGamePage(Integer gameid){
         Game game = gameService.getGameById(gameid);
         GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
-        GameDetailController controller = new GameDetailController(game, gamePageInteractor);
+        GameDetailController controller = new GameDetailController(game, gamePageInteractor, this
+                , userInteractor.getUser());
         GameDetailViewFunc view = controller.setView();
         setCenterView(view);
 
@@ -162,7 +167,5 @@ public class GameCentralController {
     public void setUserAuthenticationView(JavaFXUserAuthenticationView view) {
         this.authView = view;
     }
-
-
 
 }

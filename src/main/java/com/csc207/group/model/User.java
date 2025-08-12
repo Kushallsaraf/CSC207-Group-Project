@@ -14,6 +14,8 @@ public class User {
     private List<Integer> library;
     private String bio;
     private String profilePictureURL;
+    private List<String> followers;
+    private List<String> following;
 
 
     public User(String username, String hashedPassword){
@@ -24,7 +26,8 @@ public class User {
         this.library = new ArrayList<>();
         this.bio = "";
         this.profilePictureURL = null;
-
+        this.followers = new ArrayList<>();
+        this.following = new ArrayList<>();
 
     }
     public String getUsername() {
@@ -73,4 +76,55 @@ public class User {
     public String getProfilePictureURL(){
         return this.profilePictureURL;
     }
+
+    public void follow(String username){
+        if (!isFollowing(username)){
+        this.following.add(username);}
+    }
+
+    public void unfollow(String username){
+        if (isFollowing(username)){
+        this.following.remove(username);}
+
+    }
+
+    public boolean isFollowing(String username){
+        return this.following.contains(username);
+    }
+
+    public void addToFollowers(String username) {
+        if (!followers.contains(username)) {
+            followers.add(username);
+        }
+    }
+
+    public void removeFromFollowers(String username) {
+        followers.remove(username);
+    }
+
+    public void setFollowers(List<String> followers){
+        this.followers = followers;
+    }
+
+    public void setFollowing(List<String> following){
+        this.following = following;
+    }
+
+    public List<String> getFollowers(){
+        return this.followers;
+    }
+
+    public List<String> getFollowing(){
+        return this.following;
+    }
+
+    public int getNumberOfFollowers(){
+        return this.followers.size();
+    }
+
+    public int getNumberOfFollowing(){
+        return this.following.size();
+    }
+
+
 }
