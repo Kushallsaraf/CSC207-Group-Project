@@ -37,7 +37,7 @@ public class FourStarReviewStrategy implements RecommendationStrategy {
         for (Integer gameId : fourStarGames) {
             List<Integer> similar = service.getSimilarGameIds(gameId);
             for (Integer simId : similar) {
-                if (collected.size() >= 5) {
+                if (collected.size() >= 10) {
                     return new ArrayList<>(collected);
                 }
                 collected.add(simId);
