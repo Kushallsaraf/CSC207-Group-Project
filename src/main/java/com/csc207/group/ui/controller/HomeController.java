@@ -116,7 +116,6 @@ public class HomeController {
         return card;
     }
 
-    // ----------------- UPDATED: search now returns games + users -----------------
     private void handleSearch() {
         String query = view.getSearchQuery();
         if (query == null || query.trim().isEmpty()) {
@@ -127,7 +126,13 @@ public class HomeController {
 
         List<Node> resultNodes = new ArrayList<>();
 
-        // 1) Game results
+        // (Optional) show exact user match first
+        User exactUser = userInteractor.getUserByUsername(query);
+        if (exactUser != null) {
+            resultNodes.add(createUserResultNode(exactUser));
+        }
+
+        // Game results
         List<Integer> gameIds = gameService.searchGame(query);
         for (Integer id : gameIds) {
             GamePreview preview = gameService.getGamePreviewById(id);
@@ -136,15 +141,61 @@ public class HomeController {
             }
         }
 
-        // 2) Exact username match
-        User exactUser = userInteractor.getUserByUsername(query);
-        if (exactUser != null) {
-            resultNodes.add(createUserResultNode(exactUser));
-        }
-
-        // Show results (games + maybe user)
         view.displayGameResults(resultNodes);
     }
+
+    private Node createUserResultNode(User u) {
+        HBox row = new HBox(12);
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.setPadding(new Insets(10));
+        row.setStyle("-fx-border-color: lightgray; -fx-background-color: #1e1e1e; " +
+                "-fx-background-radius: 6; -fx-border-radius: 6;");
+
+        ImageView avatar = new ImageView();
+        avatar.setFitWidth(48);
+        avatar.setFitHeight(48);
+        avatar.setPreserveRatio(false);
+        String avatarUrl = u.getProfilePictureURL();
+        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+            try { avatar.setImage(new Image(avatarUrl, true)); } catch (Exception ignored) {}
+        }
+
+        Label name = new Label(u.getUsername());
+        name.setStyle("-fx-text-fill: #fff; -fx-font-size: 16px; -fx-font-weight: bold;");
+        VBox info = new VBox(4, name);
+        info.setAlignment(Pos.CENTER_LEFT);
+
+        row.getChildren().addAll(avatar, info);
+
+        // Hover + click → open profile (avoid navigating to your own profile view)
+        row.setOnMouseEntered(e -> {
+            row.setCursor(Cursor.HAND);
+            row.setStyle("-fx-border-color: #00ffff; -fx-border-width: 2; -fx-background-color: #1e1e1e; " +
+                    "-fx-background-radius: 6; -fx-border-radius: 6; " +
+                    "-fx-effect: dropshadow(gaussian, #00ffff, 10, 0.8, 0, 0);");
+        });
+        row.setOnMouseExited(e -> {
+            row.setCursor(Cursor.DEFAULT);
+            row.setStyle("-fx-border-color: lightgray; -fx-background-color: #1e1e1e; " +
+                    "-fx-background-radius: 6; -fx-border-radius: 6;");
+        });
+
+        String loggedIn = userInteractor.getUser().getUsername();
+        row.setOnMouseClicked(e -> {
+            if (!u.getUsername().equals(loggedIn)) {
+                gameCentralController.showUserProfileView(u.getUsername());
+            } else {
+                // If you prefer to jump to your own profile:
+                // gameCentralController.showPersonalProfileView();
+            }
+        });
+
+        row.setUserData(u.getUsername()); // optional
+        return row;
+    }
+
+
+    // ----------------- UPDATED: search now returns games + users -----------------
 
     // -----------------------------------------------------------------------------
 
@@ -198,45 +249,7 @@ public class HomeController {
     }
 
     // ---------- NEW: render a user search result ----------
-    private Node createUserResultNode(User u) {
-        HBox row = new HBox(12);
-        row.setAlignment(Pos.CENTER_LEFT);
-        row.setPadding(new Insets(10));
-        row.setStyle("-fx-border-color: lightgray; -fx-background-color: #1e1e1e; -fx-background-radius: 6; -fx-border-radius: 6;");
 
-        ImageView avatar = new ImageView();
-        avatar.setFitWidth(48);
-        avatar.setFitHeight(48);
-        avatar.setPreserveRatio(false);
-        String avatarUrl = u.getProfilePictureURL();
-        if (avatarUrl != null && !avatarUrl.isEmpty()) {
-            try { avatar.setImage(new Image(avatarUrl, true)); } catch (Exception ignored) {}
-        }
-
-        Label name = new Label(u.getUsername());
-        name.setStyle("-fx-text-fill: #fff; -fx-font-size: 16px; -fx-font-weight: bold;");
-
-        VBox info = new VBox(4, name);
-        info.setAlignment(Pos.CENTER_LEFT);
-
-        row.getChildren().addAll(avatar, info);
-
-        // Hover + click → open user profile
-        row.setOnMouseEntered(e -> {
-            row.setCursor(Cursor.HAND);
-            row.setStyle("-fx-border-color: #00ffff; -fx-border-width: 2; -fx-background-color: #1e1e1e; "
-                    + "-fx-background-radius: 6; -fx-border-radius: 6; "
-                    + "-fx-effect: dropshadow(gaussian, #00ffff, 10, 0.8, 0, 0);");
-        });
-        row.setOnMouseExited(e -> {
-            row.setCursor(Cursor.DEFAULT);
-            row.setStyle("-fx-border-color: lightgray; -fx-background-color: #1e1e1e; -fx-background-radius: 6; -fx-border-radius: 6;");
-        });
-        row.setOnMouseClicked(e -> gameCentralController.showUserProfileView(u.getUsername()));
-        row.setUserData(u.getUsername()); // optional
-
-        return row;
-    }
     // ------------------------------------------------------
 
     private void handleLibraryButtonClick(ActionEvent event) {

@@ -17,14 +17,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UserProfileController {
 
-    private final UserInteractor userInteractor;             // provides logged-in + lookup
-    private final UserProfileInteractor profileInteractor;   // gives us GameService
+    private final UserInteractor userInteractor;             // logged-in + lookups
+    private final UserProfileInteractor profileInteractor;   // exposes GameService
     private final UserProfileView view;                      // UI for other users' profiles
-    private final String targetUsername;                     // whose profile we’re viewing
+    private final String targetUsername;                     // whose profile
     private final GameCentralController gameCentralController;
 
     private List<Node> libraryCards;
@@ -45,6 +46,16 @@ public class UserProfileController {
 
     private void initialize() {
         User targetUser = userInteractor.getUserByUsername(targetUsername);
+        if (targetUser == null) {
+            // Minimal fallback if user not found
+            view.setUsername(targetUsername);
+            view.setBio("User not found.");
+            view.setProfileImage(null);
+            view.setFollowersCount(0, targetUsername);
+            view.setFollowingCount(0, targetUsername);
+            return;
+        }
+
         User loggedInUser = userInteractor.getUser();
         GameService gameService = profileInteractor.getGameService();
 
@@ -55,53 +66,78 @@ public class UserProfileController {
         view.setFollowersCount(targetUser.getFollowers().size(), targetUsername);
         view.setFollowingCount(targetUser.getFollowing().size(), targetUsername);
 
-        // Clickable Followers / Following labels → open popup with user nodes
+        // Followers label → popup
         view.getFollowersLabel().setCursor(Cursor.HAND);
+        view.getFollowersLabel().setOnMouseEntered(e ->
+                view.getFollowersLabel().setStyle("-fx-underline: true; -fx-text-fill: #00aaff;"));
+        view.getFollowersLabel().setOnMouseExited(e -> view.getFollowersLabel().setStyle(""));
         view.getFollowersLabel().setOnMouseClicked(e ->
                 view.showUsersPopup("Followers of " + targetUser.getUsername(),
                         makeNodesFromFollowers(targetUser))
         );
 
+        // Following label → popup
         view.getFollowingLabel().setCursor(Cursor.HAND);
+        view.getFollowingLabel().setOnMouseEntered(e ->
+                view.getFollowingLabel().setStyle("-fx-underline: true; -fx-text-fill: #00aaff;"));
+        view.getFollowingLabel().setOnMouseExited(e -> view.getFollowingLabel().setStyle(""));
         view.getFollowingLabel().setOnMouseClicked(e ->
                 view.showUsersPopup("Following by " + targetUser.getUsername(),
                         makeNodesFromFollowing(targetUser))
         );
 
-        // Follow button state + handler
-        view.getFollowButton().setText(loggedInUser.isFollowing(targetUsername) ? "Unfollow" : "Follow");
-        view.getFollowButton().setOnAction(new FollowButtonHandler(userInteractor, loggedInUser, targetUsername, view));
+        // Follow button
+        boolean alreadyFollowing = loggedInUser != null && loggedInUser.isFollowing(targetUsername);
+        view.getFollowButton().setText(alreadyFollowing ? "Unfollow" : "Follow");
+        view.getFollowButton().setOnAction(
+                new FollowButtonHandler(userInteractor, loggedInUser, targetUsername, view)
+        );
 
-        // Build cards from TARGET user (no Remove buttons)
+        // Cards (target user; no Remove buttons)
         buildLibraryCards(targetUser, gameService);
         buildWishlistCards(targetUser, gameService);
-
         view.setLibraryCards(libraryCards);
         view.setWishlistCards(wishlistCards);
     }
 
-    // ---------- NEW: build popup node lists ----------
+    // ---------- Build popup node lists ----------
     private List<Node> makeNodesFromFollowers(User targetUser) {
+        if (targetUser.getFollowers() == null || targetUser.getFollowers().isEmpty()) {
+            return Collections.singletonList(emptyRow("No followers yet."));
+        }
+        List<String> followers = new ArrayList<>(targetUser.getFollowers());
+        followers.sort(String::compareToIgnoreCase); // optional alphabetize
         List<Node> nodes = new ArrayList<>();
-        for (String followerUsername : targetUser.getFollowers()) {
-            User u = userInteractor.getUserByUsername(followerUsername);
-            nodes.add(userRow(u != null ? u.getUsername() : followerUsername,
+        for (String uname : followers) {
+            User u = userInteractor.getUserByUsername(uname);
+            nodes.add(userRow(u != null ? u.getUsername() : uname,
                     u != null ? u.getProfilePictureURL() : null));
         }
         return nodes;
     }
 
     private List<Node> makeNodesFromFollowing(User targetUser) {
+        if (targetUser.getFollowing() == null || targetUser.getFollowing().isEmpty()) {
+            return Collections.singletonList(emptyRow("Not following anyone yet."));
+        }
+        List<String> following = new ArrayList<>(targetUser.getFollowing());
+        following.sort(String::compareToIgnoreCase); // optional alphabetize
         List<Node> nodes = new ArrayList<>();
-        for (String followingUsername : targetUser.getFollowing()) {
-            User u = userInteractor.getUserByUsername(followingUsername);
-            nodes.add(userRow(u != null ? u.getUsername() : followingUsername,
+        for (String uname : following) {
+            User u = userInteractor.getUserByUsername(uname);
+            nodes.add(userRow(u != null ? u.getUsername() : uname,
                     u != null ? u.getProfilePictureURL() : null));
         }
         return nodes;
     }
 
-    // Small helper to render an avatar + username row, clickable to open profile
+    private HBox emptyRow(String msg) {
+        HBox row = new HBox(8);
+        row.setPadding(new Insets(6));
+        row.getChildren().add(new Label(msg));
+        return row;
+    }
+
     private HBox userRow(String username, String avatarUrl) {
         HBox row = new HBox(8);
         row.setPadding(new Insets(6));
@@ -120,18 +156,18 @@ public class UserProfileController {
 
         row.getChildren().addAll(avatar, name);
 
-        // Hover / click → open that user's profile
-        if (!username.equals(userInteractor.getUser().getUsername())){
-        row.setOnMouseEntered(ev -> row.setCursor(Cursor.HAND));
-        row.setOnMouseClicked(ev -> {
-            if (gameCentralController != null && username != null && !username.isEmpty()) {
-                gameCentralController.showUserProfileView(username);
-            }
-        });}
-
+        String me = userInteractor.getUser() != null ? userInteractor.getUser().getUsername() : null;
+        if (username != null && !username.equals(me)) {
+            row.setOnMouseEntered(ev -> row.setCursor(Cursor.HAND));
+            row.setOnMouseClicked(ev -> {
+                if (gameCentralController != null && !username.isEmpty()) {
+                    gameCentralController.showUserProfileView(username);
+                }
+            });
+        }
         return row;
     }
-    // --------------------------------------------------
+    // -------------------------------------------
 
     private void buildLibraryCards(User targetUser, GameService gameService) {
         libraryCards = new ArrayList<>();
@@ -186,15 +222,13 @@ public class UserProfileController {
         card.setUserData(gameId);
 
         card.setOnMouseEntered(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent event) {
+            @Override public void handle(javafx.scene.input.MouseEvent event) {
                 card.setCursor(Cursor.HAND);
                 card.setStyle("-fx-border-color:#999; -fx-background-color:#f0f0f0; -fx-background-radius:5; -fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
             }
         });
         card.setOnMouseExited(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent event) {
+            @Override public void handle(javafx.scene.input.MouseEvent event) {
                 card.setCursor(Cursor.DEFAULT);
                 card.setStyle("-fx-border-color:#ccc; -fx-background-color:#f9f9f9; -fx-background-radius:5; -fx-border-radius:5;");
             }
@@ -203,5 +237,6 @@ public class UserProfileController {
         return card;
     }
 }
+
 
 
