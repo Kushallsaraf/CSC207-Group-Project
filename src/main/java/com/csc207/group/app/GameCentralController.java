@@ -33,6 +33,7 @@ public class GameCentralController {
     private HostServices hostServices;
     private JavaFXUserAuthenticationView authView;
     private RecommendationEngine recommendationEngine;
+    private HomeController homeController;
 
     public GameCentralController(Stage primaryStage, HostServices hostServices) {
         this.primaryStage = primaryStage;
@@ -105,13 +106,24 @@ public class GameCentralController {
 
     // --- Methods to Switch Views ---
 
-    private void showHomeView(RecommendationEngine engine) {
+    public void showHomeView(RecommendationEngine engine) {
         HomeView homeView = new HomeView();
-        HomeController homeController = new HomeController(homeView, gameService, userInteractor,
+        homeController = new HomeController(homeView, gameService, userInteractor,
                 personalProfileController, engine, this);
         homeController.setRecommendations();
         setCenterView(homeView.getView());
     }
+
+    public void showHomeViewWithSearch(String query) {
+        HomeView homeView = new HomeView();
+        homeController = new HomeController(homeView, gameService, userInteractor,
+                personalProfileController, recommendationEngine, this);
+        homeController.setRecommendations();
+        homeView.getSearchQuery(); // This is a bit of a hack to make sure the field is not null
+        homeView.displayGameResults(homeController.searchByGenre(query));
+        setCenterView(homeView.getView());
+    }
+
 
     private void showNewsView() {
         NewsService newsService = new NewsService();
@@ -153,7 +165,7 @@ public class GameCentralController {
         Game game = gameService.getGameById(gameid);
         GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
         GameDetailController controller = new GameDetailController(game, gamePageInteractor, this
-                , userInteractor.getUser(), hostServices);
+                , userInteractor.getUser(), hostServices, homeController);
         GameDetailViewFunc view = controller.setView();
         setCenterView(view);
 

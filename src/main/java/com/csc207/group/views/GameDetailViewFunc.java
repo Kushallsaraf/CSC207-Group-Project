@@ -1,6 +1,7 @@
 package com.csc207.group.views;
 
 import com.csc207.group.views.Components.DLCcard;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -15,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,9 @@ public class GameDetailViewFunc extends VBox {
     private FlowPane screenshotContainer;
     private ScrollPane screenshotScrollPane;
     private Button buyButton;
+    private Button addButton;
+    private Button moreButton;
+    private Label confirmationLabel;
 
 
     // NEW: scroll container and content VBox
@@ -204,13 +209,18 @@ public class GameDetailViewFunc extends VBox {
         footerButtons = new HBox(20);
         footerButtons.setAlignment(Pos.CENTER);
         buyButton = new Button("Buy Now");
-        Button addButton = new Button("Add to Library");
-        Button moreButton = new Button("More Like This");
+        addButton = new Button("Add to Library");
+        moreButton = new Button("More Like This");
         String footerButtonStyle = "-fx-background-color: #555; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;";
         buyButton.setStyle(footerButtonStyle);
         addButton.setStyle(footerButtonStyle);
         moreButton.setStyle(footerButtonStyle);
         footerButtons.getChildren().addAll(buyButton, addButton, moreButton);
+
+        // --- Confirmation Label ---
+        confirmationLabel = new Label();
+        confirmationLabel.setStyle("-fx-text-fill: #2ecc71; -fx-font-size: 14px; -fx-font-weight: bold;");
+        confirmationLabel.setVisible(false);
 
         // put EVERYTHING into the scrollable content
         content.getChildren().setAll(
@@ -222,12 +232,21 @@ public class GameDetailViewFunc extends VBox {
                 achievementsSection,
                 reviewInputBox,
                 reviewsSection,
-                footerButtons
+                footerButtons,
+                confirmationLabel
         );
     }
 
     public Button getBuyNowButton() {
         return buyButton;
+    }
+
+    public Button getAddButton() {
+        return addButton;
+    }
+
+    public Button getMoreButton() {
+        return moreButton;
     }
 
     public Button getViewPhotosButton() {
@@ -431,5 +450,15 @@ public class GameDetailViewFunc extends VBox {
     public void clearReviewFields() {
         if (ratingField != null) ratingField.clear();
         if (reviewArea != null) reviewArea.clear();
+    }
+
+    public void showConfirmation(String message) {
+        confirmationLabel.setText(message);
+        confirmationLabel.setVisible(true);
+
+        // Hide the message after a few seconds
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(event -> confirmationLabel.setVisible(false));
+        delay.play();
     }
 }

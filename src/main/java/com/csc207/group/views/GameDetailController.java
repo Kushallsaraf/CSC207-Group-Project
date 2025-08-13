@@ -7,6 +7,7 @@ import com.csc207.group.model.*;
 import com.csc207.group.service.DLCService;
 import com.csc207.group.service.GamePageInteractor;
 import com.csc207.group.service.GenreService;
+import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.views.Components.AchievementCard;
 import com.csc207.group.views.Components.DLCcard;
 import javafx.application.HostServices;
@@ -32,9 +33,10 @@ public class GameDetailController {
     private User user;
     private RAWGApiClient rawgApiClient;
     private HostServices hostServices;
+    private HomeController homeController;
 
     public GameDetailController(Game game, GamePageInteractor gamePageInteractor,
-                                GameCentralController gameCentralController, User user, HostServices hostServices) {
+                                GameCentralController gameCentralController, User user, HostServices hostServices, HomeController homeController) {
         this.view = new GameDetailViewFunc();
         this.game = game;
         this.gamePageInteractor = gamePageInteractor;
@@ -42,6 +44,7 @@ public class GameDetailController {
         this.user = user;
         this.rawgApiClient = new RAWGApiClient(new RAWGFirebaseAPICache());
         this.hostServices = hostServices;
+        this.homeController = homeController;
     }
 
     // This method initializes the view with data from the game and returns the view instance
@@ -63,7 +66,23 @@ public class GameDetailController {
         view.getViewPhotosButton().setOnAction(e -> fetchAndDisplayScreenshots());
         view.getSubmitReviewButton().setOnAction(e -> handleReviewSubmission());
         view.getBuyNowButton().setOnAction(e -> handleBuyNow());
+        view.getAddButton().setOnAction(e -> handleAddTOLibrary());
+        view.getMoreButton().setOnAction(e -> handleMoreLikeThis());
     }
+
+    private void handleMoreLikeThis() {
+        if (game.getGenres() != null && !game.getGenres().isEmpty()) {
+            String firstGenre = new GenreService().getGenresById(game.getGenres().get(0));
+            gameCentralController.showHomeViewWithSearch(firstGenre.toLowerCase());
+        }
+    }
+
+
+    private void handleAddTOLibrary() {
+        gamePageInteractor.userInteractor.addToLibrary(game.getGameid());
+        view.showConfirmation("Added to your library!");
+    }
+
 
     private void handleBuyNow() {
         new Thread(() -> {
