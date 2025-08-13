@@ -31,7 +31,7 @@ public class AchievementService {
 
         JsonNode achievementsNode = rootNode.get("results");
         if (achievementsNode != null) {
-            // looping over each node thats an achievement we parse each
+            // looping over each node that's an achievement we parse each
             // attribute and create an achievement obj
             for (JsonNode achievementNode : achievementsNode) {
                 // parse each attribute of an achievement

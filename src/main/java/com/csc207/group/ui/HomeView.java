@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.List;
@@ -46,6 +48,16 @@ public class HomeView implements View {
         searchButton.setStyle("-fx-background-color: #444; -fx-text-fill: white;");
 
         searchBar.getChildren().addAll(searchField, searchButton);
+
+        // --- Event handler for pressing "Enter" in the search field ---
+        searchField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    searchButton.fire();
+                }
+            }
+        });
 
         // --- Results Container ---
         resultsContainer = new VBox(15);

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GameStoreService {
 
-    // taking the stores that the api returns for  agiven game
+    // taking the stores that the api returns for a given game
     // and returning them formatted properly
     // will allow for the method in RAWG API Client to return a list of GameStore Objects
 
