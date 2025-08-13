@@ -2,7 +2,7 @@ package com.csc207.group.service;
 
 import com.csc207.group.cache.IgdbFirebaseApiCache;
 import com.csc207.group.data_access.IgdbApiClient;
-import com.csc207.group.model.DLC;
+import com.csc207.group.model.Dlc;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
@@ -10,7 +10,7 @@ import kong.unirest.json.JSONObject;
 public class DLCService {
     private final IgdbApiClient apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
 
-    public DLC getDLCById(int id) {
+    public Dlc getDLCById(int id) {
         JsonNode json = apiClient.getGameDetailsById(id);
         JSONArray array = json.getArray();
 
@@ -30,6 +30,6 @@ public class DLCService {
             cover_page = "No cover page";
         }
 
-        return new DLC(name, description, cover_page);
+        return new Dlc(name, description, cover_page);
     }
 }

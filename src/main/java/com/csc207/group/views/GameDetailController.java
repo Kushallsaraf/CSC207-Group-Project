@@ -4,7 +4,7 @@ import com.csc207.group.app.GameCentralController;
 import com.csc207.group.cache.RawgFirebaseApiCache;
 import com.csc207.group.data_access.RawgApiClient;
 import com.csc207.group.model.Achievement;
-import com.csc207.group.model.DLC;
+import com.csc207.group.model.Dlc;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.Screenshot;
@@ -22,7 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,11 +116,11 @@ public class GameDetailController {
     }
 
     public void setUserScore() {
-        view.setUserScore(game.getCritic_rating());
+        view.setUserScore(game.getCriticRating());
     }
 
     public void setImage() {
-        String coverUrl = game.getCover_image();
+        String coverUrl = game.getCoverImage();
         System.out.println("Cover image URL: " + coverUrl);
 
         if (coverUrl != null && !coverUrl.isEmpty()) {
@@ -137,20 +136,20 @@ public class GameDetailController {
         String devs = String.join(", ", game.getDeveloper());
         view.setDeveloper(devs);
 
-        view.setReleaseDate(game.getRelease_date());
-        view.setAgeRating(game.getAge_rating());
+        view.setReleaseDate(game.getReleaseDate());
+        view.setAgeRating(game.getAgeRating());
 
         String plats = String.join(", ", game.getPlatforms());
         view.setPlatforms(plats);
     }
 
     public void setDLCs() {
-        List<DLC> dlcs = new ArrayList<>();
-        for (Integer id : game.getDLCs()) {
+        List<Dlc> dlcs = new ArrayList<>();
+        for (Integer id : game.getDownloadableContent()) {
             dlcs.add(new DLCService().getDLCById(id));
         }
         List<VBox> dlccards = new ArrayList<>();
-        for (DLC dlc : dlcs) {
+        for (Dlc dlc : dlcs) {
             dlccards.add(new DLCcard(dlc).getCard());
         }
         view.setDLCs(dlccards);

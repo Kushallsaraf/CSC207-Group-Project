@@ -94,8 +94,8 @@ public class GameService {
         gameobj.setDeveloper(developers);
 
         // Ratings
-        gameobj.setCritic_rating(gameJson.optDouble("total_rating", 0));
-        gameobj.setRating_count(gameJson.optDouble("total_rating_count", 0));
+        gameobj.setCriticRating(gameJson.optDouble("total_rating", 0));
+        gameobj.setRatingCount(gameJson.optDouble("total_rating_count", 0));
 
         // Platforms
         List<String> platforms = new ArrayList<>();
@@ -111,19 +111,19 @@ public class GameService {
 
         // Cover Image
         String cover_page = gameJson.has("cover") ? getCoverPageById(gameJson.optInt("cover", 0)) : "No cover page";
-        gameobj.setCover_image(cover_page);
+        gameobj.setCoverImage(cover_page);
 
         // Age Rating
         String rating = gameJson.has("age_ratings")
                 ? getAgeRatingById(gameJson.getJSONArray("age_ratings").getInt(0))
                 : "age rating not found";
-        gameobj.setAge_rating(rating);
+        gameobj.setAgeRating(rating);
 
         // Release Date
         String release_date = gameJson.has("release_dates")
                 ? getRelease_date(gameJson.getJSONArray("release_dates").getInt(0))
                 : "Release date not found";
-        gameobj.setRelease_date(release_date);
+        gameobj.setReleaseDate(release_date);
 
         // DLCs
         List<Integer> DLCs = new ArrayList<>();
@@ -133,7 +133,7 @@ public class GameService {
                 DLCs.add(dlcArray.getInt(i));
             }
         }
-        gameobj.setDLCs(DLCs);
+        gameobj.setDownloadableContent(DLCs);
 
         // Description
         String summary = gameJson.optString("summary", "No description available.");

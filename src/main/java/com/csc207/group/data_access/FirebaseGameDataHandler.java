@@ -7,9 +7,7 @@ import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Game objects are saved in firebase database.
@@ -36,13 +34,13 @@ public class FirebaseGameDataHandler implements GameDataHandler {
         gameJson.put("name", game.getName());
         gameJson.put("genres", game.getGenres());
         gameJson.put("developer", game.getDeveloper());
-        gameJson.put("critic_rating", game.getCritic_rating());
-        gameJson.put("rating_count", game.getRating_count());
+        gameJson.put("critic_rating", game.getCriticRating());
+        gameJson.put("rating_count", game.getRatingCount());
         gameJson.put("platforms", game.getPlatforms());
-        gameJson.put("cover_image", game.getCover_image());
-        gameJson.put("age_rating", game.getAge_rating());
-        gameJson.put("release_date", game.getRelease_date());
-        gameJson.put("DLCs", game.getDLCs());
+        gameJson.put("cover_image", game.getCoverImage());
+        gameJson.put("age_rating", game.getAgeRating());
+        gameJson.put("release_date", game.getReleaseDate());
+        gameJson.put("DLCs", game.getDownloadableContent());
         gameJson.put("description", game.getDescription());
 
         JSONArray reviewsArray = new JSONArray();
@@ -76,16 +74,16 @@ public class FirebaseGameDataHandler implements GameDataHandler {
         game.setName(gameJson.optString("name", ""));
         game.setGenres(jsonArrayToStringList(gameJson.optJSONArray("genres")));
         game.setDeveloper(jsonArrayToStringList(gameJson.optJSONArray("developer")));
-        game.setCritic_rating(gameJson.optDouble("critic_rating", 0.0));
-        game.setRating_count(gameJson.optDouble("rating_count", 0.0));
+        game.setCriticRating(gameJson.optDouble("critic_rating", 0.0));
+        game.setRatingCount(gameJson.optDouble("rating_count", 0.0));
         game.setPlatforms(jsonArrayToStringList(gameJson.optJSONArray("platforms")));
         String cover = gameJson.optString("cover_image", "");
         cover = normalizeURL(cover);
-        game.setCover_image(cover);
-        game.setCover_image(gameJson.optString("cover_image", ""));
-        game.setAge_rating(gameJson.optString("age_rating", ""));
-        game.setRelease_date(gameJson.optString("release_date", ""));
-        game.setDLCs(jsonArrayToIntList(gameJson.optJSONArray("DLCs")));
+        game.setCoverImage(cover);
+        game.setCoverImage(gameJson.optString("cover_image", ""));
+        game.setAgeRating(gameJson.optString("age_rating", ""));
+        game.setReleaseDate(gameJson.optString("release_date", ""));
+        game.setDownloadableContent(jsonArrayToIntList(gameJson.optJSONArray("DLCs")));
 
         List<Review> reviews = new ArrayList<Review>();
         if (gameJson.has(STRING_REVIEWS) && !gameJson.isNull(STRING_REVIEWS)) {
