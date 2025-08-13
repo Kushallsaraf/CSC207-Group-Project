@@ -39,12 +39,18 @@ public class PersonalProfileView extends AbstractProfileView {
 
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(15));
+        layout.setStyle("-fx-background-color: #121212;");
 
         Label bioLabel = new Label("Bio:");
+        bioLabel.setStyle("-fx-text-fill: white;");
         TextField bioField = new TextField(currentBio);
+        bioField.setStyle("-fx-text-fill: white; -fx-background-color: #1E1E1E; -fx-border-color: #333333;");
+
 
         Label imageLabel = new Label("Profile Image URL:");
+        imageLabel.setStyle("-fx-text-fill: white;");
         TextField imageField = new TextField(currentImageUrl);
+        imageField.setStyle("-fx-text-fill: white; -fx-background-color: #1E1E1E; -fx-border-color: #333333;");
 
         HBox buttonBox = new HBox(10);
         Button saveButton = new Button("Save");
@@ -69,8 +75,3 @@ public class PersonalProfileView extends AbstractProfileView {
         popupStage.showAndWait();
     }
 }
-
-
-
-
-

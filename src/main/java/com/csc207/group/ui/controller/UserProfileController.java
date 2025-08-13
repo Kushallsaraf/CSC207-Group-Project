@@ -70,7 +70,7 @@ public class UserProfileController {
         view.getFollowersLabel().setCursor(Cursor.HAND);
         view.getFollowersLabel().setOnMouseEntered(e ->
                 view.getFollowersLabel().setStyle("-fx-underline: true; -fx-text-fill: #00aaff;"));
-        view.getFollowersLabel().setOnMouseExited(e -> view.getFollowersLabel().setStyle(""));
+        view.getFollowersLabel().setOnMouseExited(e -> view.getFollowersLabel().setStyle("-fx-text-fill: #B3B3B3;"));
         view.getFollowersLabel().setOnMouseClicked(e ->
                 view.showUsersPopup("Followers of " + targetUser.getUsername(),
                         makeNodesFromFollowers(targetUser))
@@ -80,7 +80,7 @@ public class UserProfileController {
         view.getFollowingLabel().setCursor(Cursor.HAND);
         view.getFollowingLabel().setOnMouseEntered(e ->
                 view.getFollowingLabel().setStyle("-fx-underline: true; -fx-text-fill: #00aaff;"));
-        view.getFollowingLabel().setOnMouseExited(e -> view.getFollowingLabel().setStyle(""));
+        view.getFollowingLabel().setOnMouseExited(e -> view.getFollowingLabel().setStyle("-fx-text-fill: #B3B3B3;"));
         view.getFollowingLabel().setOnMouseClicked(e ->
                 view.showUsersPopup("Following by " + targetUser.getUsername(),
                         makeNodesFromFollowing(targetUser))
@@ -134,14 +134,16 @@ public class UserProfileController {
     private HBox emptyRow(String msg) {
         HBox row = new HBox(8);
         row.setPadding(new Insets(6));
-        row.getChildren().add(new Label(msg));
+        Label label = new Label(msg);
+        label.setStyle("-fx-text-fill: white;");
+        row.getChildren().add(label);
         return row;
     }
 
     private HBox userRow(String username, String avatarUrl) {
         HBox row = new HBox(8);
         row.setPadding(new Insets(6));
-        row.setStyle("-fx-background-color: #f7f7f7; -fx-background-radius: 5; -fx-border-color: #ddd; -fx-border-radius: 5;");
+        row.setStyle("-fx-background-color: #2C2C2C; -fx-background-radius: 5; -fx-border-color: #333333; -fx-border-radius: 5;");
 
         ImageView avatar = new ImageView();
         avatar.setFitWidth(32);
@@ -152,7 +154,7 @@ public class UserProfileController {
         }
 
         Label name = new Label(username);
-        name.setStyle("-fx-font-weight: bold;");
+        name.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
         row.getChildren().addAll(avatar, name);
 
@@ -186,6 +188,7 @@ public class UserProfileController {
             }
 
             Label name = new Label(entry.getTitle() + " (" + entry.getYear() + ")");
+            name.setStyle("-fx-text-fill: white;");
             card.getChildren().addAll(cover, name);
             card.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
             libraryCards.add(card);
@@ -209,6 +212,7 @@ public class UserProfileController {
             }
 
             Label name = new Label(preview.getTitle() + " (" + preview.getYear() + ")");
+            name.setStyle("-fx-text-fill: white;");
             card.getChildren().addAll(cover, name);
             card.setOnMouseClicked(new GamePreviewClickHandler(gameCentralController));
             wishlistCards.add(card);
@@ -218,25 +222,22 @@ public class UserProfileController {
     private HBox baseCard(Integer gameId) {
         HBox card = new HBox(5);
         card.setPadding(new Insets(10));
-        card.setStyle("-fx-border-color:#ccc; -fx-background-color:#f9f9f9; -fx-background-radius:5; -fx-border-radius:5;");
+        card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
         card.setUserData(gameId);
 
         card.setOnMouseEntered(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
             @Override public void handle(javafx.scene.input.MouseEvent event) {
                 card.setCursor(Cursor.HAND);
-                card.setStyle("-fx-border-color:#999; -fx-background-color:#f0f0f0; -fx-background-radius:5; -fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
+                card.setStyle("-fx-border-color:#00ffff; -fx-background-color:#3C3C3C; -fx-background-radius:5; -fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
             }
         });
         card.setOnMouseExited(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
             @Override public void handle(javafx.scene.input.MouseEvent event) {
                 card.setCursor(Cursor.DEFAULT);
-                card.setStyle("-fx-border-color:#ccc; -fx-background-color:#f9f9f9; -fx-background-radius:5; -fx-border-radius:5;");
+                card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
             }
         });
 
         return card;
     }
 }
-
-
-

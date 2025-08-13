@@ -37,7 +37,7 @@ public class AbstractProfileView extends VBox implements View {
 
     public AbstractProfileView() {
         this.setSpacing(20);
-        this.setPadding(new Insets(20));
+        this.setStyle("-fx-background-color: #121212; -fx-padding: 20;");
 
         // Profile header
         profileImageView.setFitWidth(100);
@@ -45,31 +45,42 @@ public class AbstractProfileView extends VBox implements View {
         profileImageView.setPreserveRatio(false);
         statsBox.setPadding(new Insets(5, 0, 0, 0));
 
+        usernameLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
+        bioLabel.setStyle("-fx-text-fill: #B3B3B3;");
+        followersLabel.setStyle("-fx-text-fill: #B3B3B3;");
+        followingLabel.setStyle("-fx-text-fill: #B3B3B3;");
+
         textInfo.getChildren().addAll(usernameLabel, bioLabel, statsBox);
         textInfo.setPadding(new Insets(5));
 
         HBox profileHeader = new HBox(15, profileImageView, textInfo);
         profileHeader.setPadding(new Insets(10));
-        profileHeader.setStyle("-fx-background-color: #f2f2f2; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5;");
+        profileHeader.setStyle("-fx-background-color: #1E1E1E; -fx-border-color: #333333; -fx-border-radius: 5; -fx-background-radius: 5;");
 
         // Wishlist
         Label wishlistLabel = new Label("Wishlist:");
+        wishlistLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
         wishlistCardsBox.setPadding(new Insets(10));
+        wishlistCardsBox.setStyle("-fx-background-color: #1E1E1E;");
         ScrollPane wishlistScroll = new ScrollPane(wishlistCardsBox);
         wishlistScroll.setFitToWidth(true);
         wishlistScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         wishlistScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        wishlistScroll.setStyle("-fx-background: #1E1E1E; -fx-background-color: #1E1E1E;");
         VBox.setVgrow(wishlistScroll, Priority.ALWAYS);
         wishlistContainer.getChildren().addAll(wishlistLabel, wishlistScroll);
         VBox.setVgrow(wishlistContainer, Priority.ALWAYS);
 
         // Library
         Label libraryLabel = new Label("Library:");
+        libraryLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
         libraryCardsBox.setPadding(new Insets(10));
+        libraryCardsBox.setStyle("-fx-background-color: #1E1E1E;");
         ScrollPane libraryScroll = new ScrollPane(libraryCardsBox);
         libraryScroll.setFitToWidth(true);
         libraryScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         libraryScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        libraryScroll.setStyle("-fx-background: #1E1E1E; -fx-background-color: #1E1E1E;");
         VBox.setVgrow(libraryScroll, Priority.ALWAYS);
         libraryContainer.getChildren().addAll(libraryLabel, libraryScroll);
         VBox.setVgrow(libraryContainer, Priority.ALWAYS);
@@ -159,9 +170,11 @@ public class AbstractProfileView extends VBox implements View {
         scroll.setFitToWidth(true);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setStyle("-fx-background: #1E1E1E; -fx-background-color: #1E1E1E;");
 
         VBox root = new VBox(10, scroll);
         root.setPadding(new Insets(10));
+        root.setStyle("-fx-background-color: #121212;");
 
         Scene scene = new Scene(root, 380, 500);
         popupStage.setScene(scene);

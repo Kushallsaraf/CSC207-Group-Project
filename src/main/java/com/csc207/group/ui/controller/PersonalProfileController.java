@@ -106,7 +106,7 @@ public class PersonalProfileController {
     private HBox userRow(String username) {
         HBox row = new HBox(8);
         row.setPadding(new Insets(6));
-        row.setStyle("-fx-background-color:#f7f7f7; -fx-background-radius:5; -fx-border-color:#ddd; -fx-border-radius:5;");
+        row.setStyle("-fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-color:#333333; -fx-border-radius:5;");
 
         ImageView avatar = new ImageView();
         avatar.setFitWidth(32);
@@ -122,7 +122,7 @@ public class PersonalProfileController {
         }
 
         Label name = new Label(username);
-        name.setStyle("-fx-font-weight: bold;");
+        name.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
         row.getChildren().addAll(avatar, name);
 
@@ -147,7 +147,7 @@ public class PersonalProfileController {
 
             HBox card = new HBox(5);
             card.setPadding(new Insets(10));
-            card.setStyle("-fx-border-color:#ccc; -fx-background-color:#f9f9f9; -fx-background-radius:5; -fx-border-radius:5;");
+            card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
             card.setUserData(gameId);
 
             ImageView cover = new ImageView();
@@ -161,6 +161,7 @@ public class PersonalProfileController {
             }
 
             Label name = new Label(libraryEntry.getTitle() + " (" + libraryEntry.getYear() + ")");
+            name.setStyle("-fx-text-fill: white;");
 
             Button removeButton = new Button("Remove");
             removeButton.setMaxWidth(Region.USE_PREF_SIZE);
@@ -179,11 +180,11 @@ public class PersonalProfileController {
             card.getChildren().addAll(cover, name, removeButton);
             card.setOnMouseEntered(e -> {
                 card.setCursor(Cursor.HAND);
-                card.setStyle("-fx-border-color:#999; -fx-background-color:#f0f0f0; -fx-background-radius:5; -fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
+                card.setStyle("-fx-border-color:#00ffff; -fx-background-color:#3C3C3C; -fx-background-radius:5; -fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
             });
             card.setOnMouseExited(e -> {
                 card.setCursor(Cursor.DEFAULT);
-                card.setStyle("-fx-border-color:#ccc; -fx-background-color:#f9f9f9; -fx-background-radius:5; -fx-border-radius:5;");
+                card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
             });
 
             libraryCards.add(card);
@@ -200,7 +201,7 @@ public class PersonalProfileController {
 
             HBox card = new HBox(5);
             card.setPadding(new Insets(10));
-            card.setStyle("-fx-border-color:#ccc; -fx-background-color:#f9f9f9; -fx-background-radius:5; -fx-border-radius:5;");
+            card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
             card.setUserData(gameId);
 
             ImageView cover = new ImageView();
@@ -214,6 +215,7 @@ public class PersonalProfileController {
             }
 
             Label name = new Label(preview.getTitle() + " (" + preview.getYear() + ")");
+            name.setStyle("-fx-text-fill: white;");
 
             Button removeButton = new Button("Remove");
             removeButton.setMaxWidth(Region.USE_PREF_SIZE);
@@ -239,4 +241,3 @@ public class PersonalProfileController {
         view.setProfileImage(newImageUrl);
     }
 }
-
