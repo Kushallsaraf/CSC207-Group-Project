@@ -7,6 +7,8 @@ import com.csc207.group.model.User;
 import com.csc207.group.service.GameService;
 import com.csc207.group.service.UserInteractor;
 import com.csc207.group.service.UserProfileInteractor;
+import com.csc207.group.social.FollowCommand;
+import com.csc207.group.social.UnfollowCommand;
 import com.csc207.group.ui.UserProfileView;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -90,7 +92,7 @@ public class UserProfileController {
         boolean alreadyFollowing = loggedInUser != null && loggedInUser.isFollowing(targetUsername);
         view.getFollowButton().setText(alreadyFollowing ? "Unfollow" : "Follow");
         view.getFollowButton().setOnAction(
-                new FollowButtonHandler(userInteractor, loggedInUser, targetUsername, view)
+                new FollowButtonHandler(this)
         );
 
         // Cards (target user; no Remove buttons)
@@ -98,6 +100,21 @@ public class UserProfileController {
         buildWishlistCards(targetUser, gameService);
         view.setLibraryCards(libraryCards);
         view.setWishlistCards(wishlistCards);
+    }
+
+    public void handleFollowButtonClick(){
+        User loggedInUser = userInteractor.getUser();
+        if (loggedInUser.isFollowing(targetUsername)) {
+            new UnfollowCommand(userInteractor, targetUsername).execute();
+            view.setFollowButtonText("Follow");
+        } else {
+            new FollowCommand(userInteractor, targetUsername).execute();
+            view.setFollowButtonText("Unfollow");
+        }
+
+        // Refresh follower count
+        User updatedTarget = userInteractor.getUserByUsername(targetUsername);
+        view.setFollowersCount(updatedTarget.getFollowers().size());
     }
 
     // ---------- Build popup node lists ----------
