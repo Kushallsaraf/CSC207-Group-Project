@@ -52,6 +52,7 @@ public class GameDetailViewFunc extends VBox {
     private TextField ratingField;
     private Button submitReviewButton;
     private VBox reviewsContainer;
+    private VBox achievementsContainer;
 
     // NEW: scroll container and content VBox
     private ScrollPane scroll;
@@ -148,6 +149,18 @@ public class GameDetailViewFunc extends VBox {
         DLCbox = new HBox(10);
         DLCScrollPane = createDLCSection(DLCbox);
 
+        // --- Achievements ---
+        Label achievementsHeader = new Label("Achievements");
+        achievementsHeader.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+        achievementsContainer = new VBox(10);
+        ScrollPane achievementsScroll = new ScrollPane(achievementsContainer);
+        achievementsScroll.setFitToWidth(true);
+        achievementsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        achievementsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        achievementsScroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        achievementsScroll.setPrefHeight(300); // Set a preferred height
+        VBox achievementsSection = new VBox(10, achievementsHeader, achievementsScroll);
+
         // --- Review input ---
         Label reviewLabel = new Label("Your Review:");
         reviewLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
@@ -189,6 +202,7 @@ public class GameDetailViewFunc extends VBox {
                 synopsisBox,
                 overviewBox,
                 DLCScrollPane,
+                achievementsSection,
                 reviewInputBox,
                 reviewsSection,
                 footerButtons
@@ -352,6 +366,17 @@ public class GameDetailViewFunc extends VBox {
             reviewsContainer.getChildren().add(new Label("No reviews yet."));
         } else {
             reviewsContainer.getChildren().addAll(nodes);
+        }
+    }
+
+    public void setAchievements(List<Node> achievementNodes) {
+        achievementsContainer.getChildren().clear();
+        if (achievementNodes == null || achievementNodes.isEmpty()) {
+            Label noAchievements = new Label("No achievements found for this game.");
+            noAchievements.setStyle("-fx-text-fill: #ccc;");
+            achievementsContainer.getChildren().add(noAchievements);
+        } else {
+            achievementsContainer.getChildren().addAll(achievementNodes);
         }
     }
 

@@ -1,6 +1,9 @@
 package com.csc207.group.views;
 
 import com.csc207.group.app.GameCentralController;
+import com.csc207.group.cache.RAWGFirebaseAPICache;
+import com.csc207.group.data_access.RAWGApiClient;
+import com.csc207.group.model.Achievement;
 import com.csc207.group.model.DLC;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
@@ -9,6 +12,7 @@ import com.csc207.group.service.DLCService;
 import com.csc207.group.service.GamePageInteractor;
 import com.csc207.group.service.GameService;
 import com.csc207.group.service.GenreService;
+import com.csc207.group.views.Components.AchievementCard;
 import com.csc207.group.views.Components.DLCcard;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -18,6 +22,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +34,7 @@ public class GameDetailController {
     private GamePageInteractor gamePageInteractor;
     private DLCService dlcService;
     private User user;
+    private RAWGApiClient rawgApiClient;
 
     public GameDetailController(Game game, GamePageInteractor gamePageInteractor,
                                 GameCentralController gameCentralController, User user) {
@@ -36,7 +43,7 @@ public class GameDetailController {
         this.gamePageInteractor = gamePageInteractor;
         this.gameCentralController = gameCentralController;
         this.user = user;
-
+        this.rawgApiClient = new RAWGApiClient(new RAWGFirebaseAPICache());
     }
 
     // This method initializes the view with data from the game and returns the view instance
@@ -48,6 +55,7 @@ public class GameDetailController {
         setSynopsis();
         setOverview();
         setDLCs();
+        setAchievements();
         setupReviewHandlers();
         updateReviewDisplay();
         return view;
@@ -108,6 +116,35 @@ public class GameDetailController {
 
     }
 
+    private void setAchievements() {
+        new Thread(() -> { // Run on a background thread to avoid freezing the UI
+            try {
+                Integer rawgId = rawgApiClient.findGameIdByName(game.getName());
+                if (rawgId != null) {
+                    List<Achievement> achievements = rawgApiClient.getGameAchievements(String.valueOf(rawgId));
+                    List<Node> achievementNodes = new ArrayList<>();
+                    for (Achievement achievement : achievements) {
+                        achievementNodes.add(new AchievementCard(achievement).getCard());
+                    }
+
+                    // Update UI on the JavaFX Application Thread
+                    javafx.application.Platform.runLater(() -> {
+                        view.setAchievements(achievementNodes);
+                    });
+                } else {
+                    javafx.application.Platform.runLater(() -> {
+                        view.setAchievements(new ArrayList<>());
+                    });
+                }
+            } catch (IOException | URISyntaxException | InterruptedException e) {
+                e.printStackTrace();
+                javafx.application.Platform.runLater(() -> {
+                    view.setAchievements(new ArrayList<>()); // Show empty on error
+                });
+            }
+        }).start();
+    }
+
     private void setupReviewHandlers() {
         view.getSubmitReviewButton().setOnAction(e -> handleReviewSubmission());
     }
@@ -165,11 +202,11 @@ public class GameDetailController {
 
             if (!userId.equals(user.getUsername())){
 
-            userLabel.setOnMouseClicked(e -> {
-                if (gameCentralController != null) {
-                    gameCentralController.showUserProfileView(userId);
-                }
-            });}
+                userLabel.setOnMouseClicked(e -> {
+                    if (gameCentralController != null) {
+                        gameCentralController.showUserProfileView(userId);
+                    }
+                });}
 
             Label ratingLabel = new Label("Rating: " + String.format("%.1f", r.getRating()) + " / 5");
             ratingLabel.setStyle("-fx-text-fill: #ccc;");
