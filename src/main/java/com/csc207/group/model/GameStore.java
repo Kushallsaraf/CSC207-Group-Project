@@ -1,6 +1,6 @@
 package com.csc207.group.model;
 
-import com.csc207.group.data_access.RAWGApiClient;
+import com.csc207.group.data_access.RawgApiClient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GameStore {
@@ -37,7 +37,7 @@ public class GameStore {
 
     public String getStoreName() {
 
-        return RAWGApiClient.STORES_IDS_MAPPED_TO_NAMES.get(storeID);
+        return RawgApiClient.STORES_IDS_MAPPED_TO_NAMES.get(storeID);
 
     }
 

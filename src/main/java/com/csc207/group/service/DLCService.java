@@ -1,14 +1,14 @@
 package com.csc207.group.service;
 
-import com.csc207.group.cache.IGDBFirebaseAPICache;
-import com.csc207.group.data_access.IGDBApiClient;
+import com.csc207.group.cache.IgdbFirebaseApiCache;
+import com.csc207.group.data_access.IgdbApiClient;
 import com.csc207.group.model.DLC;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 public class DLCService {
-    private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
+    private final IgdbApiClient apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
 
     public DLC getDLCById(int id) {
         JsonNode json = apiClient.getGameDetailsById(id);

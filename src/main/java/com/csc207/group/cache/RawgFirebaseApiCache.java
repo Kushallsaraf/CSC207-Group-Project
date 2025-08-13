@@ -1,7 +1,7 @@
 package com.csc207.group.cache;
 
-public class RAWGFirebaseAPICache extends FirebaseAPICache{
-    public RAWGFirebaseAPICache() {
+public class RawgFirebaseApiCache extends FirebaseApiCache {
+    public RawgFirebaseApiCache() {
         super("API/RAWG");
     }
 }

@@ -1,7 +1,7 @@
 package com.csc207.group.service;
 
-import com.csc207.group.cache.IGDBFirebaseAPICache;
-import com.csc207.group.data_access.IGDBApiClient;
+import com.csc207.group.cache.IgdbFirebaseApiCache;
+import com.csc207.group.data_access.IgdbApiClient;
 import com.csc207.group.model.GamePreview;
 import javafx.scene.image.Image;
 import kong.unirest.JsonNode;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GamePreviewService {
-    private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
+    private final IgdbApiClient apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
 
     public List<Integer> getGameByName(String name) {
         JsonNode response = apiClient.searchGamesByName(name);

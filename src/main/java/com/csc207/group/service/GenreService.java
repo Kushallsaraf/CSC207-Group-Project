@@ -1,12 +1,10 @@
 package com.csc207.group.service;
 
-import com.csc207.group.cache.IGDBFirebaseAPICache;
-import com.csc207.group.cache.RAWGFirebaseAPICache;
-import com.csc207.group.data_access.IGDBApiClient;
-import com.csc207.group.data_access.RAWGApiClient;
+import com.csc207.group.cache.IgdbFirebaseApiCache;
+import com.csc207.group.cache.RawgFirebaseApiCache;
+import com.csc207.group.data_access.IgdbApiClient;
+import com.csc207.group.data_access.RawgApiClient;
 import com.csc207.group.model.Game;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
@@ -18,7 +16,7 @@ import java.util.Map;
 
 
 public class GenreService {
-    private final RAWGApiClient client = new RAWGApiClient(new RAWGFirebaseAPICache());
+    private final RawgApiClient client = new RawgApiClient(new RawgFirebaseApiCache());
     public List<Game> getGamesByGenre(String genre) throws Exception {
         Map<String, Object> response = client.getGamesByGenre(genre);
         List<Game> games = new ArrayList<>();
@@ -46,7 +44,7 @@ public class GenreService {
 
     public String getGenresById(String id) {
         int IntId = Integer.parseInt(id);
-        final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
+        final IgdbApiClient apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
         JsonNode response = apiClient.getGenresById(IntId);
         JSONArray array = response.getArray();
         JSONObject genreObject = array.getJSONObject(0);

@@ -1,9 +1,9 @@
 package com.csc207.group.service;
 
 import com.csc207.group.cache.FirebaseRestClient;
-import com.csc207.group.cache.IGDBFirebaseAPICache;
+import com.csc207.group.cache.IgdbFirebaseApiCache;
 import com.csc207.group.data_access.FirebaseGameDataHandler;
-import com.csc207.group.data_access.IGDBApiClient;
+import com.csc207.group.data_access.IgdbApiClient;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.LibraryEntry;
@@ -26,7 +26,7 @@ public class GameService {
     private final FirebaseGameDataHandler firebaseGameDataHandler =
             new FirebaseGameDataHandler(new FirebaseRestClient());
 
-    private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
+    private final IgdbApiClient apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
     private final Map<Integer, GamePreview> previewCache = new HashMap<>();
 
     public int getGameIdByName(String name) {

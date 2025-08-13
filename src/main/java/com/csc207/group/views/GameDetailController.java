@@ -1,8 +1,8 @@
 package com.csc207.group.views;
 
 import com.csc207.group.app.GameCentralController;
-import com.csc207.group.cache.RAWGFirebaseAPICache;
-import com.csc207.group.data_access.RAWGApiClient;
+import com.csc207.group.cache.RawgFirebaseApiCache;
+import com.csc207.group.data_access.RawgApiClient;
 import com.csc207.group.model.Achievement;
 import com.csc207.group.model.DLC;
 import com.csc207.group.model.Game;
@@ -11,7 +11,6 @@ import com.csc207.group.model.Screenshot;
 import com.csc207.group.model.User;
 import com.csc207.group.service.DLCService;
 import com.csc207.group.service.GamePageInteractor;
-import com.csc207.group.service.GameService;
 import com.csc207.group.service.GenreService;
 import com.csc207.group.views.Components.AchievementCard;
 import com.csc207.group.views.Components.DLCcard;
@@ -34,7 +33,7 @@ public class GameDetailController {
     private GameDetailViewFunc view;
     private GamePageInteractor gamePageInteractor;
     private User user;
-    private RAWGApiClient rawgApiClient;
+    private RawgApiClient rawgApiClient;
 
     public GameDetailController(Game game, GamePageInteractor gamePageInteractor,
                                 GameCentralController gameCentralController, User user) {
@@ -43,7 +42,7 @@ public class GameDetailController {
         this.gamePageInteractor = gamePageInteractor;
         this.gameCentralController = gameCentralController;
         this.user = user;
-        this.rawgApiClient = new RAWGApiClient(new RAWGFirebaseAPICache());
+        this.rawgApiClient = new RawgApiClient(new RawgFirebaseApiCache());
     }
 
     // This method initializes the view with data from the game and returns the view instance
@@ -178,7 +177,8 @@ public class GameDetailController {
                         view.setAchievements(new ArrayList<>());
                     });
                 }
-            } catch (IOException | URISyntaxException | InterruptedException e) {
+            }
+            catch (URISyntaxException | InterruptedException e) {
                 e.printStackTrace();
                 javafx.application.Platform.runLater(() -> {
                     view.setAchievements(new ArrayList<>()); // Show empty on error

@@ -1,31 +1,29 @@
 package com.csc207.group.data_access;
 
 import com.csc207.group.model.Game;
-import com.csc207.group.model.Review;
-
-import java.util.List;
 
 public interface GameDataHandler {
 
-
-
-    /**Saves the gameData to the database
-     *
+    /**
+     * Saves the gameData to the database.
+     * @param gameid The id of a given game.
+     * @param game a Game object.
      */
-    public void saveGameData(int gameid, Game game);
+    void saveGameData(int gameid, Game game);
 
-    /** Instead of calling the API for a game, the GameService will check the database first.
-     *
-     * @return
+    /**
+     * Instead of calling the API for a game, the GameService will check the database first.
+     * @param gameid The id of a given game
+     * @return the cached Game object.
      */
-    public Game getCachedGame(Integer gameid);
+    Game getCachedGame(Integer gameid);
 
-    /**Checks if a game is in the database
-     *
-     * @param gameid
-     * @return
+    /**
+     * Checks if a game is in the database.
+     * @param gameid The id of a given game.
+     * @return whether the database has the game.
      */
-    public boolean hasGame(Integer gameid);
+    boolean hasGame(Integer gameid);
 
 
 }

@@ -11,18 +11,22 @@ public class GameCentral extends Application {
     private BorderPane mainLayout;
     private Stage primaryStage;
 
+    /**
+     * Main entry point for the app.
+     * @param args (command line arguments)
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        primaryStage.setTitle("Game Central");
+    public void start(Stage stage) {
+        this.primaryStage = stage;
+        stage.setTitle("Game Central");
 
         HostServices h = getHostServices();
-        GameCentralController gameCentralController = new GameCentralController(primaryStage, h);
-        JavaFXUserAuthenticator authenticator = new JavaFXUserAuthenticator(primaryStage, gameCentralController);
+        GameCentralController gameCentralController = new GameCentralController(stage, h);
+        JavaFXUserAuthenticator authenticator = new JavaFXUserAuthenticator(stage, gameCentralController);
         authenticator.run();
     }
 }
