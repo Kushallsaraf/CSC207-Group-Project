@@ -16,7 +16,6 @@ import javafx.application.HostServices;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -154,7 +153,7 @@ public class GameCentralController {
         Game game = gameService.getGameById(gameid);
         GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
         GameDetailController controller = new GameDetailController(game, gamePageInteractor, this
-                , userInteractor.getUser());
+                , userInteractor.getUser(), hostServices);
         GameDetailViewFunc view = controller.setView();
         setCenterView(view);
 

@@ -3,20 +3,16 @@ package com.csc207.group.views;
 import com.csc207.group.app.GameCentralController;
 import com.csc207.group.cache.RAWGFirebaseAPICache;
 import com.csc207.group.data_access.RAWGApiClient;
-import com.csc207.group.model.Achievement;
-import com.csc207.group.model.DLC;
-import com.csc207.group.model.Game;
-import com.csc207.group.model.Review;
-import com.csc207.group.model.Screenshot;
-import com.csc207.group.model.User;
+import com.csc207.group.model.*;
 import com.csc207.group.service.DLCService;
 import com.csc207.group.service.GamePageInteractor;
-import com.csc207.group.service.GameService;
 import com.csc207.group.service.GenreService;
 import com.csc207.group.views.Components.AchievementCard;
 import com.csc207.group.views.Components.DLCcard;
+import javafx.application.HostServices;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,15 +31,17 @@ public class GameDetailController {
     private GamePageInteractor gamePageInteractor;
     private User user;
     private RAWGApiClient rawgApiClient;
+    private HostServices hostServices;
 
     public GameDetailController(Game game, GamePageInteractor gamePageInteractor,
-                                GameCentralController gameCentralController, User user) {
+                                GameCentralController gameCentralController, User user, HostServices hostServices) {
         this.view = new GameDetailViewFunc();
         this.game = game;
         this.gamePageInteractor = gamePageInteractor;
         this.gameCentralController = gameCentralController;
         this.user = user;
         this.rawgApiClient = new RAWGApiClient(new RAWGFirebaseAPICache());
+        this.hostServices = hostServices;
     }
 
     // This method initializes the view with data from the game and returns the view instance
@@ -64,7 +62,52 @@ public class GameDetailController {
     private void setupActionHandlers() {
         view.getViewPhotosButton().setOnAction(e -> fetchAndDisplayScreenshots());
         view.getSubmitReviewButton().setOnAction(e -> handleReviewSubmission());
+        view.getBuyNowButton().setOnAction(e -> handleBuyNow());
     }
+
+    private void handleBuyNow() {
+        new Thread(() -> {
+            try {
+                Integer rawgId = rawgApiClient.findGameIdByName(game.getName());
+                if (rawgId == null) {
+                    javafx.application.Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Not Available");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Could not find a store page for this game.");
+                        alert.showAndWait();
+                    });
+                    return;
+                }
+
+                List<GameStore> stores = rawgApiClient.getStoresForGame(String.valueOf(rawgId));
+                if (stores != null && !stores.isEmpty()) {
+                    String storeUrl = stores.get(0).getStoreURL();
+                    javafx.application.Platform.runLater(() -> {
+                        hostServices.showDocument(storeUrl);
+                    });
+                } else {
+                    javafx.application.Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Not Available");
+                        alert.setHeaderText(null);
+                        alert.setContentText("No store pages are available for this game.");
+                        alert.showAndWait();
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                javafx.application.Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("An error occurred while trying to find a store page.");
+                    alert.showAndWait();
+                });
+            }
+        }).start();
+    }
+
 
     private void fetchAndDisplayScreenshots() {
         new Thread(() -> {

@@ -56,6 +56,7 @@ public class GameDetailViewFunc extends VBox {
     private Button btnPhotos;
     private FlowPane screenshotContainer;
     private ScrollPane screenshotScrollPane;
+    private Button buyButton;
 
 
     // NEW: scroll container and content VBox
@@ -202,7 +203,7 @@ public class GameDetailViewFunc extends VBox {
         // --- Footer ---
         footerButtons = new HBox(20);
         footerButtons.setAlignment(Pos.CENTER);
-        Button buyButton = new Button("Buy Now");
+        buyButton = new Button("Buy Now");
         Button addButton = new Button("Add to Library");
         Button moreButton = new Button("More Like This");
         String footerButtonStyle = "-fx-background-color: #555; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;";
@@ -223,6 +224,10 @@ public class GameDetailViewFunc extends VBox {
                 reviewsSection,
                 footerButtons
         );
+    }
+
+    public Button getBuyNowButton() {
+        return buyButton;
     }
 
     public Button getViewPhotosButton() {
