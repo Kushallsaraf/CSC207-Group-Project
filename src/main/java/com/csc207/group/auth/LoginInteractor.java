@@ -1,7 +1,7 @@
 package com.csc207.group.auth;
 
 import com.csc207.group.model.User;
-import util.Constants;
+import com.csc207.group.util.Constants;
 
 public class LoginInteractor {
     private UserDataHandler handler;

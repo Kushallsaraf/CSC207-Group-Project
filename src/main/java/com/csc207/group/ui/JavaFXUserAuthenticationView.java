@@ -1,6 +1,6 @@
 package com.csc207.group.ui;
 
-import util.Constants;
+import com.csc207.group.util.Constants;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,6 +8,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -75,6 +77,16 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView, Vie
 
         // --- Add all components to the view ---
         view.getChildren().addAll(logo, prompt, usernameField, passwordField, loginButton, signUpButton, messageLabel);
+
+        // --- Event handler for pressing "Enter" in the password field ---
+        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    loginButton.fire();
+                }
+            }
+        });
     }
 
     // --- View interface methods ---
@@ -168,6 +180,3 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView, Vie
         return signUpButton;
     }
 }
-
-
-

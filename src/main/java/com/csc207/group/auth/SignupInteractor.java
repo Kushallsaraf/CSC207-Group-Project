@@ -1,6 +1,6 @@
 package com.csc207.group.auth;
 
-import util.Constants;
+import com.csc207.group.util.Constants;
 
 import java.io.IOException;
 
