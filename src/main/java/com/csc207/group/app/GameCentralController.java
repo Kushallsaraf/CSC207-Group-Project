@@ -83,10 +83,6 @@ public class GameCentralController {
         Button homeButton = new Button("Home");
         Button newsButton = new Button("News");
 
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search...");
-        searchField.setStyle("-fx-font-size: 14px; -fx-pref-width: 350px;");
-
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
@@ -103,7 +99,7 @@ public class GameCentralController {
         homeButton.setStyle(buttonStyle);
         newsButton.setStyle(buttonStyle);
 
-        topNav.getChildren().addAll(homeButton, newsButton, searchField, spacer, libraryButton);
+        topNav.getChildren().addAll(homeButton, newsButton, spacer, libraryButton);
         return topNav;
     }
 

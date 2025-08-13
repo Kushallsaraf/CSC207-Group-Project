@@ -20,7 +20,7 @@ public class ScreenshotService {
         // creating a mapper
         ObjectMapper mapper = new ObjectMapper();
 
-        // parsing into the root node and the screesnhots node
+        // parsing into the root node and the screenshots node
 
         JsonNode rootNode = mapper.readTree(json);
 

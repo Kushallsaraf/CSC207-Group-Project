@@ -15,7 +15,12 @@ public class NewsService {
         JSONArray articles = jsonObj.getJSONArray("articles");
         List<News> newsList = new ArrayList<>();
 
-        for (int i = 0; i < articles.length() && i < 6; i++) {
+        for (int i = 0; i < articles.length(); i++) {
+            // Stop once we have 6 valid articles
+            if (newsList.size() >= 6) {
+                break;
+            }
+
             JSONObject article = articles.getJSONObject(i);
             String source = article.getJSONObject("source").getString("name");
             String title = article.getString("title");
