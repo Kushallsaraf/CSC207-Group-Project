@@ -22,6 +22,7 @@ public class HomeView implements View {
     private final VBox resultsContainer;
     private final TextField searchField;
     private final Button searchButton;
+    private final Button genreSearchButton;
 
     public HomeView() {
         // Main container with dark theme
@@ -47,9 +48,12 @@ public class HomeView implements View {
         searchButton = new Button("Search");
         searchButton.setStyle("-fx-background-color: #444; -fx-text-fill: white;");
 
-        searchBar.getChildren().addAll(searchField, searchButton);
+        genreSearchButton = new Button("Search by Genre");
+        genreSearchButton.setStyle("-fx-background-color: #444; -fx-text-fill: white;");
 
-        // --- Event handler for pressing "Enter" in the search field ---
+        searchBar.getChildren().addAll(searchField, searchButton, genreSearchButton);
+
+        // --- Event handler for pressing Enter in the search field ---
         searchField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -75,6 +79,10 @@ public class HomeView implements View {
     // Hooks for controller
     public void setSearchButtonHandler(EventHandler<ActionEvent> handler) {
         searchButton.setOnAction(handler);
+    }
+
+    public void setGenreSearchButtonHandler(EventHandler<ActionEvent> handler) {
+        genreSearchButton.setOnAction(handler);
     }
 
     public String getSearchQuery() {

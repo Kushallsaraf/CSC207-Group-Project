@@ -1,8 +1,10 @@
 package com.csc207.group.ui.controller;
 
 import com.csc207.group.app.GameCentralController;
+import com.csc207.group.model.Game;
 import com.csc207.group.model.GameRecommendation;
 import com.csc207.group.model.Recommendation;
+import com.csc207.group.service.GenreService;
 import com.csc207.group.service.recommendation.RecommendationEngine;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,6 +31,7 @@ public class HomeController {
 
     private final HomeView view;
     private final GameService gameService;
+    private final GenreService genreService;
     private final UserInteractor userInteractor;
     private final PersonalProfileController personalProfileController;
     private final RecommendationEngine recommendationEngine;
@@ -39,6 +42,7 @@ public class HomeController {
                           RecommendationEngine engine, GameCentralController gameCentralController) {
         this.view = view;
         this.gameService = gameService;
+        this.genreService = new GenreService();
         this.userInteractor = userInteractor;
         this.personalProfileController = personalProfileController;
         this.recommendationEngine = engine;
@@ -48,6 +52,13 @@ public class HomeController {
             @Override
             public void handle(ActionEvent event) {
                 handleSearch();
+            }
+        });
+
+        view.setGenreSearchButtonHandler(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                handleGenreSearch();
             }
         });
     }
@@ -144,6 +155,34 @@ public class HomeController {
         view.displayGameResults(resultNodes);
     }
 
+    private void handleGenreSearch() {
+        String query = view.getSearchQuery();
+        if (query == null || query.trim().isEmpty()) {
+            view.displayGameResults(new ArrayList<>());
+            return;
+        }
+        query = query.trim();
+
+        List<Node> resultNodes = new ArrayList<>();
+        try {
+            List<Game> games = genreService.getGamesByGenre(query);
+            for (Game game : games) {
+                if (game.getGameid() != 0) {
+                    GamePreview preview = gameService.getGamePreviewById(game.getGameid());
+                    if (preview != null) {
+                        resultNodes.add(createGamePreviewNode(preview));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Optionally, display an error to the user
+            view.displayGameResults(new ArrayList<>());
+        }
+
+        view.displayGameResults(resultNodes);
+    }
+
     private Node createUserResultNode(User u) {
         HBox row = new HBox(12);
         row.setAlignment(Pos.CENTER_LEFT);
@@ -207,6 +246,7 @@ public class HomeController {
 
         Label titleLabel = new Label(game.getTitle() + " (" + game.getYear() + ")");
         titleLabel.setFont(Font.font(16));
+        titleLabel.setStyle("-fx-text-fill: white;");
 
         VBox infoBox = new VBox(5, titleLabel);
 

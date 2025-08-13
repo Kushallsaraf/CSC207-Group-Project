@@ -35,6 +35,9 @@ public class GenreService {
                 Game g = new Game();
                 g.setGenres(genres);
                 g.setName((String) game.get("name"));
+                if (game.containsKey("id")) {
+                    g.setGameid((Integer) game.get("id"));
+                }
                 games.add(g);
             }
         }
@@ -50,4 +53,3 @@ public class GenreService {
         return genreObject.get("name").toString();
     }
 }
-
