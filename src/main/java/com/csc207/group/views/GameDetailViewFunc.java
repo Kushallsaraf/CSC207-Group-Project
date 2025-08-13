@@ -1,8 +1,8 @@
 package com.csc207.group.views;
 
 import com.csc207.group.views.Components.DLCcard;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -53,6 +53,10 @@ public class GameDetailViewFunc extends VBox {
     private Button submitReviewButton;
     private VBox reviewsContainer;
     private VBox achievementsContainer;
+    private Button btnPhotos;
+    private FlowPane screenshotContainer;
+    private ScrollPane screenshotScrollPane;
+
 
     // NEW: scroll container and content VBox
     private ScrollPane scroll;
@@ -128,16 +132,28 @@ public class GameDetailViewFunc extends VBox {
 
         actionButtons = new VBox(10);
         actionButtons.setAlignment(Pos.CENTER);
-        Button btnPhotos = new Button("View All Photos");
-        Button btnVideos = new Button("View All Videos");
+        btnPhotos = new Button("View All Photos");
         Button btnReviews = new Button("View User Reviews");
         String actionButtonStyle = "-fx-background-color: #333; -fx-text-fill: white; -fx-font-size: 14px; -fx-pref-width: 150px; -fx-padding: 10;";
         btnPhotos.setStyle(actionButtonStyle);
-        btnVideos.setStyle(actionButtonStyle);
         btnReviews.setStyle(actionButtonStyle);
-        actionButtons.getChildren().addAll(btnPhotos, btnVideos, btnReviews);
+        actionButtons.getChildren().addAll(btnPhotos, btnReviews);
 
-        mainContent.getChildren().addAll(imagesBox, actionButtons);
+        // --- Screenshot Display Area ---
+        screenshotContainer = new FlowPane();
+        screenshotContainer.setPadding(new Insets(10));
+        screenshotContainer.setVgap(10);
+        screenshotContainer.setHgap(10);
+        screenshotContainer.setStyle("-fx-background-color: #222;");
+
+        screenshotScrollPane = new ScrollPane(screenshotContainer);
+        screenshotScrollPane.setFitToWidth(true);
+        screenshotScrollPane.setPrefHeight(250); // Match image height
+        screenshotScrollPane.setVisible(false); // Initially hidden
+        screenshotScrollPane.setStyle("-fx-background: #222; -fx-background-color: #222;");
+
+        mainContent.getChildren().addAll(imagesBox, actionButtons, screenshotScrollPane);
+        HBox.setHgrow(screenshotScrollPane, Priority.ALWAYS); // Let it take available space
 
         // --- Synopsis ---
         synopsisBox = createSection("Synopsis:", synopsisStr != null ? synopsisStr : "No synopsis available.");
@@ -208,6 +224,30 @@ public class GameDetailViewFunc extends VBox {
                 footerButtons
         );
     }
+
+    public Button getViewPhotosButton() {
+        return btnPhotos;
+    }
+
+    public void displayScreenshots(List<Image> images) {
+        screenshotContainer.getChildren().clear();
+        if (images != null && !images.isEmpty()) {
+            for (Image img : images) {
+                ImageView iv = new ImageView(img);
+                iv.setFitHeight(150);
+                iv.setPreserveRatio(true);
+                iv.setSmooth(true);
+                screenshotContainer.getChildren().add(iv);
+            }
+            screenshotScrollPane.setVisible(true);
+        } else {
+            Label noScreenshots = new Label("No screenshots available.");
+            noScreenshots.setStyle("-fx-text-fill: #ccc;");
+            screenshotContainer.getChildren().add(noScreenshots);
+            screenshotScrollPane.setVisible(true); // Show the container with the message
+        }
+    }
+
 
     private void updateTags() {
         tagsBox.getChildren().clear();
@@ -282,17 +322,20 @@ public class GameDetailViewFunc extends VBox {
 
     private void rebuildOverview() {
         if (overviewBox != null) {
-            content.getChildren().remove(overviewBox);
-            overviewBox = createOverviewSection();
-            int synopsisIndex = content.getChildren().indexOf(synopsisBox);
-            content.getChildren().add(synopsisIndex + 1, overviewBox);
+            int overviewIndex = content.getChildren().indexOf(overviewBox);
+            if (overviewIndex != -1) {
+                content.getChildren().remove(overviewIndex);
+                overviewBox = createOverviewSection();
+                content.getChildren().add(overviewIndex, overviewBox);
+            }
         }
     }
+
 
     // --- Setters ---
     public void setTitle(String title) {
         this.titleStr = title;
-        if (title != null && this.title != null) this.title.setText(title);
+        if (this.title != null) this.title.setText(title);
     }
 
     public void setTags(List<String> tags) {
@@ -334,9 +377,9 @@ public class GameDetailViewFunc extends VBox {
 
     public void setSynopsis(String synopsis) {
         this.synopsisStr = synopsis;
-        if (synopsisBox != null) {
-            synopsisBox.getChildren().clear();
-            synopsisBox.getChildren().addAll(createSection("Synopsis:", synopsis).getChildren());
+        if (synopsisBox != null && synopsisBox.getChildren().size() > 1 && synopsisBox.getChildren().get(1) instanceof Text) {
+            Text body = (Text) synopsisBox.getChildren().get(1);
+            body.setText(synopsis);
         }
     }
 

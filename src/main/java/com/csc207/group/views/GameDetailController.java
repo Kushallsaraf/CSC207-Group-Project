@@ -7,6 +7,7 @@ import com.csc207.group.model.Achievement;
 import com.csc207.group.model.DLC;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
+import com.csc207.group.model.Screenshot;
 import com.csc207.group.model.User;
 import com.csc207.group.service.DLCService;
 import com.csc207.group.service.GamePageInteractor;
@@ -32,7 +33,6 @@ public class GameDetailController {
     private Game game;
     private GameDetailViewFunc view;
     private GamePageInteractor gamePageInteractor;
-    private DLCService dlcService;
     private User user;
     private RAWGApiClient rawgApiClient;
 
@@ -56,17 +56,59 @@ public class GameDetailController {
         setOverview();
         setDLCs();
         setAchievements();
-        setupReviewHandlers();
+        setupActionHandlers();
         updateReviewDisplay();
         return view;
     }
+
+    private void setupActionHandlers() {
+        view.getViewPhotosButton().setOnAction(e -> fetchAndDisplayScreenshots());
+        view.getSubmitReviewButton().setOnAction(e -> handleReviewSubmission());
+    }
+
+    private void fetchAndDisplayScreenshots() {
+        new Thread(() -> {
+            try {
+                // First get RAWG game ID from the game name
+                Integer rawgId = rawgApiClient.findGameIdByName(game.getName());
+                if (rawgId == null) {
+                    System.out.println("Could not find RAWG ID for " + game.getName());
+                    javafx.application.Platform.runLater(() -> {
+                        view.displayScreenshots(new ArrayList<>());
+                    });
+                    return;
+                }
+
+                // Use ID to get screenshots
+                List<Screenshot> screenshots = rawgApiClient.getScreenshotsForGame(String.valueOf(rawgId));
+                List<Image> images = new ArrayList<>();
+                for (Screenshot s : screenshots) {
+                    if (s.getImageURL() != null && !s.getImageURL().isEmpty()) {
+                        images.add(new Image(s.getImageURL(), true)); // Load in background
+                    }
+                }
+
+                // Update UI on the JavaFX Application Thread
+                javafx.application.Platform.runLater(() -> {
+                    view.displayScreenshots(images);
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Handle error on UI thread if needed
+                javafx.application.Platform.runLater(() -> {
+                    view.displayScreenshots(new ArrayList<>());
+                });
+            }
+        }).start();
+    }
+
 
     public void setTitle() {
         view.setTitle(game.getName());
     }
 
     public void setGenre() {
-//        view.setTags(game.getGenres());
         List<String> genres = game.getGenres();
         List<String> genreNames = new ArrayList<>();
         for (String genre : genres) {
@@ -143,10 +185,6 @@ public class GameDetailController {
                 });
             }
         }).start();
-    }
-
-    private void setupReviewHandlers() {
-        view.getSubmitReviewButton().setOnAction(e -> handleReviewSubmission());
     }
 
     private void handleReviewSubmission() {
