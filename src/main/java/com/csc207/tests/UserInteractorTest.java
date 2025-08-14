@@ -88,13 +88,13 @@ class UserInteractorTest {
         verify(mockDataHandler, times(1)).saveUser(mockUser);
 
         interactor.editProfilePicture("url.png");
-        assertEquals("url.png", mockUser.getProfilePictureURL());
+        assertEquals("url.png", mockUser.getProfilePictureUrl());
         verify(mockDataHandler, times(2)).saveUser(mockUser);
     }
 
     @Test
     void testGetReviewerProfilePicture() {
-        mockUser.setProfilePictureURL("pic.png");
+        mockUser.setProfilePictureUrl("pic.png");
         String url = interactor.getReviewerProfilePicture("testUser");
         assertEquals("pic.png", url);
     }
