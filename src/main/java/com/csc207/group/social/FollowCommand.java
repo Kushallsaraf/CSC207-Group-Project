@@ -1,19 +1,25 @@
 package com.csc207.group.social;
 
-import com.csc207.group.service.UserInteractor;
+import com.csc207.group.interface_adapter.FollowUserPresenter;
+import com.csc207.group.interface_adapter.FollowUserRequestModel;
+import com.csc207.group.interface_adapter.FollowUserViewModel;
+import com.csc207.group.interface_adapter.UserInteractorInputBoundary;
 
-public class FollowCommand implements Command{
-    private final UserInteractor interactor;
-    private final String targetUsername;
+/** Intended for future offline functionality for follower system
+ *
+ */
+public class FollowCommand implements Command {
+    private final UserInteractorInputBoundary interactor;   // use case API
+    private final FollowUserRequestModel request;       // input data
 
-    public FollowCommand(UserInteractor interactor, String targetUsername) {
+    public FollowCommand(UserInteractorInputBoundary interactor,
+                             FollowUserRequestModel request) {
         this.interactor = interactor;
-        this.targetUsername = targetUsername;
+        this.request = request;
     }
 
     @Override
     public void execute() {
-        interactor.followUser(targetUsername);
-
+        interactor.executeFollow(request);
     }
 }
