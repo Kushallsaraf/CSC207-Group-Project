@@ -154,11 +154,9 @@ public class GameDetailViewFunc extends VBox {
         actionButtons = new VBox(CONSTANT_3);
         actionButtons.setAlignment(Pos.CENTER);
         btnPhotos = new Button("View All Photos");
-        Button btnReviews = new Button("View User Reviews");
         String actionButtonStyle = "-fx-background-color: #333; -fx-text-fill: white; -fx-font-size: 14px; -fx-pref-width: 150px; -fx-padding: 10;";
         btnPhotos.setStyle(actionButtonStyle);
-        btnReviews.setStyle(actionButtonStyle);
-        actionButtons.getChildren().addAll(btnPhotos, btnReviews);
+        actionButtons.getChildren().addAll(btnPhotos);
 
         // --- Screenshot Display Area ---
         screenshotContainer = new FlowPane();
