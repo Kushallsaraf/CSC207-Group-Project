@@ -1,4 +1,7 @@
-package com.csc207.group;
+package com.csc207.group.usecase.screenshots;
 
-public class ViewScreenshotsInputBoundary {
+public interface ViewScreenshotsInputBoundary {
+
+    void execute(ViewScreenshotsRequestModel requestModel);
+
 }

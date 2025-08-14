@@ -1,5 +1,9 @@
 package com.csc207.group.views;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.csc207.group.app.GameCentralController;
 import com.csc207.group.cache.RawgFirebaseApiCache;
 import com.csc207.group.data_access.RawgApiClient;
@@ -8,6 +12,14 @@ import com.csc207.group.service.DlcService;
 import com.csc207.group.service.GamePageInteractor;
 import com.csc207.group.service.GenreService;
 import com.csc207.group.ui.controller.HomeController;
+import com.csc207.group.ui.controller.ScreenshotController;
+import com.csc207.group.ui.controller.ScreenshotController;
+import com.csc207.group.usecase.screenshots.ViewScreenshotsInputBoundary;
+import com.csc207.group.usecase.screenshots.ViewScreenshotsInteractor;
+import com.csc207.group.usecase.screenshots.ViewScreenshotsRequestModel;
+import com.csc207.group.usecase.screenshots.gateway.ScreenshotGateway;
+import com.csc207.group.presenter.ScreenshotPresenter;
+import com.csc207.group.data_access.RawgScreenshotGateway;
 import com.csc207.group.views.Components.AchievementCard;
 import com.csc207.group.views.Components.DLCcard;
 import javafx.application.HostServices;
@@ -20,10 +32,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameDetailController {
     private GameCentralController gameCentralController;
     private Game game;
@@ -33,17 +41,26 @@ public class GameDetailController {
     private RawgApiClient rawgApiClient;
     private HostServices hostServices;
     private HomeController homeController;
+    private ScreenshotController screenshotController;
+    private ScreenshotPresenter screenshotPresenter;
+    private ViewScreenshotsInteractor viewScreenshotsInteractor;
 
     public GameDetailController(Game game, GamePageInteractor gamePageInteractor,
-                                GameCentralController gameCentralController, User user, HostServices hostServices, HomeController homeController) {
+                                GameCentralController gameCentralController, User user, HostServices hostServices,
+                                HomeController homeController, ScreenshotController screenshotController) {
         this.view = new GameDetailViewFunc();
+        screenshotPresenter = new ScreenshotPresenter(view);
         this.game = game;
         this.gamePageInteractor = gamePageInteractor;
         this.gameCentralController = gameCentralController;
         this.user = user;
         this.rawgApiClient = new RawgApiClient(new RawgFirebaseApiCache());
+        viewScreenshotsInteractor = new ViewScreenshotsInteractor(
+                new RawgScreenshotGateway(rawgApiClient), screenshotPresenter
+        );
         this.hostServices = hostServices;
         this.homeController = homeController;
+        this.screenshotController = screenshotController;
     }
 
     // This method initializes the view with data from the game and returns the view instance
@@ -116,40 +133,22 @@ public class GameDetailController {
     private void fetchAndDisplayScreenshots() {
         new Thread(() -> {
             try {
-                // First get RAWG game ID from the game name
                 Integer rawgId = rawgApiClient.findGameIdByName(game.getName());
-                if (rawgId == null) {
-                    System.out.println("Could not find RAWG ID for " + game.getName());
-                    javafx.application.Platform.runLater(() -> {
-                        view.displayScreenshots(new ArrayList<>());
-                    });
-                    return;
+                if (rawgId != null) {
+                    viewScreenshotsInteractor.execute(
+                            new ViewScreenshotsRequestModel(String.valueOf(rawgId))
+                    );
                 }
-
-                // Use ID to get screenshots
-                List<Screenshot> screenshots = rawgApiClient.getScreenshotsForGame(String.valueOf(rawgId));
-                List<Image> images = new ArrayList<>();
-                for (Screenshot s : screenshots) {
-                    if (s.getImageUrl() != null && !s.getImageUrl().isEmpty()) {
-                        images.add(new Image(s.getImageUrl(), true)); // Load in background
-                    }
+                else {
+                    javafx.application.Platform.runLater(() -> view.displayScreenshots(new ArrayList<>()));
                 }
-
-                // Update UI on the JavaFX Application Thread
-                javafx.application.Platform.runLater(() -> {
-                    view.displayScreenshots(images);
-                });
-
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
-                // Handle error on UI thread if needed
-                javafx.application.Platform.runLater(() -> {
-                    view.displayScreenshots(new ArrayList<>());
-                });
+                javafx.application.Platform.runLater(() -> view.displayScreenshots(new ArrayList<>()));
             }
         }).start();
     }
-
 
     public void setTitle() {
         view.setTitle(game.getName());

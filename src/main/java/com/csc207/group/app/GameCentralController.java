@@ -1,7 +1,9 @@
 package com.csc207.group.app;
 
+import com.csc207.group.data_access.RawgScreenshotGateway;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.User;
+import com.csc207.group.presenter.ScreenshotPresenter;
 import com.csc207.group.service.GamePageInteractor;
 import com.csc207.group.service.GameService;
 import com.csc207.group.service.NewsService;
@@ -16,6 +18,7 @@ import com.csc207.group.ui.PersonalProfileView;
 import com.csc207.group.ui.UserProfileView;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.PersonalProfileController;
+import com.csc207.group.ui.controller.ScreenshotController;
 import com.csc207.group.ui.controller.UserProfileController;
 import com.csc207.group.views.GameDetailController;
 import com.csc207.group.views.GameDetailViewFunc;
@@ -169,11 +172,19 @@ public class GameCentralController {
 
     }
 
-    public void showGamePage(Integer gameid){
+    public void showGamePage(Integer gameid) {
         Game game = gameService.getGameById(gameid);
         GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
-        GameDetailController controller = new GameDetailController(game, gamePageInteractor, this
-                , userInteractor.getUser(), hostServices, homeController);
+
+        ScreenshotPresenter screenshotPresenter = new ScreenshotPresenter(new GameDetailViewFunc());
+        ViewScreenshotsInputBoundary screenshotInteractor = new ViewScreenshotsInteractor(
+                new RawgScreenshotGateway(rawgApiClient),
+                screenshotPresenter
+        );
+        ScreenshotController screenshotController = new ScreenshotController();
+
+        GameDetailController controller = new GameDetailController(game, gamePageInteractor, this,
+                userInteractor.getUser(), hostServices, homeController, screenshotController);
         GameDetailViewFunc view = controller.setView();
         setCenterView(view);
 
