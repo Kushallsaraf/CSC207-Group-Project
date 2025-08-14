@@ -40,7 +40,7 @@ public class UserProfileInteractor {
 
     public String getProfilePictureUrl() {
         User u = getTargetUser();
-        return u != null ? u.getProfilePictureURL() : "";
+        return u != null ? u.getProfilePictureUrl() : "";
     }
 
     public int getFollowersCount() {

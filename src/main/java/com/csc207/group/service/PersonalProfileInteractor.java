@@ -1,11 +1,12 @@
 package com.csc207.group.service;
-import com.csc207.group.model.GamePreview;
-import com.csc207.group.model.LibraryEntry;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersonalProfileInteractor {
+import com.csc207.group.model.GamePreview;
+import com.csc207.group.model.LibraryEntry;
+
+public final class PersonalProfileInteractor {
 
     private final UserInteractor userInteractor;
     private final GameService gameService;
@@ -41,10 +42,10 @@ public class PersonalProfileInteractor {
     }
 
     public String getProfilePictureUrl() {
-        return userInteractor.getUser().getProfilePictureURL();
+        return userInteractor.getUser().getProfilePictureUrl();
     }
 
-    private void loadPreviews(){
+    private void loadPreviews() {
         previews = new HashMap<>();
         for (Integer item: this.userInteractor.getUser().getWishlist()){
             previews.put(item, gameService.getGamePreviewById(item));
@@ -63,11 +64,13 @@ public class PersonalProfileInteractor {
         return this.gameService;
     }
 
-    public void reload(){
+    /**
+     * Reload entries and previews.
+     */
+    public void reload() {
         loadEntries();
         loadPreviews();
     }
-
 
 }
 

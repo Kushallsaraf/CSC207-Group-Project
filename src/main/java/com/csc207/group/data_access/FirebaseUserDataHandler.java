@@ -100,7 +100,7 @@ public class FirebaseUserDataHandler implements UserDataHandler {
                 user.setBio(jsonObject.getString(BIO));
             }
             if (jsonObject.has(PROFILE_PICTURE_URL)) {
-                user.setProfilePictureURL(jsonObject.getString(PROFILE_PICTURE_URL));
+                user.setProfilePictureUrl(jsonObject.getString(PROFILE_PICTURE_URL));
             }
 
             return user;
@@ -128,9 +128,9 @@ public class FirebaseUserDataHandler implements UserDataHandler {
             JSONObject reviewJson = new JSONObject();
             Review review = entry.getValue();
 
-            reviewJson.put("userid", review.getUserid());
+            reviewJson.put("userid", review.getUserId());
             reviewJson.put("content", review.getContent());
-            reviewJson.put("gameid", review.getGameid());
+            reviewJson.put("gameid", review.getGameId());
             reviewJson.put("rating", review.getRating());
 
             reviewsJson.put(String.valueOf(entry.getKey()), reviewJson);
@@ -138,7 +138,7 @@ public class FirebaseUserDataHandler implements UserDataHandler {
 
         userJson.put(REVIEWS, reviewsJson);
         userJson.put(BIO, user.getBio());
-        userJson.put(PROFILE_PICTURE_URL, user.getProfilePictureURL());
+        userJson.put(PROFILE_PICTURE_URL, user.getProfilePictureUrl());
 
         client.putData(USERS + user.getUsername(), userJson.toString());
 

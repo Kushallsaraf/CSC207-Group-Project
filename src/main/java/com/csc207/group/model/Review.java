@@ -1,32 +1,36 @@
 package com.csc207.group.model;
 
-public class Review {
-    private  String userid;
-    private  String content;
-    private  int gameid;
-    private  double rating;
+public final class Review {
+    private String userId;
+    private String content;
+    private int gameId;
+    private double rating;
 
-    public Review(String userid, String content, int gameid, double rating){
+    public Review(String userId, String content, int gameId, double rating) {
 
         this.content = content;
-        this.gameid = gameid;
+        this.gameId = gameId;
         this.rating = rating;
-        this.userid = userid;
+        this.userId = userId;
     }
 
-    public void editReview(String newContent, double newRating){
+    /**
+     * Editing a review.
+     * @param newContent The new content of a review.
+     * @param newRating The new rating of the review.
+     */
+    public void editReview(String newContent, double newRating) {
         this.content = newContent;
         this.rating = newRating;
 
     }
 
-    public int getGameid() {
-        return gameid;
+    public int getGameId() {
+        return gameId;
     }
 
-
-    public String getUserid() {
-        return userid;
+    public String getUserId() {
+        return userId;
     }
 
     public String getContent() {

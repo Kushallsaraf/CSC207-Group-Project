@@ -123,7 +123,7 @@ public class GameCentralController {
 
     private void showNewsView() {
         NewsService newsService = new NewsService();
-        NewsView newsView = new NewsView(newsService.ArticleBuilder(), url -> hostServices.showDocument(url));
+        NewsView newsView = new NewsView(newsService.articleBuilder(), url -> hostServices.showDocument(url));
         setCenterView(newsView.getView());
     }
 

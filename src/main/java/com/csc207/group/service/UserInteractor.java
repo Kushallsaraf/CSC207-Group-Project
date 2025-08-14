@@ -1,11 +1,8 @@
 package com.csc207.group.service;
 
 import com.csc207.group.auth.UserDataHandler;
-import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
-
-import java.util.List;
 
 public class UserInteractor {
     private final User user;
@@ -17,7 +14,7 @@ public class UserInteractor {
     }
 
     public String getReviewerProfilePicture(String username){
-        return dataHandler.getUser(username).getProfilePictureURL();
+        return dataHandler.getUser(username).getProfilePictureUrl();
 
     }
 
@@ -110,7 +107,7 @@ public class UserInteractor {
     }
 
     public void editProfilePicture(String updatedProfilePictureUrl){
-        this.user.setProfilePictureURL(updatedProfilePictureUrl);
+        this.user.setProfilePictureUrl(updatedProfilePictureUrl);
         dataHandler.saveUser(user);
 
     }

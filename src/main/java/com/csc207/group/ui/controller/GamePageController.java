@@ -76,8 +76,8 @@ public class GamePageController {
             Review r = reviews.get(i);
             if (r == null) continue;
 
-            String userId = r.getUserid();
-            String avatarUrl = gamePageInteractor.getProfileURL(userId); // assumed to exist
+            String userId = r.getUserId();
+            String avatarUrl = gamePageInteractor.getProfileUrl(userId); // assumed to exist
 
             // Square avatar on the far left
             ImageView avatar = buildSquareAvatar(avatarUrl, 48); // 48x48

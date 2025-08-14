@@ -194,7 +194,7 @@ public class HomeController {
         avatar.setFitWidth(48);
         avatar.setFitHeight(48);
         avatar.setPreserveRatio(false);
-        String avatarUrl = u.getProfilePictureURL();
+        String avatarUrl = u.getProfilePictureUrl();
         if (avatarUrl != null && !avatarUrl.isEmpty()) {
             try { avatar.setImage(new Image(avatarUrl, true)); } catch (Exception ignored) {}
         }

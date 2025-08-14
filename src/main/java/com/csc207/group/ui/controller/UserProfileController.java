@@ -62,7 +62,7 @@ public class UserProfileController {
         // Header
         view.setUsername(targetUser.getUsername());
         view.setBio(targetUser.getBio());
-        view.setProfileImage(targetUser.getProfilePictureURL());
+        view.setProfileImage(targetUser.getProfilePictureUrl());
         view.setFollowersCount(targetUser.getFollowers().size(), targetUsername);
         view.setFollowingCount(targetUser.getFollowing().size(), targetUsername);
 
@@ -111,7 +111,7 @@ public class UserProfileController {
         for (String uname : followers) {
             User u = userInteractor.getUserByUsername(uname);
             nodes.add(userRow(u != null ? u.getUsername() : uname,
-                    u != null ? u.getProfilePictureURL() : null));
+                    u != null ? u.getProfilePictureUrl() : null));
         }
         return nodes;
     }
@@ -126,7 +126,7 @@ public class UserProfileController {
         for (String uname : following) {
             User u = userInteractor.getUserByUsername(uname);
             nodes.add(userRow(u != null ? u.getUsername() : uname,
-                    u != null ? u.getProfilePictureURL() : null));
+                    u != null ? u.getProfilePictureUrl() : null));
         }
         return nodes;
     }

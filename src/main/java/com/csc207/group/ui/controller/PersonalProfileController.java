@@ -115,7 +115,7 @@ public class PersonalProfileController {
 
         // Try to fetch profile image URL (optional; safe if null)
         String avatarUrl = userInteractor.getUserByUsername(username) != null
-                ? userInteractor.getUserByUsername(username).getProfilePictureURL()
+                ? userInteractor.getUserByUsername(username).getProfilePictureUrl()
                 : null;
         if (avatarUrl != null && !avatarUrl.isEmpty()) {
             try { avatar.setImage(new Image(avatarUrl, true)); } catch (Exception ignored) {}

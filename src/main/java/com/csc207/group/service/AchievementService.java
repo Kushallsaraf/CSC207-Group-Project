@@ -1,20 +1,26 @@
 package com.csc207.group.service;
 
-import com.csc207.group.model.Achievement;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.csc207.group.model.Achievement;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * This class is used to parse the achievement objects from a JSON
+ * This class is used to parse the achievement objects from a JSON.
  */
 public class AchievementService {
     // this class can take the json objects and parse them to create a proper list
     // achievements as we'll need for each game
+
+    /**
+     * Parses achievements from the returned Json from the RAWG API.
+     * @param json the json received from RAWG API.
+     * @return List of achievements
+     * @throws JsonProcessingException if unable to convert to Json.
+     */
     public static List<Achievement> parseAchievementsFromJson(String json) throws JsonProcessingException {
         // list we will return
         List<Achievement> achievementList = new ArrayList<Achievement>();
@@ -27,7 +33,6 @@ public class AchievementService {
         if (rootNode.isArray() && !rootNode.isEmpty()) {
             rootNode = rootNode.get(0);
         }
-
 
         JsonNode achievementsNode = rootNode.get("results");
         if (achievementsNode != null) {
