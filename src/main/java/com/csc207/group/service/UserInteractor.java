@@ -25,7 +25,7 @@ public class UserInteractor {
 
     public void followUser(String targetUsername){
 
-        if (!this.user.isFollowing(targetUsername)){
+        if (!this.user.isFollowing(targetUsername)){//check if user is already following
 
         this.user.follow(targetUsername);
         User targetUser = dataHandler.getUser(targetUsername);
@@ -79,7 +79,7 @@ public class UserInteractor {
     }
     public void leaveOrUpdateReview(int gameId, String content, double rating) {
         if (hasReviewed(gameId)){
-            return;
+            user.getReviews().get(gameId).editReview(content, rating);
         }
         Review review = user.getReviews().get(gameId);
 
