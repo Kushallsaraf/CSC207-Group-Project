@@ -7,9 +7,7 @@ import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**Game objects are saved in firebase database. This class is responsible
  * for the storing and retrieving of these objects.

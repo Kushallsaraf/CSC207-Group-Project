@@ -7,7 +7,7 @@ import java.io.IOException;
 /**Stores user data from data source and writes data to data source.
  *
  */
-public interface UserDataHandler {
+public interface UserRepository {
 
     /**Checks if a username is already taken
      *

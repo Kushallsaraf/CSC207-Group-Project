@@ -2,7 +2,6 @@ package com.csc207.group.ui;
 
 import com.csc207.group.util.Constants;
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;

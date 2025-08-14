@@ -5,8 +5,6 @@ import com.csc207.group.cache.RAWGFirebaseAPICache;
 import com.csc207.group.data_access.IGDBApiClient;
 import com.csc207.group.data_access.RAWGApiClient;
 import com.csc207.group.model.Game;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;

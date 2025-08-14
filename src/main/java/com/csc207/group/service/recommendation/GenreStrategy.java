@@ -3,7 +3,6 @@ package com.csc207.group.service.recommendation;
 import com.csc207.group.model.GameRecommendation;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
-import com.csc207.group.service.GameService;
 
 import java.util.ArrayList;
 import java.util.List;

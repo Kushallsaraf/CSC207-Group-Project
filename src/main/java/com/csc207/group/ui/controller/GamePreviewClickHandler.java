@@ -1,7 +1,6 @@
 package com.csc207.group.ui.controller;
 
 import com.csc207.group.app.GameCentralController;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;

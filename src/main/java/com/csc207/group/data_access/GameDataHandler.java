@@ -1,9 +1,6 @@
 package com.csc207.group.data_access;
 
 import com.csc207.group.model.Game;
-import com.csc207.group.model.Review;
-
-import java.util.List;
 
 public interface GameDataHandler {
 

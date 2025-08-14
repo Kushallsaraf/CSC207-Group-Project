@@ -1,25 +1,20 @@
 package com.csc207.group.service;
 
-import com.csc207.group.auth.UserDataHandler;
-import com.csc207.group.model.GamePreview;
+import com.csc207.group.auth.UserRepository;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class UserInteractor {
     private final User user;
-    private final UserDataHandler dataHandler;
+    private final UserRepository userRepository;
 
-    public UserInteractor(User user, UserDataHandler dataHandler) {
+    public UserInteractor(User user, UserRepository userRepository) {
         this.user = user;
-        this.dataHandler = dataHandler;
+        this.userRepository = userRepository;
     }
 
     public String getReviewerProfilePicture(String username){
-        return dataHandler.getUser(username).getProfilePictureURL();
+        return userRepository.getUser(username).getProfilePictureURL();
 
     }
 
@@ -28,10 +23,10 @@ public class UserInteractor {
         if (!this.user.isFollowing(targetUsername)){//check if user is already following
 
         this.user.follow(targetUsername);
-        User targetUser = dataHandler.getUser(targetUsername);
+        User targetUser = userRepository.getUser(targetUsername);
         targetUser.addToFollowers(user.getUsername());
-        dataHandler.saveUser(user); //update user info on database
-        dataHandler.saveUser(targetUser);//update target user info on database
+        userRepository.saveUser(user); //update user info on database
+        userRepository.saveUser(targetUser);//update target user info on database
 
 
         }
@@ -39,7 +34,7 @@ public class UserInteractor {
     }
 
     public User getUserByUsername(String username){
-        return dataHandler.getUser(username);
+        return userRepository.getUser(username);
     }
     public User getUser(){
         return this.user;
@@ -48,7 +43,7 @@ public class UserInteractor {
     public boolean addToWishlist(int gameId) {
         if (!user.getWishlist().contains(gameId)) {
             user.getWishlist().add(gameId);
-            dataHandler.saveUser(user);
+            userRepository.saveUser(user);
             return true;
         }
         return false;
@@ -57,14 +52,14 @@ public class UserInteractor {
     public boolean removeFromWishlist(int gameId) {
 
         user.getWishlist().remove(Integer.valueOf(gameId));
-        dataHandler.saveUser(user);
+        userRepository.saveUser(user);
         return true;
     }
 
     public boolean addToLibrary(int gameId) {
         if (!user.getLibrary().contains(gameId)) {
             user.getLibrary().add(gameId);
-            dataHandler.saveUser(user);
+            userRepository.saveUser(user);
             return true;
         }
 
@@ -74,7 +69,7 @@ public class UserInteractor {
     public void voidMakeReview(int gameid, String content, double rating){
         Review review = new Review(user.getUsername(), content, gameid, rating);
         this.user.getReviews().put(gameid, review);
-        dataHandler.saveUser(user);
+        userRepository.saveUser(user);
 
     }
     public void leaveOrUpdateReview(int gameId, String content, double rating) {
@@ -90,13 +85,13 @@ public class UserInteractor {
             review = new Review(user.getUsername(), content, gameId, rating);
             user.getReviews().put(gameId, review);
         }
-        dataHandler.saveUser(user);
+        userRepository.saveUser(user);
     }
 
     public boolean removeReview(int gameId) {
 
         Review removed =  user.getReviews().remove(gameId);
-        dataHandler.saveUser(user);
+        userRepository.saveUser(user);
         return removed != null;
     }
 
@@ -115,7 +110,7 @@ public class UserInteractor {
     public boolean removeFromLibrary(int gameid) {
 
         user.getLibrary().remove(Integer.valueOf(gameid));
-        dataHandler.saveUser(user);
+        userRepository.saveUser(user);
         return user.getLibrary().contains(gameid);
 
 
@@ -123,17 +118,17 @@ public class UserInteractor {
 
     public void editBio(String updatedBio) {
         this.user.setBio(updatedBio);
-        dataHandler.saveUser(user);
+        userRepository.saveUser(user);
     }
 
     public void editProfilePicture(String updatedProfilePictureUrl){
         this.user.setProfilePictureURL(updatedProfilePictureUrl);
-        dataHandler.saveUser(user);
+        userRepository.saveUser(user);
 
     }
 
     public void saveUser(User user){
-        dataHandler.saveUser(user);
+        userRepository.saveUser(user);
     }
 
 }

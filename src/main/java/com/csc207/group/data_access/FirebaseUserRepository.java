@@ -3,7 +3,7 @@ package com.csc207.group.data_access;
 import com.csc207.group.cache.FirebaseRestClient;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
-import com.csc207.group.auth.UserDataHandler;
+import com.csc207.group.auth.UserRepository;
 import kong.unirest.json.JSONObject;
 
 import java.io.IOException;
@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FirebaseUserDataHandler implements UserDataHandler {
+public class FirebaseUserRepository implements UserRepository {
 
     private final FirebaseRestClient client;
 
-    public FirebaseUserDataHandler(FirebaseRestClient client) {
+    public FirebaseUserRepository(FirebaseRestClient client) {
         this.client = client;
     }
 

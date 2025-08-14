@@ -10,7 +10,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class SignupView {
     private VBox view;

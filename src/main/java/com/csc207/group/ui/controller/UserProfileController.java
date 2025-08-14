@@ -1,6 +1,7 @@
 package com.csc207.group.ui.controller;
 
 import com.csc207.group.app.GameCentralController;
+import com.csc207.group.interface_adapter.FollowUserInputBoundary;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.LibraryEntry;
 import com.csc207.group.model.User;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class UserProfileController {
 
-    private final UserInteractor userInteractor;             // logged-in + lookups
+    private final UserInteractor userInteractor;      // logged-in + lookups
     private final UserProfileInteractor profileInteractor;   // exposes GameService
     private final UserProfileView view;                      // UI for other users' profiles
     private final String targetUsername;                     // whose profile
@@ -38,6 +39,7 @@ public class UserProfileController {
                                  UserProfileView view,
                                  String targetUsername,
                                  GameCentralController gameCentralController) {
+
         this.userInteractor = userInteractor;
         this.profileInteractor = profileInteractor;
         this.view = view;

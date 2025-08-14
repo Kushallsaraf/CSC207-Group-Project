@@ -31,11 +31,9 @@
 
 package com.csc207.group.data_access;
 
-import kong.unirest.GetRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
-import kong.unirest.json.JSONObject;
 
 public class NewsClient {
     private static final String API_KEY = "72006c1e793c44c28c9d66ed4214819d";

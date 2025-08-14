@@ -1,7 +1,7 @@
 package com.csc207.group.ui;
 
 import com.csc207.group.cache.FirebaseRestClient;
-import com.csc207.group.data_access.FirebaseUserDataHandler;
+import com.csc207.group.data_access.FirebaseUserRepository;
 import com.csc207.group.auth.*;
 import com.csc207.group.app.GameCentralController;
 import javafx.stage.Stage;
@@ -11,7 +11,7 @@ public class JavaFXUserAuthenticator{
 
     private JavaFXUserAuthenticationView view;
     private JavaFXUserAuthenticationController controller;
-    private UserDataHandler dataHandler;
+    private UserRepository dataHandler;
     private LoginPresenter loginPresenter;
     private LoginInteractor loginInteractor;
     private SignupInteractor signupInteractor;
@@ -26,7 +26,7 @@ public class JavaFXUserAuthenticator{
 
 
         FirebaseRestClient firebaseRestClient = new FirebaseRestClient();
-        dataHandler = new FirebaseUserDataHandler(firebaseRestClient);
+        dataHandler = new FirebaseUserRepository(firebaseRestClient);
         loginPresenter = new LoginPresenter(view);
         signupPresenter = new SignupPresenter(view);
         loginInteractor = new LoginInteractor(dataHandler, loginPresenter);

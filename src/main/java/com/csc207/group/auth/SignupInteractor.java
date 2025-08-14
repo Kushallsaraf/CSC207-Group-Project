@@ -5,10 +5,10 @@ import com.csc207.group.util.Constants;
 import java.io.IOException;
 
 public class SignupInteractor {
-    private UserDataHandler handler;
+    private UserRepository handler;
     private SignupPresenter presenter;
 
-    public SignupInteractor(UserDataHandler handler, SignupPresenter presenter){
+    public SignupInteractor(UserRepository handler, SignupPresenter presenter){
         this.handler = handler;
         this.presenter = presenter;
     }

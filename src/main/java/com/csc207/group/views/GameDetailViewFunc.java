@@ -1,6 +1,5 @@
 package com.csc207.group.views;
 
-import com.csc207.group.views.Components.DLCcard;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

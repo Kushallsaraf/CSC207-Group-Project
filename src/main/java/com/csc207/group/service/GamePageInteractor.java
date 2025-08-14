@@ -5,7 +5,6 @@ import com.csc207.group.data_access.FirebaseGameDataHandler;
 import com.csc207.group.data_access.GameDataHandler;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
-import com.csc207.group.model.User;
 
 public class GamePageInteractor {
     public final UserInteractor userInteractor;
