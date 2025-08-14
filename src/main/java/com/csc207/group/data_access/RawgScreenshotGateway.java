@@ -42,7 +42,7 @@ public class RawgScreenshotGateway implements ScreenshotGateway {
         if (result == null) {
             return new ArrayList<>();
         }
-
+        System.out.println("Screenshots fetched: " + (result == null ? "null" : result.size()));
         return result;
 
     }

@@ -1,5 +1,7 @@
 package com.csc207.group.app;
 
+import com.csc207.group.cache.RawgFirebaseApiCache;
+import com.csc207.group.data_access.RawgApiClient;
 import com.csc207.group.data_access.RawgScreenshotGateway;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.User;
@@ -20,6 +22,8 @@ import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.PersonalProfileController;
 import com.csc207.group.ui.controller.ScreenshotController;
 import com.csc207.group.ui.controller.UserProfileController;
+import com.csc207.group.usecase.screenshots.ViewScreenshotsInputBoundary;
+import com.csc207.group.usecase.screenshots.ViewScreenshotsInteractor;
 import com.csc207.group.views.GameDetailController;
 import com.csc207.group.views.GameDetailViewFunc;
 import com.csc207.group.views.NewsView;
@@ -176,12 +180,13 @@ public class GameCentralController {
         Game game = gameService.getGameById(gameid);
         GamePageInteractor gamePageInteractor = new GamePageInteractor(userInteractor);
 
+        RawgApiClient rawgApiClient = new RawgApiClient(new RawgFirebaseApiCache());
         ScreenshotPresenter screenshotPresenter = new ScreenshotPresenter(new GameDetailViewFunc());
         ViewScreenshotsInputBoundary screenshotInteractor = new ViewScreenshotsInteractor(
                 new RawgScreenshotGateway(rawgApiClient),
                 screenshotPresenter
         );
-        ScreenshotController screenshotController = new ScreenshotController();
+        ScreenshotController screenshotController = new ScreenshotController(screenshotInteractor);
 
         GameDetailController controller = new GameDetailController(game, gamePageInteractor, this,
                 userInteractor.getUser(), hostServices, homeController, screenshotController);

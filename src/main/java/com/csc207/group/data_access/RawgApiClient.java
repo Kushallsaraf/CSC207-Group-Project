@@ -170,6 +170,8 @@ public final class RawgApiClient {
             System.out.println(REQUEST_NOT_IN_CACHE_CALLING_API);
             this.cache.cacheInt(Endpoints.RAWG_GAME_ID_BY_NAME, gameName, id);
         }
+        System.out.println("Searching RAWG for game name: " + gameName);
+        System.out.println("Found RAWG id: " + id);
         return id;
     }
 
