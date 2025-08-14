@@ -1,5 +1,9 @@
 package com.csc207.group.ui.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.csc207.group.app.GameCentralController;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.LibraryEntry;
@@ -16,16 +20,19 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class UserProfileController {
 
-    private final UserInteractor userInteractor;             // logged-in + lookups
-    private final UserProfileInteractor profileInteractor;   // exposes GameService
-    private final UserProfileView view;                      // UI for other users' profiles
-    private final String targetUsername;                     // whose profile
+    private static final int CONSTANT_1 = 8;
+    private static final int CONSTANT_2 = 6;
+    private static final int CONSTANT_3 = 32;
+    private static final int CONSTANT_4 = 50;
+    private static final int CONSTANT_5 = 5;
+    private static final int CONSTANT_6 = 10;
+
+    private final UserInteractor userInteractor;
+    private final UserProfileInteractor profileInteractor;
+    private final UserProfileView view;
+    private final String targetUsername;
     private final GameCentralController gameCentralController;
 
     private List<Node> libraryCards;
@@ -106,7 +113,7 @@ public class UserProfileController {
             return Collections.singletonList(emptyRow("No followers yet."));
         }
         List<String> followers = new ArrayList<>(targetUser.getFollowers());
-        followers.sort(String::compareToIgnoreCase); // optional alphabetize
+        followers.sort(String::compareToIgnoreCase);
         List<Node> nodes = new ArrayList<>();
         for (String uname : followers) {
             User u = userInteractor.getUserByUsername(uname);
@@ -121,7 +128,7 @@ public class UserProfileController {
             return Collections.singletonList(emptyRow("Not following anyone yet."));
         }
         List<String> following = new ArrayList<>(targetUser.getFollowing());
-        following.sort(String::compareToIgnoreCase); // optional alphabetize
+        following.sort(String::compareToIgnoreCase);
         List<Node> nodes = new ArrayList<>();
         for (String uname : following) {
             User u = userInteractor.getUserByUsername(uname);
@@ -132,8 +139,8 @@ public class UserProfileController {
     }
 
     private HBox emptyRow(String msg) {
-        HBox row = new HBox(8);
-        row.setPadding(new Insets(6));
+        HBox row = new HBox(CONSTANT_1);
+        row.setPadding(new Insets(CONSTANT_2));
         Label label = new Label(msg);
         label.setStyle("-fx-text-fill: white;");
         row.getChildren().add(label);
@@ -141,16 +148,22 @@ public class UserProfileController {
     }
 
     private HBox userRow(String username, String avatarUrl) {
-        HBox row = new HBox(8);
-        row.setPadding(new Insets(6));
-        row.setStyle("-fx-background-color: #2C2C2C; -fx-background-radius: 5; -fx-border-color: #333333; -fx-border-radius: 5;");
+        HBox row = new HBox(CONSTANT_1);
+        row.setPadding(new Insets(CONSTANT_2));
+        row.setStyle("-fx-background-color: #2C2C2C; -fx-background-radius: 5; "
+                + "-fx-border-color: #333333; -fx-border-radius: 5;");
 
         ImageView avatar = new ImageView();
-        avatar.setFitWidth(32);
-        avatar.setFitHeight(32);
+        avatar.setFitWidth(CONSTANT_3);
+        avatar.setFitHeight(CONSTANT_3);
         avatar.setPreserveRatio(false);
         if (avatarUrl != null && !avatarUrl.isEmpty()) {
-            try { avatar.setImage(new Image(avatarUrl, true)); } catch (Exception ignored) {}
+            try {
+                avatar.setImage(new Image(avatarUrl, true));
+            }
+            catch (Exception ignored) {
+                ignored.printStackTrace();
+            }
         }
 
         Label name = new Label(username);
@@ -175,16 +188,23 @@ public class UserProfileController {
         libraryCards = new ArrayList<>();
         for (Integer gameId : targetUser.getLibrary()) {
             LibraryEntry entry = gameService.getLibraryEntryById(gameId);
-            if (entry == null) continue;
+            if (entry == null) {
+                continue;
+            }
 
             HBox card = baseCard(gameId);
 
             ImageView cover = new ImageView();
-            cover.setFitWidth(50);
-            cover.setFitHeight(50);
+            cover.setFitWidth(CONSTANT_4);
+            cover.setFitHeight(CONSTANT_4);
             String url = entry.getCoverImage() != null ? entry.getCoverImage().getUrl() : null;
             if (url != null && !url.isEmpty()) {
-                try { cover.setImage(new Image(url, true)); } catch (Exception ignored) {}
+                try {
+                    cover.setImage(new Image(url, true));
+                }
+                catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
             }
 
             Label name = new Label(entry.getTitle() + " (" + entry.getYear() + ")");
@@ -199,16 +219,23 @@ public class UserProfileController {
         wishlistCards = new ArrayList<>();
         for (Integer gameId : targetUser.getWishlist()) {
             GamePreview preview = gameService.getGamePreviewById(gameId);
-            if (preview == null) continue;
+            if (preview == null) {
+                continue;
+            }
 
             HBox card = baseCard(gameId);
 
             ImageView cover = new ImageView();
-            cover.setFitWidth(50);
-            cover.setFitHeight(50);
+            cover.setFitWidth(CONSTANT_4);
+            cover.setFitHeight(CONSTANT_4);
             String url = preview.getCoverImage() != null ? preview.getCoverImage().getUrl() : null;
             if (url != null && !url.isEmpty()) {
-                try { cover.setImage(new Image(url, true)); } catch (Exception ignored) {}
+                try {
+                    cover.setImage(new Image(url, true));
+                }
+                catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
             }
 
             Label name = new Label(preview.getTitle() + " (" + preview.getYear() + ")");
@@ -220,21 +247,25 @@ public class UserProfileController {
     }
 
     private HBox baseCard(Integer gameId) {
-        HBox card = new HBox(5);
-        card.setPadding(new Insets(10));
-        card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
+        HBox card = new HBox(CONSTANT_5);
+        card.setPadding(new Insets(CONSTANT_6));
+        card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; "
+                + "-fx-background-radius:5; -fx-border-radius:5;");
         card.setUserData(gameId);
 
         card.setOnMouseEntered(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
             @Override public void handle(javafx.scene.input.MouseEvent event) {
                 card.setCursor(Cursor.HAND);
-                card.setStyle("-fx-border-color:#00ffff; -fx-background-color:#3C3C3C; -fx-background-radius:5; -fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
+                card.setStyle("-fx-border-color:#00ffff; -fx-background-color:#3C3C3C; "
+                        + "-fx-background-radius:5; -fx-border-radius:5; "
+                        + "-fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
             }
         });
         card.setOnMouseExited(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
             @Override public void handle(javafx.scene.input.MouseEvent event) {
                 card.setCursor(Cursor.DEFAULT);
-                card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
+                card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; "
+                        + "-fx-background-radius:5; -fx-border-radius:5;");
             }
         });
 
