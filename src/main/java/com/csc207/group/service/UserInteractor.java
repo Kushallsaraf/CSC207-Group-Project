@@ -1,16 +1,22 @@
 package com.csc207.group.service;
 
 import com.csc207.group.auth.UserRepository;
+import com.csc207.group.interface_adapter.FollowUserOutputBoundary;
+import com.csc207.group.interface_adapter.FollowUserRequestModel;
+import com.csc207.group.interface_adapter.FollowUserResponseModel;
+import com.csc207.group.interface_adapter.UserInteractorInputBoundary;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
 
-public class UserInteractor {
+public class UserInteractor implements UserInteractorInputBoundary {
     private final User user;
     private final UserRepository userRepository;
+    private final FollowUserOutputBoundary output;
 
-    public UserInteractor(User user, UserRepository userRepository) {
+    public UserInteractor(User user, UserRepository userRepository, FollowUserOutputBoundary output) {
         this.user = user;
         this.userRepository = userRepository;
+        this.output = output;
     }
 
     public String getReviewerProfilePicture(String username){
@@ -18,15 +24,18 @@ public class UserInteractor {
 
     }
 
-    public void followUser(String targetUsername){
+    public void executeFollow(FollowUserRequestModel followUserRequestModel){
 
-        if (!this.user.isFollowing(targetUsername)){//check if user is already following
+        if (!this.user.isFollowing(followUserRequestModel.getTargetUsername())){//check if user is already following
 
-        this.user.follow(targetUsername);
-        User targetUser = userRepository.getUser(targetUsername);
+        this.user.follow(followUserRequestModel.getTargetUsername());
+        User targetUser = userRepository.getUser(followUserRequestModel.getTargetUsername());
         targetUser.addToFollowers(user.getUsername());
         userRepository.saveUser(user); //update user info on database
-        userRepository.saveUser(targetUser);//update target user info on database
+        userRepository.saveUser(targetUser);
+        output.present(new FollowUserResponseModel(true, "OK",
+                followUserRequestModel.getTargetUsername(), targetUser.getNumberOfFollowers(),
+                targetUser.getNumberOfFollowing()));
 
 
         }

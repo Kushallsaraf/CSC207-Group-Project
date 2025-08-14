@@ -7,6 +7,7 @@ import com.csc207.group.model.User;
 import com.csc207.group.ui.UserProfileView;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 
 public class FollowButtonHandler implements EventHandler<ActionEvent> {
 
@@ -19,7 +20,8 @@ public class FollowButtonHandler implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        this.userProfileController.handleFollowButtonClick();
+        Button b = (Button) event.getSource();
+        this.userProfileController.handleFollowButtonClick(b.getText());
     }
 }
 

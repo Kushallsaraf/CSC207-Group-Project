@@ -1,7 +1,7 @@
 package com.csc207.group.ui.controller;
 
 import com.csc207.group.app.GameCentralController;
-import com.csc207.group.interface_adapter.FollowUserInputBoundary;
+import com.csc207.group.interface_adapter.*;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.LibraryEntry;
 import com.csc207.group.model.User;
@@ -25,31 +25,33 @@ import java.util.List;
 
 public class UserProfileController {
 
-    private final UserInteractor userInteractor;      // logged-in + lookups
+    private final UserInteractorInputBoundary userInteractorInputBoundary;      // logged-in + lookups
     private final UserProfileInteractor profileInteractor;   // exposes GameService
     private final UserProfileView view;                      // UI for other users' profiles
     private final String targetUsername;                     // whose profile
     private final GameCentralController gameCentralController;
+    private final FollowUserPresenter presenter;
 
     private List<Node> libraryCards;
     private List<Node> wishlistCards;
 
-    public UserProfileController(UserInteractor userInteractor,
+    public UserProfileController(UserInteractor userInteractorInputBoundary,
                                  UserProfileInteractor profileInteractor,
                                  UserProfileView view,
                                  String targetUsername,
-                                 GameCentralController gameCentralController) {
+                                 GameCentralController gameCentralController, FollowUserPresenter presenter) {
 
-        this.userInteractor = userInteractor;
+        this.userInteractorInputBoundary = userInteractorInputBoundary;
         this.profileInteractor = profileInteractor;
         this.view = view;
         this.targetUsername = targetUsername;
         this.gameCentralController = gameCentralController;
+        this.presenter = presenter;
         initialize();
     }
 
     private void initialize() {
-        User targetUser = userInteractor.getUserByUsername(targetUsername);
+        User targetUser = userInteractorInputBoundary.getUserByUsername(targetUsername);
         if (targetUser == null) {
             // Minimal fallback if user not found
             view.setUsername(targetUsername);
@@ -60,7 +62,7 @@ public class UserProfileController {
             return;
         }
 
-        User loggedInUser = userInteractor.getUser();
+        User loggedInUser = userInteractorInputBoundary.getUser();
         GameService gameService = profileInteractor.getGameService();
 
         // Header
@@ -77,7 +79,7 @@ public class UserProfileController {
         view.getFollowersLabel().setOnMouseExited(e -> view.getFollowersLabel().setStyle("-fx-text-fill: #B3B3B3;"));
         view.getFollowersLabel().setOnMouseClicked(e ->
                 view.showUsersPopup("Followers of " + targetUser.getUsername(),
-                        makeNodesFromFollowers(targetUser))
+                        makeNodesFromFollowers(userInteractorInputBoundary.getUserByUsername(targetUsername)))
         );
 
         // Following label → popup
@@ -104,19 +106,23 @@ public class UserProfileController {
         view.setWishlistCards(wishlistCards);
     }
 
-    public void handleFollowButtonClick(){
-        User loggedInUser = userInteractor.getUser();
-        if (loggedInUser.isFollowing(targetUsername)) {
-            new UnfollowCommand(userInteractor, targetUsername).execute();
+    public void handleFollowButtonClick(String buttonText){
+        if (buttonText.equals("Unfollow")) {
             view.setFollowButtonText("Follow");
+            new UnfollowCommand(userInteractorInputBoundary, targetUsername).execute();
+            view.setFollowersCount(userInteractorInputBoundary.
+                    getUserByUsername(targetUsername).getNumberOfFollowers());
         } else {
-            new FollowCommand(userInteractor, targetUsername).execute();
-            view.setFollowButtonText("Unfollow");
+            new FollowCommand(userInteractorInputBoundary, new FollowUserRequestModel(targetUsername)).execute();
+            // Refresh follower count
+            FollowUserViewModel viewModel = presenter.getViewModel();
+
+            view.setFollowersCount(viewModel.getFollowersCount());
+            view.setFollowButtonText(viewModel.getButtonLabel());
+
         }
 
-        // Refresh follower count
-        User updatedTarget = userInteractor.getUserByUsername(targetUsername);
-        view.setFollowersCount(updatedTarget.getFollowers().size());
+
     }
 
     // ---------- Build popup node lists ----------
@@ -128,7 +134,7 @@ public class UserProfileController {
         followers.sort(String::compareToIgnoreCase); // optional alphabetize
         List<Node> nodes = new ArrayList<>();
         for (String uname : followers) {
-            User u = userInteractor.getUserByUsername(uname);
+            User u = userInteractorInputBoundary.getUserByUsername(uname);
             nodes.add(userRow(u != null ? u.getUsername() : uname,
                     u != null ? u.getProfilePictureURL() : null));
         }
@@ -143,7 +149,7 @@ public class UserProfileController {
         following.sort(String::compareToIgnoreCase); // optional alphabetize
         List<Node> nodes = new ArrayList<>();
         for (String uname : following) {
-            User u = userInteractor.getUserByUsername(uname);
+            User u = userInteractorInputBoundary.getUserByUsername(uname);
             nodes.add(userRow(u != null ? u.getUsername() : uname,
                     u != null ? u.getProfilePictureURL() : null));
         }
@@ -177,7 +183,7 @@ public class UserProfileController {
 
         row.getChildren().addAll(avatar, name);
 
-        String me = userInteractor.getUser() != null ? userInteractor.getUser().getUsername() : null;
+        String me = userInteractorInputBoundary.getUser() != null ? userInteractorInputBoundary.getUser().getUsername() : null;
         if (username != null && !username.equals(me)) {
             row.setOnMouseEntered(ev -> row.setCursor(Cursor.HAND));
             row.setOnMouseClicked(ev -> {
@@ -241,19 +247,22 @@ public class UserProfileController {
     private HBox baseCard(Integer gameId) {
         HBox card = new HBox(5);
         card.setPadding(new Insets(10));
-        card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
+        card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5;" +
+                " -fx-border-radius:5;");
         card.setUserData(gameId);
 
         card.setOnMouseEntered(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
             @Override public void handle(javafx.scene.input.MouseEvent event) {
                 card.setCursor(Cursor.HAND);
-                card.setStyle("-fx-border-color:#00ffff; -fx-background-color:#3C3C3C; -fx-background-radius:5; -fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
+                card.setStyle("-fx-border-color:#00ffff; -fx-background-color:#3C3C3C; -fx-background-radius:5; " +
+                        "-fx-border-radius:5; -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.2, 0, 0);");
             }
         });
         card.setOnMouseExited(new javafx.event.EventHandler<javafx.scene.input.MouseEvent>() {
             @Override public void handle(javafx.scene.input.MouseEvent event) {
                 card.setCursor(Cursor.DEFAULT);
-                card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5; -fx-border-radius:5;");
+                card.setStyle("-fx-border-color:#333333; -fx-background-color:#2C2C2C; -fx-background-radius:5;" +
+                        " -fx-border-radius:5;");
             }
         });
 

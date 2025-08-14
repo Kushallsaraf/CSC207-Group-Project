@@ -1,6 +1,7 @@
 package com.csc207.group.app;
 
 import com.csc207.group.data_access.FirebaseUserRepository;
+import com.csc207.group.interface_adapter.FollowUserPresenter;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.User;
 import com.csc207.group.service.GamePageInteractor;
@@ -43,10 +44,12 @@ public class GameCentralController {
     private JavaFXUserAuthenticationView authView;
     private RecommendationEngine recommendationEngine;
     private HomeController homeController;
+    private FollowUserPresenter followPresenter;
 
     public GameCentralController(Stage primaryStage, HostServices hostServices) {
         this.primaryStage = primaryStage;
         this.hostServices = hostServices;
+        this.followPresenter = new FollowUserPresenter();
 
         Scene scene = new Scene(mainLayout, 1200, 800);
         primaryStage.setScene(scene);
@@ -68,7 +71,7 @@ public class GameCentralController {
         RecommendationService recommendationService = new RecommendationService();
         recommendationEngine = new RecommendationEngine(recommendationService, user);
         userInteractor = new UserInteractor(user, new FirebaseUserRepository
-                (new com.csc207.group.cache.FirebaseRestClient()));
+                (new com.csc207.group.cache.FirebaseRestClient()), followPresenter);
         personalProfileView = new PersonalProfileView();
         PersonalProfileInteractor personalProfileInteractor = new PersonalProfileInteractor(userInteractor, gameService);
         personalProfileController = new PersonalProfileController(personalProfileInteractor, userInteractor, personalProfileView, this);
@@ -150,7 +153,8 @@ public class GameCentralController {
         UserProfileInteractor userProfileInteractor = new UserProfileInteractor(userInteractor, gameService,
                 targetUsername);
         UserProfileController userProfileController = new UserProfileController(userInteractor,
-                userProfileInteractor,userProfileView, targetUsername, this);
+                userProfileInteractor,userProfileView, targetUsername, this,
+                followPresenter);
         setCenterView(userProfileView.getView());
 
     }
