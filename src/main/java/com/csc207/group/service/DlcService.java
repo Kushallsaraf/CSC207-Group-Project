@@ -7,10 +7,15 @@ import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
-public class DLCService {
+public final class DlcService {
     private final IgdbApiClient apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
 
-    public Dlc getDLCById(int id) {
+    /**
+     * Gets dlc of a game by id.
+     * @param id the id of the game.
+     * @return returns a Dlc object.
+     */
+    public Dlc getDlcById(int id) {
         JsonNode json = apiClient.getGameDetailsById(id);
         JSONArray array = json.getArray();
 
@@ -22,14 +27,14 @@ public class DLCService {
         String description = obj.optString("summary", "None");
 
         // Setting cover image url
-        String cover_page = "";
+        String coverPage = "";
         if (obj.has("cover")) {
-            cover_page = new GameService().getCoverPageById(obj.optInt("cover", 0));
+            coverPage = new GameService().getCoverPageById(obj.optInt("cover", 0));
         }
         else {
-            cover_page = "No cover page";
+            coverPage = "No cover page";
         }
 
-        return new Dlc(name, description, cover_page);
+        return new Dlc(name, description, coverPage);
     }
 }

@@ -3,7 +3,7 @@ package com.csc207.group.model;
 import com.csc207.group.data_access.RawgApiClient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GameStore {
+public final class GameStore {
     @JsonProperty("id")
     private int id;
 
@@ -14,26 +14,36 @@ public class GameStore {
     private int storeID;
 
     @JsonProperty("url")
-    private String storeURL;
+    private String storeUrl;
 
     // consructor
-    public GameStore(int id, String gameID, int storeID, String storeURL) {
+    public GameStore(int id, String gameID, int storeID, String storeUrl) {
         this.id = id;
         this.gameID = gameID;
         this.storeID = storeID;
-        this.storeURL = storeURL;
+        this.storeUrl = storeUrl;
 
     }
 
-    public GameStore() {}
+    public GameStore() {
 
-    public int getId() { return id; }
+    }
 
-    public String getGameID() { return gameID; }
+    public int getId() {
+        return id;
+    }
 
-    public int getStoreID() { return storeID; }
+    public String getGameID() {
+        return gameID;
+    }
 
-    public String getStoreURL() { return storeURL; }
+    public int getStoreID() {
+        return storeID;
+    }
+
+    public String getStoreUrl() {
+        return storeUrl;
+    }
 
     public String getStoreName() {
 
@@ -41,5 +51,4 @@ public class GameStore {
 
     }
 
-    
 }

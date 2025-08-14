@@ -1,15 +1,23 @@
 package com.csc207.group.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.csc207.group.data_access.NewsClient;
 import com.csc207.group.model.News;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+public final class NewsService {
 
-public class NewsService {
-    public List<News> ArticleBuilder() {
+    public static final int SIX = 6;
+    public static final int TEN = 10;
+
+    /**
+     * Builds a news article using the api.
+     * @return returns a list of news articles.
+     */
+    public List<News> articleBuilder() {
         NewsClient response = new NewsClient();
         JSONObject jsonObj = response.getGamingNews().getObject();
         JSONArray articles = jsonObj.getJSONArray("articles");
@@ -17,7 +25,7 @@ public class NewsService {
 
         for (int i = 0; i < articles.length(); i++) {
             // Stop once we have 6 valid articles
-            if (newsList.size() >= 6) {
+            if (newsList.size() >= SIX) {
                 break;
             }
 
@@ -33,7 +41,7 @@ public class NewsService {
             // Get the URL for the article's image
             String imageUrl = article.optString("urlToImage", "");
 
-            String date = article.getString("publishedAt").substring(0, 10);
+            String date = article.getString("publishedAt").substring(0, TEN);
 
             // Only add the article if it has both a webpage URL and an image URL
             if (!url.isEmpty() && !imageUrl.isEmpty()) {

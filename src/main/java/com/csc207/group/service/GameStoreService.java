@@ -1,12 +1,12 @@
 package com.csc207.group.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.csc207.group.model.GameStore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameStoreService {
 
@@ -14,6 +14,12 @@ public class GameStoreService {
     // and returning them formatted properly
     // will allow for the method in RAWG API Client to return a list of GameStore Objects
 
+    /**
+     * Parses GameStores From Json.
+     * @param json the json input.
+     * @return List of Game Stores.
+     * @throws JsonProcessingException if unable to convert to json.
+     */
     public static List<GameStore> parseGameStoresFromJson(String json) throws JsonProcessingException {
 
         List<GameStore> gameStoresList = new ArrayList<GameStore>();
@@ -29,20 +35,20 @@ public class GameStoreService {
         }
         JsonNode gameStoresNode = rootNode.get("results");
 
-        if(gameStoresNode != null && gameStoresNode.isArray()) {
+        if (gameStoresNode != null && gameStoresNode.isArray()) {
             for (JsonNode gameStoreNode : gameStoresNode) {
 
                 int id = gameStoreNode.get("id").asInt();
                 String gameID = gameStoreNode.get("game_id").asText();
                 int storeID = gameStoreNode.get("store_id").asInt();
-                String storeURL = gameStoreNode.get("url").asText();
+                String storeUrl = gameStoreNode.get("url").asText();
 
                 // creating the game service object and adding to list
                 gameStoresList.add(new GameStore(
                         id,
                         gameID,
                         storeID,
-                        storeURL));
+                        storeUrl));
 
             }
         }

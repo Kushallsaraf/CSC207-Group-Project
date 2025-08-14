@@ -9,7 +9,7 @@ import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.Screenshot;
 import com.csc207.group.model.User;
-import com.csc207.group.service.DLCService;
+import com.csc207.group.service.DlcService;
 import com.csc207.group.service.GamePageInteractor;
 import com.csc207.group.service.GenreService;
 import com.csc207.group.views.Components.AchievementCard;
@@ -81,8 +81,8 @@ public class GameDetailController {
                 List<Screenshot> screenshots = rawgApiClient.getScreenshotsForGame(String.valueOf(rawgId));
                 List<Image> images = new ArrayList<>();
                 for (Screenshot s : screenshots) {
-                    if (s.getImageURL() != null && !s.getImageURL().isEmpty()) {
-                        images.add(new Image(s.getImageURL(), true)); // Load in background
+                    if (s.getImageUrl() != null && !s.getImageUrl().isEmpty()) {
+                        images.add(new Image(s.getImageUrl(), true)); // Load in background
                     }
                 }
 
@@ -146,7 +146,7 @@ public class GameDetailController {
     public void setDLCs() {
         List<Dlc> dlcs = new ArrayList<>();
         for (Integer id : game.getDownloadableContent()) {
-            dlcs.add(new DLCService().getDLCById(id));
+            dlcs.add(new DlcService().getDlcById(id));
         }
         List<VBox> dlccards = new ArrayList<>();
         for (Dlc dlc : dlcs) {
@@ -216,8 +216,8 @@ public class GameDetailController {
         for (Review r : reviews) {
             if (r == null) continue;
 
-            String userId = r.getUserid();
-            String avatarUrl = gamePageInteractor.getProfileURL(userId);
+            String userId = r.getUserId();
+            String avatarUrl = gamePageInteractor.getProfileUrl(userId);
 
             ImageView avatar = new ImageView();
             if (avatarUrl != null && !avatarUrl.isEmpty()) {

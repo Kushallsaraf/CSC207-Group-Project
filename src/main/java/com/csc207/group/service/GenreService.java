@@ -1,5 +1,10 @@
 package com.csc207.group.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.csc207.group.cache.IgdbFirebaseApiCache;
 import com.csc207.group.cache.RawgFirebaseApiCache;
 import com.csc207.group.data_access.IgdbApiClient;
@@ -9,15 +14,18 @@ import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-
-public class GenreService {
+public final class GenreService {
+    public static final String NAME = "name";
     private final RawgApiClient client = new RawgApiClient(new RawgFirebaseApiCache());
-    public List<Game> getGamesByGenre(String genre) throws Exception {
+
+    /**
+     * Gets games by genre.
+     * @param genre the genre.
+     * @return List of games.
+     * @throws IOException if error with API response.
+     * @throws InterruptedException if HTTP request is interrupted.
+     */
+    public List<Game> getGamesByGenre(String genre) throws IOException, InterruptedException {
         Map<String, Object> response = client.getGamesByGenre(genre);
         List<Game> games = new ArrayList<>();
 
@@ -28,11 +36,11 @@ public class GenreService {
             if (game.get("genres") != null) {
                 List<Map<String, Object>> genreList = (List<Map<String, Object>>) game.get("genres");
                 for (Map<String, Object> g : genreList) {
-                    genres.add((String) g.get("name"));
+                    genres.add((String) g.get(NAME));
                 }
                 Game g = new Game();
                 g.setGenres(genres);
-                g.setName((String) game.get("name"));
+                g.setName((String) game.get(NAME));
                 if (game.containsKey("id")) {
                     g.setGameid((Integer) game.get("id"));
                 }
@@ -42,12 +50,17 @@ public class GenreService {
         return games;
     }
 
+    /**
+     * Gets genres by id.
+     * @param id id of genre.
+     * @return String name of genre.
+     */
     public String getGenresById(String id) {
-        int IntId = Integer.parseInt(id);
+        int intId = Integer.parseInt(id);
         final IgdbApiClient apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
-        JsonNode response = apiClient.getGenresById(IntId);
+        JsonNode response = apiClient.getGenresById(intId);
         JSONArray array = response.getArray();
         JSONObject genreObject = array.getJSONObject(0);
-        return genreObject.get("name").toString();
+        return genreObject.get(NAME).toString();
     }
 }

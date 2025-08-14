@@ -46,9 +46,9 @@ public class FirebaseGameDataHandler implements GameDataHandler {
         JSONArray reviewsArray = new JSONArray();
         for (Review review : game.getReviews()) {
             JSONObject reviewJson = new JSONObject();
-            reviewJson.put("userid", review.getUserid());
+            reviewJson.put("userid", review.getUserId());
             reviewJson.put("content", review.getContent());
-            reviewJson.put("gameid", review.getGameid());
+            reviewJson.put("gameid", review.getGameId());
             reviewJson.put("rating", review.getRating());
             reviewsArray.put(reviewJson);
         }

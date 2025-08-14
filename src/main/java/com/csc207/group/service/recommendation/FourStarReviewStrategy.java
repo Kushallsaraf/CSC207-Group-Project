@@ -53,7 +53,7 @@ public class FourStarReviewStrategy implements RecommendationStrategy {
             for (Review review : user.getReviews().values()) {
                 double rating = review.getRating();
                 if (rating >= lowerBound && rating < upperBound) {
-                    games.add(review.getGameid());
+                    games.add(review.getGameId());
                 }
             }
         }

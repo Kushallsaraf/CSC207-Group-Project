@@ -1,24 +1,38 @@
 package com.csc207.group.Review;
 
+import java.util.List;
+
 import com.csc207.group.model.Review;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.List;
-
 public class ReviewView extends Application {
-
+    public static final String INVALID_INPUT = "Invalid Input";
+    public static final String PLEASE_ENTER_A_VALID_RATING_0_5 = "Please enter a valid rating 0-5";
+    public static final int TEN = 10;
+    public static final int TWENTY = 20;
+    public static final int SEVENHUNDREDFIFTY = 750;
+    public static final int THREEHUNDRED = 300;
+    public static final int SIXTEENHUNDRED = 1600;
+    public static final int SIXTY = 60;
+    public static final int TWENTYFIVE = 25;
+    public static final int SEVENTEENHUNREDFIFTY = 1750;
+    public static final int EIGHTY = 80;
+    public static final int NINTEENHUNDRED20 = 1920;
+    public static final int ONETHOUSAND = 1000;
     private List<Review> reviewList;
 
     public void setReviews(java.util.List<Review> reviews) {
@@ -26,7 +40,7 @@ public class ReviewView extends Application {
     }
 
     public void start(Stage stage) {
-        VBox vbox = new VBox(10);
+        VBox vbox = new VBox(TEN);
         vbox.setStyle("-fx-padding: 5; -fx-background-color: #222;");
         vbox.setAlignment(Pos.TOP_CENTER);
 
@@ -37,35 +51,35 @@ public class ReviewView extends Application {
         subtitle.setStyle("-fx-font-size: 16px; -fx-text-fill: #ccc;");
 
         GridPane reviews = new GridPane();
-        reviews.setVgap(10);
-        reviews.setHgap(10);
+        reviews.setVgap(TEN);
+        reviews.setHgap(TEN);
         reviews.setStyle("-fx-background-color: #222");
         reviews.setAlignment(Pos.TOP_CENTER);
 
         Integer i = 0;
         for (Review review : reviewList) {
-            reviews.add(new ReviewCard(review).getCard(),i%2,i/2);
+            reviews.add(new ReviewCard(review).getCard(), i % 2, i / 2);
             i++;
         }
 
         ScrollPane curreviews = new ScrollPane(reviews);
         curreviews.setFitToWidth(true);
-        curreviews.setPadding(new Insets(20));
-        curreviews.setPrefHeight(750);
+        curreviews.setPadding(new Insets(TWENTY));
+        curreviews.setPrefHeight(SEVENHUNDREDFIFTY);
         curreviews.setStyle("-fx-background-color: #222");
 
         TextArea leave = new TextArea();
         leave.setPromptText("Tell what you think!");
         TextFormatter<String> formatter = new TextFormatter<>(change -> {
-            if (change.getControlNewText().length() <= 300) {
+            if (change.getControlNewText().length() <= THREEHUNDRED) {
                 return change;
             } else {
                 return null;
             }
         });
         leave.setTextFormatter(formatter);
-        leave.setMinWidth(1600);
-        leave.setMinHeight(60);
+        leave.setMinWidth(SIXTEENHUNDRED);
+        leave.setMinHeight(SIXTY);
         leave.setStyle("-fx-font-size: 14");
 
         TextField rating = new TextField();
@@ -74,22 +88,22 @@ public class ReviewView extends Application {
         Button post = new Button("Post");
         post.setStyle("-fx-background-color: #222; -fx-font-size: 16; -fx-background-radius: 10; -fx-border-radius: 10; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 4");
 
-        HBox postsys = new HBox(25);
-        postsys.setPrefSize(1750,80);
+        HBox postsys = new HBox(TWENTYFIVE);
+        postsys.setPrefSize(SEVENTEENHUNREDFIFTY, EIGHTY);
         postsys.setAlignment(Pos.CENTER);
-        postsys.getChildren().addAll(leave,post);
+        postsys.getChildren().addAll(leave, post);
 
-        vbox.getChildren().addAll(title,subtitle,curreviews,postsys);
-        Scene scene = new Scene(vbox,1920,1000);
+        vbox.getChildren().addAll(title, subtitle, curreviews, postsys);
+        Scene scene = new Scene(vbox, NINTEENHUNDRED20, ONETHOUSAND);
         stage.setScene(scene);
         stage.show();
 
-        post.setOnAction(e -> {
+        post.setOnAction(event -> {
             if (rating.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Invalid Input");
+                alert.setTitle(INVALID_INPUT);
                 alert.setHeaderText(null);
-                alert.setContentText("Please enter a valid rating 0-5");
+                alert.setContentText(PLEASE_ENTER_A_VALID_RATING_0_5);
                 alert.showAndWait();
             }
 
@@ -97,23 +111,29 @@ public class ReviewView extends Application {
                 double value = Double.parseDouble(rating.getText());
                 if (value < 0 || value > 5) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Invalid Input");
+                    alert.setTitle(INVALID_INPUT);
                     alert.setHeaderText(null);
-                    alert.setContentText("Please enter a valid rating 0-5");
+                    alert.setContentText(PLEASE_ENTER_A_VALID_RATING_0_5);
                     alert.showAndWait();
-                } else {
-                    reviewList.add(new Review("newuser",leave.getText(),1234, 4.5));
                 }
-            } catch (NumberFormatException f) {
+                else {
+                    reviewList.add(new Review("newuser", leave.getText(),1234, 4.5));
+                }
+            }
+            catch (NumberFormatException f) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Invalid Input");
+                alert.setTitle(INVALID_INPUT);
                 alert.setHeaderText(null);
-                alert.setContentText("Please enter a valid rating 0-5");
+                alert.setContentText(PLEASE_ENTER_A_VALID_RATING_0_5);
                 alert.showAndWait();
             }
         });
     }
 
+    /**
+     * Main method for ReviewView.
+     * @param args Args.
+     */
     public static void main(String[] args) {
         launch(args);
     }
