@@ -18,12 +18,12 @@ This project was developed to provide a centralized platform for gamers to manag
 
 ## Table of Contents
 
-* [Features](https://github.com/Kushallsaraf/CSC207-Group-Project)
-* [Installation](https://github.com/Kushallsaraf/CSC207-Group-Project)
-* [Usage Guide](https://github.com/Kushallsaraf/CSC207-Group-Project)
-* [License](https://github.com/Kushallsaraf/CSC207-Group-Project)
-* [Feedback](https://github.com/Kushallsaraf/CSC207-Group-Project)
-* [Contributing](https://github.com/Kushallsaraf/CSC207-Group-Project)
+* [Features](https://github.com/Kushallsaraf/CSC207-Group-Project#features)
+* [Installation](https://github.com/Kushallsaraf/CSC207-Group-Project#installation)
+* [Usage Guide](https://github.com/Kushallsaraf/CSC207-Group-Project#usage-guide)
+* [License](https://github.com/Kushallsaraf/CSC207-Group-Project#license)
+* [Feedback](https://github.com/Kushallsaraf/CSC207-Group-Project#feedback)
+* [Contributing](https://github.com/Kushallsaraf/CSC207-Group-Project#contributing)
 
 -----
 
