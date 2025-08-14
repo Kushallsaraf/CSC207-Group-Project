@@ -5,7 +5,9 @@ import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserInteractor {
     private final User user;
@@ -18,6 +20,21 @@ public class UserInteractor {
 
     public String getReviewerProfilePicture(String username){
         return dataHandler.getUser(username).getProfilePictureURL();
+
+    }
+
+    public void followUser(String targetUsername){
+
+        if (!this.user.isFollowing(targetUsername)){
+
+        this.user.follow(targetUsername);
+        User targetUser = dataHandler.getUser(targetUsername);
+        targetUser.addToFollowers(user.getUsername());
+        dataHandler.saveUser(user); //update user info on database
+        dataHandler.saveUser(targetUser);//update target user info on database
+
+
+        }
 
     }
 

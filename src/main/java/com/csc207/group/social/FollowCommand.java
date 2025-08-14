@@ -14,18 +14,7 @@ public class FollowCommand implements Command{
 
     @Override
     public void execute() {
-        User loggedIn = interactor.getUser();
-        User target = interactor.getUserByUsername(targetUsername);
-
-        if (loggedIn.isFollowing(targetUsername)) {
-            return;
-        }
-
-        loggedIn.follow(targetUsername);
-        target.addToFollowers(loggedIn.getUsername());
-
-        interactor.saveUser(loggedIn);
-        interactor.saveUser(target);
+        interactor.followUser(targetUsername);
 
     }
 }
