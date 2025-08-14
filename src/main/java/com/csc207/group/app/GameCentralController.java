@@ -1,5 +1,6 @@
 package com.csc207.group.app;
 
+import com.csc207.group.data_access.FirebaseUserRepository;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.User;
 import com.csc207.group.service.GamePageInteractor;
@@ -66,7 +67,7 @@ public class GameCentralController {
         gameService = new GameService();
         RecommendationService recommendationService = new RecommendationService();
         recommendationEngine = new RecommendationEngine(recommendationService, user);
-        userInteractor = new UserInteractor(user, new com.csc207.group.data_access.FirebaseUserDataHandler
+        userInteractor = new UserInteractor(user, new FirebaseUserRepository
                 (new com.csc207.group.cache.FirebaseRestClient()));
         personalProfileView = new PersonalProfileView();
         PersonalProfileInteractor personalProfileInteractor = new PersonalProfileInteractor(userInteractor, gameService);

@@ -1,13 +1,10 @@
 package com.csc207.group.views;
 
-import com.csc207.group.model.GameStore;
 import com.csc207.group.views.Components.DLCcard;
 import javafx.animation.PauseTransition;
-import javafx.application.HostServices;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -19,8 +16,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -28,21 +23,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class GameDetailViewFunc extends VBox {
-    // Constants from the second version for clean code
-    private static final int IMAGE_HEIGHT = 250;
-    private static final int CONTENT_SPACING = 25;
-    private static final int CONSTANT_1 = 30;
-    private static final int CONSTANT_2 = 15;
-    private static final int CONSTANT_3 = 10;
-    private static final int CONSTANT_4 = 8;
-    private static final int CONSTANT_5 = 5;
-    private static final int CONSTANT_6 = 20;
-    private static final int CONSTANT_7 = 300;
-    private static final int CONSTANT_8 = 3;
-    private static final String CONSTANT_9 = "--";
-    private static final int CONSTANT_10 = 40;
-
-    // Member variables from both versions
     private Label title;
     private HBox tagsBox;
     private Label scoreLabel;

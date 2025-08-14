@@ -7,7 +7,7 @@ import com.csc207.group.model.User;
 /**
  * Stores user data from data source and writes data to data source.
  */
-public interface UserDataHandler {
+public interface UserRepository {
 
     /**
      * Checks if a username is already taken.
