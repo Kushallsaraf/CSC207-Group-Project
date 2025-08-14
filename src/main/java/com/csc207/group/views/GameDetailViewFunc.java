@@ -1,10 +1,13 @@
 package com.csc207.group.views;
 
+import com.csc207.group.model.GameStore;
 import com.csc207.group.views.Components.DLCcard;
 import javafx.animation.PauseTransition;
+import javafx.application.HostServices;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -16,6 +19,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -464,5 +469,35 @@ public class GameDetailViewFunc extends VBox {
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(event -> confirmationLabel.setVisible(false));
         delay.play();
+    }
+
+    public void showStorePopup(List<GameStore> stores, HostServices hostServices) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Available Stores");
+
+        VBox popupLayout = new VBox(10);
+        popupLayout.setPadding(new Insets(15));
+        popupLayout.setStyle("-fx-background-color: #2a2a2a;");
+
+        if (stores == null || stores.isEmpty()) {
+            Label noStoresLabel = new Label("No online stores found for this game.");
+            noStoresLabel.setStyle("-fx-text-fill: white;");
+            popupLayout.getChildren().add(noStoresLabel);
+        } else {
+            for (GameStore store : stores) {
+                Button storeButton = new Button("Buy on " + store.getStoreName());
+                storeButton.setStyle("-fx-background-color: #555; -fx-text-fill: white; -fx-font-weight: bold;");
+                storeButton.setOnAction(e -> {
+                    hostServices.showDocument(store.getStoreUrl());
+                    popupStage.close();
+                });
+                popupLayout.getChildren().add(storeButton);
+            }
+        }
+
+        Scene popupScene = new Scene(popupLayout);
+        popupStage.setScene(popupScene);
+        popupStage.showAndWait();
     }
 }

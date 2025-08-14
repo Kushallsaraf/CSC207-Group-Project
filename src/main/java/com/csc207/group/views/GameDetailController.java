@@ -20,7 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,37 +89,23 @@ public class GameDetailController {
                 Integer rawgId = rawgApiClient.findGameIdByName(game.getName());
                 if (rawgId == null) {
                     javafx.application.Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Not Available");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Could not find a store page for this game.");
-                        alert.showAndWait();
+                        view.showStorePopup(new ArrayList<>(), hostServices);
                     });
                     return;
                 }
 
                 List<GameStore> stores = rawgApiClient.getStoresForGame(String.valueOf(rawgId));
-                if (stores != null && !stores.isEmpty()) {
-                    String storeUrl = stores.get(0).getStoreUrl();
-                    javafx.application.Platform.runLater(() -> {
-                        hostServices.showDocument(storeUrl);
-                    });
-                } else {
-                    javafx.application.Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Not Available");
-                        alert.setHeaderText(null);
-                        alert.setContentText("No store pages are available for this game.");
-                        alert.showAndWait();
-                    });
-                }
+                javafx.application.Platform.runLater(() -> {
+                    view.showStorePopup(stores, hostServices);
+                });
+
             } catch (Exception e) {
                 e.printStackTrace();
                 javafx.application.Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
-                    alert.setContentText("An error occurred while trying to find a store page.");
+                    alert.setContentText("An error occurred while trying to find store pages.");
                     alert.showAndWait();
                 });
             }
