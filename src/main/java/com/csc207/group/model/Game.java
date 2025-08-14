@@ -3,19 +3,20 @@ package com.csc207.group.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+public final class Game {
     private String name;
     private List<String> genres;
-    private List <String> developer;
-    private double critic_rating;
-    private double rating_count;
-    private List <String> platforms;
-    private String cover_image;
-    private String age_rating;
-    private String release_date;
-    private List <Integer> DLCs;
-    private List <Review> reviews;
-    private String description; // adding a new attribute
+    private List<String> developer;
+    private double criticRating;
+    private double ratingCount;
+    private List<String> platforms;
+    private String coverImage;
+    private String ageRating;
+    private String releaseDate;
+    private List<Integer> downloadableContent;
+    private List<Review> reviews;
+    private String description;
+    // adding a new attribute
 
     private int gameid;
 
@@ -35,13 +36,13 @@ public class Game {
         this.name = "";
         this.genres = new ArrayList<String>();
         this.developer = new ArrayList<String>();
-        this.critic_rating = 0.0;
-        this.rating_count = 0.0;
+        this.criticRating = 0.0;
+        this.ratingCount = 0.0;
         this.platforms = new ArrayList<String>();
-        this.cover_image = "";
-        this.age_rating = "";
-        this.release_date = "";
-        this.DLCs = new ArrayList<Integer>();
+        this.coverImage = "";
+        this.ageRating = "";
+        this.releaseDate = "";
+        this.downloadableContent = new ArrayList<Integer>();
         this.reviews = new ArrayList<Review>();
         this.gameid = 0;
     }
@@ -54,57 +55,145 @@ public class Game {
         return this.gameid;
     }
 
+    /**
+     * Sets name for a game.
+     * @param name the name.
+     */
     public void setName(String name) {
-        this.name = name != null ? name : "";
+        if (name != null) {
+            this.name = name;
+        }
+        else {
+            this.name = "";
+        }
     }
 
+    /**
+     * Sets the genres for a game.
+     * @param genres list of genres.
+     */
     public void setGenres(List<String> genres) {
-        this.genres = genres != null ? genres : new ArrayList<String>();
+        if (genres != null) {
+            this.genres = genres;
+        }
+        else {
+            this.genres = new ArrayList<String>();
+        }
     }
 
+    /**
+     * Sets the developer for a given game.
+     * @param developer developer list
+     */
     public void setDeveloper(List<String> developer) {
-        this.developer = developer != null ? developer : new ArrayList<String>();
+        if (developer != null) {
+            this.developer = developer;
+        }
+        else {
+            this.developer = new ArrayList<String>();
+        }
     }
 
-    public void setCritic_rating(double critic_rating) {
-        this.critic_rating = critic_rating;
+    public void setCriticRating(double criticRating) {
+        this.criticRating = criticRating;
     }
 
-    public void setRating_count(double rating_count) {
-        this.rating_count = rating_count;
+    public void setRatingCount(double ratingCount) {
+        this.ratingCount = ratingCount;
     }
 
+    /**
+     * Sets the platforms for a given game.
+     * @param platforms the platforms.
+     */
     public void setPlatforms(List<String> platforms) {
-        this.platforms = platforms != null ? platforms : new ArrayList<String>();
-    }
-    public void setDescription(String description) {this.description = description;} // added a new setter for description
-
-    public void setCover_image(String cover_image) {
-        this.cover_image = cover_image != null ? cover_image : "";
-    }
-
-    public void setAge_rating(String age_rating) {
-        this.age_rating = age_rating != null ? age_rating : "";
+        if (platforms != null) {
+            this.platforms = platforms;
+        }
+        else {
+            this.platforms = new ArrayList<String>();
+        }
     }
 
-    public void setRelease_date(String release_date) {
-        this.release_date = release_date != null ? release_date : "";
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    // added a new setter for description
+
+    /**
+     * Sets cover image for a game.
+     * @param coverImage The cover image.
+     */
+    public void setCoverImage(String coverImage) {
+        if (coverImage != null) {
+            this.coverImage = coverImage;
+        }
+        else {
+            this.coverImage = "";
+        }
     }
 
-    public void setDLCs(List<Integer> DLCs) {
-        this.DLCs = DLCs != null ? DLCs : new ArrayList<Integer>();
+    /**
+     * Sets age rating for a game.
+     * @param ageRating the age rating.
+     */
+    public void setAgeRating(String ageRating) {
+        if (ageRating != null) {
+            this.ageRating = ageRating;
+        }
+        else {
+            this.ageRating = "";
+        }
     }
 
+    /**
+     * Sets release date.
+     * @param releaseDate The release date.
+     */
+    public void setReleaseDate(String releaseDate) {
+        if (releaseDate != null) {
+            this.releaseDate = releaseDate;
+        }
+        else {
+            this.releaseDate = "";
+        }
+    }
+
+    /**
+     * Sets Downloadable Content for a game.
+     * @param downloadableContent The downloadable content.
+     */
+    public void setDownloadableContent(List<Integer> downloadableContent) {
+        if (downloadableContent != null) {
+            this.downloadableContent = downloadableContent;
+        }
+        else {
+            this.downloadableContent = new ArrayList<Integer>();
+        }
+    }
+
+    /**
+     * Sets Reviews parameter.
+     * @param reviews reviews list.
+     */
     public void setReviews(List<Review> reviews) {
-        this.reviews = reviews != null ? reviews : new ArrayList<Review>();
+        if (reviews != null) {
+            this.reviews = reviews;
+        }
+        else {
+            this.reviews = new ArrayList<Review>();
+        }
     }
 
+    /**
+     * Appends reviews to the review attribute.
+     * @param review a review.
+     */
     public void appendReview(Review review) {
         if (review != null) {
             reviews.add(review);
         }
     }
-
 
     public String getName() {
         return name;
@@ -120,51 +209,53 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game Details: " + name +
-                ", Genres: " + genres +
-                ", Developer: " + developer +
-                ", Critic Rating: " + critic_rating +
-                ", Rating Count: " + rating_count +
-                ", Platforms: " + platforms +
-                ", Cover Image: " + cover_image +
-                ", Age Rating: " + age_rating +
-                ", Release Date: " + release_date +
-                ", DLCs: " + DLCs;
+        return "Game Details: " + name
+                + ", Genres: " + genres
+                + ", Developer: " + developer
+                + ", Critic Rating: " + criticRating
+                + ", Rating Count: " + ratingCount
+                + ", Platforms: " + platforms
+                + ", Cover Image: " + coverImage
+                + ", Age Rating: " + ageRating
+                + ", Release Date: " + releaseDate
+                + ", DLCs: " + downloadableContent;
     }
 
-    public double getCritic_rating() {
-        return critic_rating;
+    public double getCriticRating() {
+        return criticRating;
     }
 
-    public double getRating_count() {
-        return rating_count;
+    public double getRatingCount() {
+        return ratingCount;
     }
 
     public List<String> getPlatforms() {
         return platforms;
     }
 
-    public String getCover_image() {
-        return cover_image;
+    public String getCoverImage() {
+        return coverImage;
     }
 
-    public String getAge_rating() {
-        return age_rating;
+    public String getAgeRating() {
+        return ageRating;
     }
 
-    public String getRelease_date() {
-        return release_date;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public List <Integer> getDLCs() {
-        return DLCs;
+    public List<Integer> getDownloadableContent() {
+        return downloadableContent;
     }
 
-    public List <Review> getReviews() {
+    public List<Review> getReviews() {
         return reviews;
     }
 
-    public String getDescription() {return description;} // added a new getter for description
-
+    public String getDescription() {
+        return description;
+    }
+    // added a new getter for description
 
 }

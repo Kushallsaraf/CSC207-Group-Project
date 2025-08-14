@@ -41,7 +41,6 @@ public class DeveloperView {
         // You can add more developers here
         // else if ("Bethesda".equals(developerName)) { ... }
 
-
         return gridPane;
     }
 

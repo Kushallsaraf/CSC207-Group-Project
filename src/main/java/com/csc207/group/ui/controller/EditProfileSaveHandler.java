@@ -5,7 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-/**Handles the logic for edit button press on user profile view
+/**
+ * Handles the logic for edit button press on user profile view.
  *
  */
 public class EditProfileSaveHandler implements EventHandler<ActionEvent> {

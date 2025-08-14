@@ -1,5 +1,7 @@
 package com.csc207.group.ui;
 
+import java.util.List;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,12 +13,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import java.util.List;
 
+/**
+ * Represents the home view for the Game Central application.
+ * Allows searching for games, displaying results, and showing recommendations.
+ * Designed for extension if needed.
+ */
 public class HomeView implements View {
+
+    private static final int CONSTANT_1 = 10;
+    private static final int CONSTANT_2 = 15;
+    private static final int CONSTANT_3 = 20;
+    private static final int CONSTANT_4 = 400;
 
     private final VBox layout;
     private final VBox resultsContainer;
@@ -24,21 +34,22 @@ public class HomeView implements View {
     private final Button searchButton;
     private final Button genreSearchButton;
 
+    /**
+     * Constructs the home view UI.
+     */
     public HomeView() {
-        // Main container with dark theme
-        layout = new VBox(20);
+        layout = new VBox(CONSTANT_3);
         layout.setStyle("-fx-padding: 20; -fx-background-color: #222;");
         layout.setAlignment(Pos.TOP_CENTER);
 
-        // Welcome copy
         Label welcomeLabel = new Label("WELCOME TO GAME CENTRAL!");
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         Label subLabel = new Label("Start searching below to find new games.");
         subLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #ccc;");
 
-        // --- Search Bar ---
-        HBox searchBar = new HBox(10);
+        // Search bar
+        HBox searchBar = new HBox(CONSTANT_1);
         searchBar.setAlignment(Pos.CENTER);
 
         searchField = new TextField();
@@ -53,50 +64,73 @@ public class HomeView implements View {
 
         searchBar.getChildren().addAll(searchField, searchButton, genreSearchButton);
 
-        // --- Event handler for pressing Enter in the search field ---
-        searchField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    searchButton.fire();
-                }
+        // Press Enter to fire search
+        searchField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                searchButton.fire();
             }
         });
 
-        // --- Results Container ---
-        resultsContainer = new VBox(15);
-        resultsContainer.setPadding(new Insets(15));
+        // Results container
+        resultsContainer = new VBox(CONSTANT_2);
+        resultsContainer.setPadding(new Insets(CONSTANT_2));
 
         ScrollPane scrollPane = new ScrollPane(resultsContainer);
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background-color: transparent; -fx-background: #333;");
-        scrollPane.setPrefHeight(400);
+        scrollPane.setPrefHeight(CONSTANT_4);
 
-        // Layout
         layout.getChildren().addAll(welcomeLabel, subLabel, searchBar, scrollPane);
     }
 
-    // Hooks for controller
+    /**
+     * Sets the event handler for the search button.
+     *
+     * @param handler the ActionEvent handler
+     */
     public void setSearchButtonHandler(EventHandler<ActionEvent> handler) {
         searchButton.setOnAction(handler);
     }
 
+    /**
+     * Sets the event handler for the genre search button.
+     *
+     * @param handler the ActionEvent handler
+     */
     public void setGenreSearchButtonHandler(EventHandler<ActionEvent> handler) {
         genreSearchButton.setOnAction(handler);
     }
 
+    /**
+     * Returns the current search query from the search field.
+     *
+     * @return the search query as a String
+     */
     public String getSearchQuery() {
         return searchField.getText().trim();
     }
 
+    /**
+     * Clears all game results currently displayed.
+     */
     public void clearResults() {
         resultsContainer.getChildren().clear();
     }
 
-    public void addResult(Node n) {
-        resultsContainer.getChildren().add(n);
+    /**
+     * Adds a single game result node to the results container.
+     *
+     * @param node the Node representing a game result
+     */
+    public void addResult(Node node) {
+        resultsContainer.getChildren().add(node);
     }
 
+    /**
+     * Displays a list of game result nodes. If the list is empty or null, shows a "No results" message.
+     *
+     * @param resultNodes the list of result Nodes
+     */
     public void displayGameResults(List<Node> resultNodes) {
         resultsContainer.getChildren().clear();
 
@@ -104,7 +138,6 @@ public class HomeView implements View {
             Label noResultsLabel = new Label("No results found.");
             noResultsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
             resultsContainer.getChildren().add(noResultsLabel);
-            return;
         }
 
         resultsContainer.getChildren().addAll(resultNodes);
@@ -126,35 +159,38 @@ public class HomeView implements View {
         resultsContainer.getChildren().clear();
     }
 
+    /**
+     * Displays a recommendation section at the bottom of the home view.
+     *
+     * @param recNodes list of recommendation nodes to display
+     * @param message  title message for the recommendation section
+     */
     public void setRecommendations(List<Node> recNodes, String message) {
-        // Remove any existing recommendation section first
-        // This ensures we don't keep stacking old sections
-        layout.getChildren().removeIf(node -> node.getUserData() != null
-                && "recommendations-section".equals(node.getUserData()));
+        layout.getChildren().removeIf(node -> {
+            Object userData = node.getUserData();
+            return userData != null && "recommendations-section".equals(userData);
+        });
 
-        // Section container
-        VBox section = new VBox(10);
-        section.setUserData("recommendations-section"); // marker for easy removal
+        VBox section = new VBox(CONSTANT_1);
+        section.setUserData("recommendations-section");
         section.setAlignment(Pos.TOP_LEFT);
 
-        // Title label
         Label title = new Label(message);
         title.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
 
-        // Horizontal container for recommendation cards
-        HBox recContainer = new HBox(10);
-        recContainer.setPadding(new Insets(10));
+        HBox recContainer = new HBox(CONSTANT_1);
+        recContainer.setPadding(new Insets(CONSTANT_1));
         recContainer.setAlignment(Pos.CENTER_LEFT);
 
         if (recNodes != null && !recNodes.isEmpty()) {
             recContainer.getChildren().addAll(recNodes);
-        } else {
+        }
+        else {
             Label noRec = new Label("No recommendations available.");
             noRec.setStyle("-fx-text-fill: #ccc; -fx-font-size: 14px;");
             recContainer.getChildren().add(noRec);
         }
 
-        // ScrollPane for horizontal scrolling
         ScrollPane scrollPane = new ScrollPane(recContainer);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -163,12 +199,6 @@ public class HomeView implements View {
         scrollPane.setPannable(true);
 
         section.getChildren().addAll(title, scrollPane);
-
-        // Add it at the bottom of the main layout
         layout.getChildren().add(section);
     }
-
-
-
-
 }

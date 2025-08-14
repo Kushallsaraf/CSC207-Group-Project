@@ -1,18 +1,26 @@
 package com.csc207.group.data_access;
 
-import com.csc207.group.cache.FirebaseRestClient;
-import com.csc207.group.model.Review;
-import com.csc207.group.model.User;
-import com.csc207.group.auth.UserDataHandler;
-import kong.unirest.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.csc207.group.auth.UserDataHandler;
+import com.csc207.group.cache.FirebaseRestClient;
+import com.csc207.group.model.Review;
+import com.csc207.group.model.User;
+import kong.unirest.json.JSONObject;
+
 public class FirebaseUserDataHandler implements UserDataHandler {
 
+    public static final String USERS = "Users/";
+    public static final String WISHLIST = "wishlist";
+    public static final String FOLLOWERS = "followers";
+    public static final String FOLLOWING = "following";
+    public static final String LIBRARY = "library";
+    public static final String REVIEWS = "reviews";
+    public static final String BIO = "bio";
+    public static final String PROFILE_PICTURE_URL = "profile-picture-url";
     private final FirebaseRestClient client;
 
     public FirebaseUserDataHandler(FirebaseRestClient client) {
@@ -21,7 +29,7 @@ public class FirebaseUserDataHandler implements UserDataHandler {
 
     @Override
     public boolean usernameExists(String username) {
-        return client.hasPath("Users/" + username);
+        return client.hasPath(USERS + username);
     }
 
     @Override
@@ -31,54 +39,51 @@ public class FirebaseUserDataHandler implements UserDataHandler {
         }
 
         String userJson = "{ \"pwd\": \"" + hashedPassword + "\" }";
-        client.putData("Users/" + username, userJson);
+        client.putData(USERS + username, userJson);
 
         System.out.println("User '" + username + "' registered.");
     }
 
     @Override
     public User getUser(String usernameInput) {
-        String json = client.getData("Users/" + usernameInput);
+        String json = client.getData(USERS + usernameInput);
 
-        if (json != null && !json.equals("null")) {
+        if (json != null && !"null".equals(json)) {
             JSONObject jsonObject = new JSONObject(json);
             String pwd = jsonObject.getString("pwd");
 
             User user = new User(usernameInput, pwd);
 
-
-            if (jsonObject.has("wishlist")) {
-                for (Object id : jsonObject.getJSONArray("wishlist")) {
+            if (jsonObject.has(WISHLIST)) {
+                for (Object id : jsonObject.getJSONArray(WISHLIST)) {
                     user.getWishlist().add((Integer) id);
                 }
             }
 
-            if (jsonObject.has("followers") && !jsonObject.isNull("followers")) {
+            if (jsonObject.has(FOLLOWERS) && !jsonObject.isNull(FOLLOWERS)) {
                 List<String> followersList = new ArrayList<>();
-                for (Object u : jsonObject.getJSONArray("followers")) {
+                for (Object u : jsonObject.getJSONArray(FOLLOWERS)) {
                     followersList.add((String) u);
                 }
                 user.setFollowers(followersList);
             }
 
-            if (jsonObject.has("following") && !jsonObject.isNull("following")) {
+            if (jsonObject.has(FOLLOWING) && !jsonObject.isNull(FOLLOWING)) {
                 List<String> followingList = new ArrayList<>();
-                for (Object u : jsonObject.getJSONArray("following")) {
+                for (Object u : jsonObject.getJSONArray(FOLLOWING)) {
                     followingList.add((String) u);
                 }
                 user.setFollowing(followingList);
             }
 
-
-            if (jsonObject.has("library")) {
-                for (Object id : jsonObject.getJSONArray("library")) {
+            if (jsonObject.has(LIBRARY)) {
+                for (Object id : jsonObject.getJSONArray(LIBRARY)) {
                     user.getLibrary().add((Integer) id);
                 }
             }
 
-
-            if (jsonObject.has("reviews")) {
-                JSONObject reviewsJson = jsonObject.getJSONObject("reviews");
+            if (jsonObject.has(REVIEWS)) {
+                JSONObject reviewsJson = jsonObject.getJSONObject(REVIEWS);
                 for (String gameIdStr : reviewsJson.keySet()) {
                     JSONObject reviewJson = reviewsJson.getJSONObject(gameIdStr);
 
@@ -91,11 +96,11 @@ public class FirebaseUserDataHandler implements UserDataHandler {
                     user.getReviews().put(gameid, review);
                 }
             }
-            if (jsonObject.has("bio")) {
-                user.setBio(jsonObject.getString("bio"));
+            if (jsonObject.has(BIO)) {
+                user.setBio(jsonObject.getString(BIO));
             }
-            if (jsonObject.has("profile-picture-url")) {
-                user.setProfilePictureURL(jsonObject.getString("profile-picture-url"));
+            if (jsonObject.has(PROFILE_PICTURE_URL)) {
+                user.setProfilePictureUrl(jsonObject.getString(PROFILE_PICTURE_URL));
             }
 
             return user;
@@ -110,36 +115,32 @@ public class FirebaseUserDataHandler implements UserDataHandler {
         JSONObject userJson = new JSONObject();
         List<String> following = user.getFollowing();
         List<String> followers = user.getFollowers();
-        userJson.put("followers", followers);
-        userJson.put("following", following);
+        userJson.put(FOLLOWERS, followers);
+        userJson.put(FOLLOWING, following);
         userJson.put("pwd", user.getHashedPassword());
 
+        userJson.put(WISHLIST, user.getWishlist());
 
-        userJson.put("wishlist", user.getWishlist());
-
-
-        userJson.put("library", user.getLibrary());
-
+        userJson.put(LIBRARY, user.getLibrary());
 
         JSONObject reviewsJson = new JSONObject();
         for (Map.Entry<Integer, Review> entry : user.getReviews().entrySet()) {
             JSONObject reviewJson = new JSONObject();
             Review review = entry.getValue();
 
-            reviewJson.put("userid", review.getUserid());
+            reviewJson.put("userid", review.getUserId());
             reviewJson.put("content", review.getContent());
-            reviewJson.put("gameid", review.getGameid());
+            reviewJson.put("gameid", review.getGameId());
             reviewJson.put("rating", review.getRating());
 
             reviewsJson.put(String.valueOf(entry.getKey()), reviewJson);
         }
 
-        userJson.put("reviews", reviewsJson);
-        userJson.put("bio", user.getBio());
-        userJson.put("profile-picture-url", user.getProfilePictureURL());
+        userJson.put(REVIEWS, reviewsJson);
+        userJson.put(BIO, user.getBio());
+        userJson.put(PROFILE_PICTURE_URL, user.getProfilePictureUrl());
 
-
-        client.putData("Users/" + user.getUsername(), userJson.toString());
+        client.putData(USERS + user.getUsername(), userJson.toString());
 
     }
 }

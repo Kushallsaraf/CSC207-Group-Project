@@ -5,12 +5,12 @@ import com.csc207.group.data_access.FirebaseUserDataHandler;
 import com.csc207.group.auth.*;
 import com.csc207.group.app.GameCentralController;
 import javafx.stage.Stage;
-import com.csc207.group.ui.controller.JavaFXUserAuthenticationController;
+import com.csc207.group.ui.controller.JavaFxUserAuthenticationController;
 
-public class JavaFXUserAuthenticator{
+public class JavaFxUserAuthenticator {
 
     private JavaFXUserAuthenticationView view;
-    private JavaFXUserAuthenticationController controller;
+    private JavaFxUserAuthenticationController controller;
     private UserDataHandler dataHandler;
     private LoginPresenter loginPresenter;
     private LoginInteractor loginInteractor;
@@ -19,7 +19,7 @@ public class JavaFXUserAuthenticator{
     private GameCentralController gameCentralController;
 
 
-    public JavaFXUserAuthenticator(Stage stage, GameCentralController gameCentralController){
+    public JavaFxUserAuthenticator(Stage stage, GameCentralController gameCentralController){
         view = new JavaFXUserAuthenticationView(stage);
         this.gameCentralController = gameCentralController;
         gameCentralController.setUserAuthenticationView(view);
@@ -31,12 +31,9 @@ public class JavaFXUserAuthenticator{
         signupPresenter = new SignupPresenter(view);
         loginInteractor = new LoginInteractor(dataHandler, loginPresenter);
         signupInteractor = new SignupInteractor(dataHandler, signupPresenter);
-        controller = new JavaFXUserAuthenticationController(view, loginInteractor,
+        controller = new JavaFxUserAuthenticationController(view, loginInteractor,
                 signupInteractor, gameCentralController);
     }
-
-
-
 
     public void run() {
 

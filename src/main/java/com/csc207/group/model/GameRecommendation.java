@@ -1,17 +1,16 @@
 package com.csc207.group.model;
 
-/**A Game model that stores relevant game data for recommendations
+/**
+ * A Game model that stores relevant game data for recommendations.
  *
  */
-public class GameRecommendation {
+public final class GameRecommendation {
 
     private int year;
     private String title;
     private String coverImage;
     private int gameid;
     private double rating;
-
-
 
     public GameRecommendation(int gameid, String title, String coverImage, int year, double rating) {
         this.gameid = gameid;
@@ -63,15 +62,13 @@ public class GameRecommendation {
 
     @Override
     public String toString() {
-        return "GameRecommendation{" +
-                "year=" + year +
-                ", title='" + title + '\'' +
-                ", coverImage='" + coverImage + '\'' +
-                ", gameid=" + gameid +
-                ", rating=" + rating +
-                '}';
+        return "GameRecommendation{"
+                + "year="
+                + year + ", title='"
+                + title + '\''
+                + ", coverImage='" + coverImage + '\''
+                + ", gameid=" + gameid + ", rating="
+                + rating + '}';
     }
-
-
 
 }

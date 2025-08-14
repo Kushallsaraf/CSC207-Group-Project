@@ -6,8 +6,7 @@ import javafx.event.EventHandler;
 public class ReviewSubmissionHandler implements EventHandler<ActionEvent> {
     private GamePageController gamePageController;
 
-
-    public ReviewSubmissionHandler(GamePageController gamePageController){
+    public ReviewSubmissionHandler(GamePageController gamePageController) {
         this.gamePageController = gamePageController;
     }
 
@@ -16,7 +15,4 @@ public class ReviewSubmissionHandler implements EventHandler<ActionEvent> {
         gamePageController.handleReviewSubmission();
 
     }
-
-
-
 }

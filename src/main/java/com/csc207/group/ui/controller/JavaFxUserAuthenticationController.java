@@ -1,25 +1,26 @@
 package com.csc207.group.ui.controller;
 
+import java.io.IOException;
+
+import com.csc207.group.app.GameCentralController;
 import com.csc207.group.auth.LoginInteractor;
 import com.csc207.group.auth.SignupInteractor;
-import com.csc207.group.app.GameCentralController;
+import com.csc207.group.ui.JavaFXUserAuthenticationView;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
-import com.csc207.group.ui.JavaFXUserAuthenticationView;
 
-import java.io.IOException;
-
-public class JavaFXUserAuthenticationController {
+public class JavaFxUserAuthenticationController {
 
     private JavaFXUserAuthenticationView view;
     private LoginInteractor loginInteractor;
     private SignupInteractor signupInteractor;
     private GameCentralController gameCentralController;
 
-    public JavaFXUserAuthenticationController(JavaFXUserAuthenticationView view, LoginInteractor loginInteractor,
-                                              SignupInteractor signupInteractor, GameCentralController gameCentralController){
+    public JavaFxUserAuthenticationController(JavaFXUserAuthenticationView view, LoginInteractor loginInteractor,
+                                              SignupInteractor signupInteractor,
+                                              GameCentralController gameCentralController) {
         this.view = view;
         this.loginInteractor = loginInteractor;
         this.signupInteractor = signupInteractor;
@@ -28,7 +29,7 @@ public class JavaFXUserAuthenticationController {
         connectSignupButton();
     }
 
-    private void connectLoginButton(){
+    private void connectLoginButton() {
         this.view.getLoginButton().setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
@@ -38,11 +39,10 @@ public class JavaFXUserAuthenticationController {
 
     }
 
-    private void handleLogin(){
+    private void handleLogin() {
         String username = this.view.getUsernameInput();
         String password = this.view.getPasswordInput();
-        if (this.loginInteractor.handleLogin(username, password)){
-
+        if (this.loginInteractor.handleLogin(username, password)) {
             PauseTransition delay = new PauseTransition(Duration.seconds(1));
             delay.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
@@ -56,7 +56,7 @@ public class JavaFXUserAuthenticationController {
         }
     }
 
-    private void connectSignupButton(){
+    private void connectSignupButton() {
         this.view.getSignupButton().setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
@@ -66,13 +66,14 @@ public class JavaFXUserAuthenticationController {
 
     }
 
-    private void handleSignup(){
+    private void handleSignup() {
         String username = this.view.getUsernameInput();
         String password = this.view.getPasswordInput();
         try {
             this.signupInteractor.handleSignup(username, password);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }
+        catch (IOException exception) {
+            throw new RuntimeException(exception);
         }
     }
 }

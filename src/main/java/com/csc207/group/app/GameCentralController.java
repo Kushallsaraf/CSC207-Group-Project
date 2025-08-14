@@ -2,10 +2,18 @@ package com.csc207.group.app;
 
 import com.csc207.group.model.Game;
 import com.csc207.group.model.User;
-import com.csc207.group.service.*;
+import com.csc207.group.service.GamePageInteractor;
+import com.csc207.group.service.GameService;
+import com.csc207.group.service.NewsService;
+import com.csc207.group.service.PersonalProfileInteractor;
+import com.csc207.group.service.UserInteractor;
+import com.csc207.group.service.UserProfileInteractor;
 import com.csc207.group.service.recommendation.RecommendationEngine;
 import com.csc207.group.service.recommendation.RecommendationService;
-import com.csc207.group.ui.*;
+import com.csc207.group.ui.HomeView;
+import com.csc207.group.ui.JavaFXUserAuthenticationView;
+import com.csc207.group.ui.PersonalProfileView;
+import com.csc207.group.ui.UserProfileView;
 import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.ui.controller.PersonalProfileController;
 import com.csc207.group.ui.controller.UserProfileController;
@@ -127,7 +135,7 @@ public class GameCentralController {
 
     private void showNewsView() {
         NewsService newsService = new NewsService();
-        NewsView newsView = new NewsView(newsService.ArticleBuilder(), url -> hostServices.showDocument(url));
+        NewsView newsView = new NewsView(newsService.articleBuilder(), url -> hostServices.showDocument(url));
         setCenterView(newsView.getView());
     }
 

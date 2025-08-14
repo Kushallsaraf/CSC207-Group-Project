@@ -8,35 +8,32 @@ public interface UserAuthenticationView {
 
     /**
      *
-     * @return a string of the username field input
+     * @return a string of the username field input.
      */
     public String getUsernameInput();
 
-
     /**
      *
-     * @return a string of the password field input
+     * @return a string of the password field input.
      *
      */
     public String getPasswordInput();
 
-
-    /** Makes the view visible
-     *
+    /**
+     * Makes the view visible.
      */
     public void display();
 
-    /**Update the message label
-     *
+    /**
+     * Update the message label.
+     * @param message that we want to display
      */
     public void updateMessageView(String message);
 
-
-    /**Closes the view
-     *
+    /**
+     * Closes the view.
      */
     public void close();
-
 
     public void clearUsernameAndPasswordFields();
 

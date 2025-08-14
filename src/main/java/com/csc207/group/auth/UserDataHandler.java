@@ -1,29 +1,39 @@
 package com.csc207.group.auth;
 
-import com.csc207.group.model.User;
-
 import java.io.IOException;
 
-/**Stores user data from data source and writes data to data source.
- *
+import com.csc207.group.model.User;
+
+/**
+ * Stores user data from data source and writes data to data source.
  */
 public interface UserDataHandler {
 
-    /**Checks if a username is already taken
-     *
-     * @param username
-     * @return
+    /**
+     * Checks if a username is already taken.
+     * @param username The username of the user.
+     * @return whether the username exists
      */
-    public boolean usernameExists(String username);
+    boolean usernameExists(String username);
 
-    public void registerUser(String username, String hashedPassword) throws IOException;
+    /**
+     * Registers a user.
+     * @param username Username for a user.
+     * @param hashedPassword The hashed password for a user.
+     * @throws IOException if error writing user data.
+     */
+    void registerUser(String username, String hashedPassword) throws IOException;
 
+    /**
+     * Gets a user.
+     * @param usernameInput the input for username.
+     * @return Returns a user.
+     */
+    User getUser(String usernameInput);
 
-    public User getUser(String usernameInput);
-
-    /** Updates the database with current user info
-     *
-     * @param user
+    /**
+     * Updates the database with current user info.
+     * @param user the given user.
      */
     void saveUser(User user);
 }

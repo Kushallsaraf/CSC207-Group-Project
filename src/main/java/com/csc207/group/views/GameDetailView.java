@@ -84,7 +84,7 @@ public class GameDetailView {
         VBox synopsisBox = createSection("Synopsis:", "Step into the shoes of V, a cyberpunk mercenary for hire and do what it takes to make a name for yourself in Night City, a megalopolis obsessed with power, glamour, and body modification. Legends are made here. What will yours be?");
 
         // --- OVERVIEW ---
-        VBox overviewBox = createOverviewSection(developerClickHandler); // Pass the handler
+        VBox overviewBox = createOverviewSection(developerClickHandler);
 
         // --- FOOTER BUTTONS ---
         HBox footerButtons = new HBox(20);
@@ -138,7 +138,7 @@ public class GameDetailView {
         grid.add(createOverviewRow("MSRP:"), 0, 0);
         grid.add(createOverviewRow("$79.99"), 1, 0);
         grid.add(createOverviewRow("Developer:"), 0, 1);
-        grid.add(devLabel, 1, 1); // Add the clickable label
+        grid.add(devLabel, 1, 1);
         grid.add(createOverviewRow("Release Date:"), 0, 2);
         grid.add(createOverviewRow("December 10, 2020"), 1, 2);
         grid.add(createOverviewRow("Platforms:"), 0, 3);

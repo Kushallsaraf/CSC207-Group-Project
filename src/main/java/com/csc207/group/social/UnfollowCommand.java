@@ -3,7 +3,7 @@ package com.csc207.group.social;
 import com.csc207.group.model.User;
 import com.csc207.group.service.UserInteractor;
 
-public class UnfollowCommand implements Command{
+public class UnfollowCommand implements Command {
     private final UserInteractor interactor;
     private final String targetUsername;
 
@@ -26,8 +26,6 @@ public class UnfollowCommand implements Command{
 
         interactor.saveUser(loggedIn);
         interactor.saveUser(target);
-
     }
-
 
 }

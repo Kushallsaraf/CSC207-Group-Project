@@ -1,11 +1,12 @@
 package com.csc207.group.service;
-import com.csc207.group.model.GamePreview;
-import com.csc207.group.model.LibraryEntry;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersonalProfileInteractor {
+import com.csc207.group.model.GamePreview;
+import com.csc207.group.model.LibraryEntry;
+
+public final class PersonalProfileInteractor {
 
     private final UserInteractor userInteractor;
     private final GameService gameService;
@@ -18,17 +19,28 @@ public class PersonalProfileInteractor {
         loadPreviews();
         loadEntries();
     }
-    public Map<Integer, GamePreview> getPreviews(){
+
+    public Map<Integer, GamePreview> getPreviews() {
         return this.previews;
     }
-    public Map<Integer, LibraryEntry> getEntries(){
+
+    public Map<Integer, LibraryEntry> getEntries() {
         return this.entries;
     }
 
-    public void removePreview(Integer id){
+    /**
+     * Removes preview.
+     * @param id id.
+     */
+    public void removePreview(Integer id) {
         previews.remove(id);
     }
-    public void removeEntry(Integer id){
+
+    /**
+     * Removes entry.
+     * @param id id.
+     */
+    public void removeEntry(Integer id) {
         entries.remove(id);
     }
 
@@ -41,20 +53,20 @@ public class PersonalProfileInteractor {
     }
 
     public String getProfilePictureUrl() {
-        return userInteractor.getUser().getProfilePictureURL();
+        return userInteractor.getUser().getProfilePictureUrl();
     }
 
-    private void loadPreviews(){
+    private void loadPreviews() {
         previews = new HashMap<>();
-        for (Integer item: this.userInteractor.getUser().getWishlist()){
+        for (Integer item: this.userInteractor.getUser().getWishlist()) {
             previews.put(item, gameService.getGamePreviewById(item));
 
         }
     }
 
-    private void loadEntries(){
+    private void loadEntries() {
         entries = new HashMap<>();
-        for (Integer item: this.userInteractor.getUser().getLibrary()){
+        for (Integer item: this.userInteractor.getUser().getLibrary()) {
             entries.put(item, gameService.getLibraryEntryById(item));
         }
     }
@@ -63,11 +75,13 @@ public class PersonalProfileInteractor {
         return this.gameService;
     }
 
-    public void reload(){
+    /**
+     * Reload entries and previews.
+     */
+    public void reload() {
         loadEntries();
         loadPreviews();
     }
-
 
 }
 
