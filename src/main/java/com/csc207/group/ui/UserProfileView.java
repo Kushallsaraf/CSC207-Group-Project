@@ -19,6 +19,3 @@ public class UserProfileView extends AbstractProfileView {
         this.followButton.setText(status);
     }
 }
-
-
-

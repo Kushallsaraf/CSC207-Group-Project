@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 
 public class DLCcard {
     private static VBox card;
+
     public DLCcard(DLC dlc) {
         card = new VBox();
         card = new VBox(5);

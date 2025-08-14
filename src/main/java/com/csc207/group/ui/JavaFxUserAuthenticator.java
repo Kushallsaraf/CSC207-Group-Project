@@ -7,7 +7,7 @@ import com.csc207.group.app.GameCentralController;
 import javafx.stage.Stage;
 import com.csc207.group.ui.controller.JavaFXUserAuthenticationController;
 
-public class JavaFXUserAuthenticator{
+public class JavaFxUserAuthenticator {
 
     private JavaFXUserAuthenticationView view;
     private JavaFXUserAuthenticationController controller;
@@ -19,7 +19,7 @@ public class JavaFXUserAuthenticator{
     private GameCentralController gameCentralController;
 
 
-    public JavaFXUserAuthenticator(Stage stage, GameCentralController gameCentralController){
+    public JavaFxUserAuthenticator(Stage stage, GameCentralController gameCentralController){
         view = new JavaFXUserAuthenticationView(stage);
         this.gameCentralController = gameCentralController;
         gameCentralController.setUserAuthenticationView(view);
@@ -34,9 +34,6 @@ public class JavaFXUserAuthenticator{
         controller = new JavaFXUserAuthenticationController(view, loginInteractor,
                 signupInteractor, gameCentralController);
     }
-
-
-
 
     public void run() {
 
