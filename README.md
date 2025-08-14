@@ -3,6 +3,11 @@
 ## Authors and Contributors
 
 This project was created by the **Game Central Team**.
+* Kushall Saraf
+* Saad Q
+* Tabish Khan
+* Rohan Singh
+* Yash Ingale
 
 ## Project Overview
 
