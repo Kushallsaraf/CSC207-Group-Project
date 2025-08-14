@@ -80,6 +80,24 @@ public final class HomeController {
         });
     }
 
+    public List<Node> searchByGenre(String query) {
+        List<Node> resultNodes = new ArrayList<>();
+        try {
+            List<Game> games = genreService.getGamesByGenre(query);
+            for (Game game : games) {
+                if (game.getGameid() != 0) {
+                    GamePreview preview = gameService.getGamePreviewById(game.getGameid());
+                    if (preview != null) {
+                        resultNodes.add(createGamePreviewNode(preview));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultNodes;
+    }
+
     /**
      * Set's recomendations.
      */

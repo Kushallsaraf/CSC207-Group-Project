@@ -13,6 +13,20 @@ public final class UserInteractor {
         this.dataHandler = dataHandler;
     }
 
+    public void followUser(String targetUsername) {
+
+        if (!this.user.isFollowing(targetUsername)) {
+
+            this.user.follow(targetUsername);
+            User targetUser = dataHandler.getUser(targetUsername);
+            targetUser.addToFollowers(user.getUsername());
+            dataHandler.saveUser(user);
+            dataHandler.saveUser(targetUser);
+
+        }
+
+    }
+
     /**
      * Gets reviewer profile picture.
      * @param username username of reviewer.

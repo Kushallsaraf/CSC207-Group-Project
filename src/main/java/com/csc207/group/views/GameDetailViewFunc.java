@@ -1,9 +1,7 @@
 package com.csc207.group.views;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
+import com.csc207.group.views.Components.DLCcard;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -14,23 +12,20 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class GameDetailViewFunc extends VBox {
+    // Constants from the second version for clean code
     private static final int IMAGE_HEIGHT = 250;
-    private static final int SCREENSHOT_HEIGHT = 150;
     private static final int CONTENT_SPACING = 25;
-    private static final String BACKGROUND_DARK = "#1a1a1a";
-    private static final String TEXT_COLOR_WHITE = "white";
-    private static final String TEXT_COLOR_GRAY = "#ccc";
     private static final int CONSTANT_1 = 30;
     private static final int CONSTANT_2 = 15;
     private static final int CONSTANT_3 = 10;
@@ -42,6 +37,7 @@ public class GameDetailViewFunc extends VBox {
     private static final String CONSTANT_9 = "--";
     private static final int CONSTANT_10 = 40;
 
+    // Member variables from both versions
     private Label title;
     private HBox tagsBox;
     private Label scoreLabel;
@@ -67,7 +63,7 @@ public class GameDetailViewFunc extends VBox {
     private HBox DlcBox;
     private ScrollPane DlcScrollPane;
 
-    private Consumer<String> developerClickHandler = s -> { };
+    private Consumer<String> developerClickHandler = s -> {};
 
     private TextArea reviewArea;
     private TextField ratingField;
@@ -78,8 +74,12 @@ public class GameDetailViewFunc extends VBox {
     private FlowPane screenshotContainer;
     private ScrollPane screenshotScrollPane;
 
+    // Buttons and Label from the first version
+    private Button buyButton;
+    private Button addButton;
+    private Button moreButton;
+    private Label confirmationLabel;
 
-    // NEW: scroll container and content VBox
     private ScrollPane scroll;
     private VBox content;
 
@@ -110,33 +110,21 @@ public class GameDetailViewFunc extends VBox {
         HBox headerSection = new HBox(CONSTANT_6);
         headerSection.setAlignment(Pos.CENTER_LEFT);
 
-        // Title
-        String titleText = "Title";
-        if (titleStr != null) {
-            titleText = titleStr;
-        }
-        title = new Label(titleText);
+        VBox titleAndTags = new VBox(CONSTANT_3);
+        title = new Label(titleStr != null ? titleStr : "Title");
         title.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         tagsBox = new HBox(CONSTANT_4);
         updateTags();
-        VBox titleAndTags = new VBox(CONSTANT_3);
         titleAndTags.getChildren().addAll(title, tagsBox);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        String scoreText;
-        if (userScore > 0) {
-            scoreText = "Critic Rating: " + userScore + "/100";
-        }
-        else {
-            scoreText = "User Score: --/100";
-        }
-        scoreLabel = new Label(scoreText);
-        scoreLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: white;");
         HBox userScoreBox = new HBox(CONSTANT_5);
         userScoreBox.setAlignment(Pos.CENTER);
+        scoreLabel = new Label(userScore > 0 ? "Critic Rating: " + userScore + "/100" : "User Score: --/100");
+        scoreLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: white;");
 
         starIcon = new SVGPath();
         starIcon.setContent("M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z");
@@ -202,7 +190,7 @@ public class GameDetailViewFunc extends VBox {
         achievementsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         achievementsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         achievementsScroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-        achievementsScroll.setPrefHeight(CONSTANT_7); // Set a preferred height
+        achievementsScroll.setPrefHeight(CONSTANT_7);
         VBox achievementsSection = new VBox(CONSTANT_3, achievementsHeader, achievementsScroll);
 
         // --- Review input ---
@@ -230,16 +218,21 @@ public class GameDetailViewFunc extends VBox {
         // --- Footer ---
         footerButtons = new HBox(CONSTANT_6);
         footerButtons.setAlignment(Pos.CENTER);
-        Button buyButton = new Button("Buy Now");
-        Button addButton = new Button("Add to Library");
-        Button moreButton = new Button("More Like This");
+        buyButton = new Button("Buy Now");
+        addButton = new Button("Add to Library");
+        moreButton = new Button("More Like This");
         String footerButtonStyle = "-fx-background-color: #555; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;";
         buyButton.setStyle(footerButtonStyle);
         addButton.setStyle(footerButtonStyle);
         moreButton.setStyle(footerButtonStyle);
         footerButtons.getChildren().addAll(buyButton, addButton, moreButton);
 
-        // put EVERYTHING into the scrollable content
+        // --- Confirmation Label ---
+        confirmationLabel = new Label();
+        confirmationLabel.setStyle("-fx-text-fill: #2ecc71; -fx-font-size: 14px; -fx-font-weight: bold;");
+        confirmationLabel.setVisible(false);
+
+        // Add all components to the main content VBox
         content.getChildren().setAll(
                 headerSection,
                 mainContent,
@@ -249,14 +242,29 @@ public class GameDetailViewFunc extends VBox {
                 achievementsSection,
                 reviewInputBox,
                 reviewsSection,
-                footerButtons
+                footerButtons,
+                confirmationLabel
         );
+    }
+
+    // --- Getters from the first version ---
+    public Button getBuyNowButton() {
+        return buyButton;
+    }
+
+    public Button getAddButton() {
+        return addButton;
+    }
+
+    public Button getMoreButton() {
+        return moreButton;
     }
 
     public Button getViewPhotosButton() {
         return btnPhotos;
     }
 
+    // --- Methods from both versions, merged ---
     public void displayScreenshots(List<Image> images) {
         screenshotContainer.getChildren().clear();
         if (images != null && !images.isEmpty()) {
@@ -272,10 +280,9 @@ public class GameDetailViewFunc extends VBox {
             Label noScreenshots = new Label("No screenshots available.");
             noScreenshots.setStyle("-fx-text-fill: #ccc;");
             screenshotContainer.getChildren().add(noScreenshots);
-            screenshotScrollPane.setVisible(true); // Show the container with the message
+            screenshotScrollPane.setVisible(true);
         }
     }
-
 
     private void updateTags() {
         tagsBox.getChildren().clear();
@@ -292,14 +299,12 @@ public class GameDetailViewFunc extends VBox {
     }
 
     private VBox createSection(String title, String content) {
-        VBox section = new VBox(5);
+        VBox section = new VBox(CONSTANT_5);
         Label header = new Label(title);
         header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
-
         Text body = new Text(content);
         body.setStyle("-fx-font-size: 14px; -fx-fill: #ccc;");
         body.setWrappingWidth(600);
-
         section.getChildren().addAll(header, body);
         return section;
     }
@@ -308,39 +313,17 @@ public class GameDetailViewFunc extends VBox {
         VBox section = new VBox(CONSTANT_3);
         Label header = new Label("Overview:");
         header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
-
         GridPane grid = new GridPane();
         grid.setHgap(CONSTANT_10);
         grid.setVgap(CONSTANT_3);
-
-        String developerText = "Developer Unknown";
-        if (developer != null) {
-            developerText = developer;
-        }
-
-        String releaseDateText = CONSTANT_9;
-        if (releaseDate != null) {
-            releaseDateText = releaseDate;
-        }
-
-        String platformsText = "--";
-        if (platforms != null) {
-            platformsText = platforms;
-        }
-
-        String ageRatingText = "--";
-        if (ageRating != null) {
-            ageRatingText = ageRating;
-        }
-
-        grid.add(createOverviewRow(developerText), 1, 0);
+        grid.add(createOverviewRow("Developer:"), 0, 0);
+        grid.add(createOverviewRow(developer != null ? developer : "Developer Unknown"), 1, 0);
         grid.add(createOverviewRow("Release Date:"), 0, 1);
-        grid.add(createOverviewRow(releaseDateText), 1, 1);
+        grid.add(createOverviewRow(releaseDate != null ? releaseDate : CONSTANT_9), 1, 1);
         grid.add(createOverviewRow("Platforms:"), 0, 2);
-        grid.add(createOverviewRow(platformsText), 1, 2);
+        grid.add(createOverviewRow(platforms != null ? platforms : CONSTANT_9), 1, 2);
         grid.add(createOverviewRow("Age Rating (ESRB):"), 0, CONSTANT_8);
-        grid.add(createOverviewRow(ageRatingText), 1, CONSTANT_8);
-
+        grid.add(createOverviewRow(ageRating != null ? ageRating : CONSTANT_9), 1, CONSTANT_8);
         section.getChildren().addAll(header, grid);
         return section;
     }
@@ -351,11 +334,10 @@ public class GameDetailViewFunc extends VBox {
         return label;
     }
 
-    private ScrollPane createDLCSection(HBox DLCbox) {
-
-        ScrollPane scrollPane = new ScrollPane(DLCbox);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Always show horizontal bar
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);  // No vertical bar
+    private ScrollPane createDLCSection(HBox dlcBox) {
+        ScrollPane scrollPane = new ScrollPane(dlcBox);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setFitToHeight(true);
         scrollPane.setStyle("-fx-background-color: #1a1a1a; -fx-padding: 30;");
         scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
@@ -372,6 +354,11 @@ public class GameDetailViewFunc extends VBox {
                 content.getChildren().add(overviewIndex, overviewBox);
             }
         }
+    }
+
+    public void setDeveloperClickHandler(Consumer<String> handler) {
+        this.developerClickHandler = handler != null ? handler : s -> {};
+        rebuildOverview();
     }
 
     // --- Setters ---
@@ -419,8 +406,7 @@ public class GameDetailViewFunc extends VBox {
 
     public void setSynopsis(String synopsis) {
         this.synopsisStr = synopsis;
-        if (synopsisBox != null && synopsisBox.getChildren().size() > 1
-                && synopsisBox.getChildren().get(1) instanceof Text) {
+        if (synopsisBox != null && synopsisBox.getChildren().size() > 1 && synopsisBox.getChildren().get(1) instanceof Text) {
             Text body = (Text) synopsisBox.getChildren().get(1);
             body.setText(synopsis);
         }
@@ -450,8 +436,7 @@ public class GameDetailViewFunc extends VBox {
         reviewsContainer.getChildren().clear();
         if (nodes == null || nodes.isEmpty()) {
             reviewsContainer.getChildren().add(new Label("No reviews yet."));
-        }
-        else {
+        } else {
             reviewsContainer.getChildren().addAll(nodes);
         }
     }
@@ -462,18 +447,22 @@ public class GameDetailViewFunc extends VBox {
             Label noAchievements = new Label("No achievements found for this game.");
             noAchievements.setStyle("-fx-text-fill: #ccc;");
             achievementsContainer.getChildren().add(noAchievements);
-        }
-        else {
+        } else {
             achievementsContainer.getChildren().addAll(achievementNodes);
         }
     }
 
     public void clearReviewFields() {
-        if (ratingField != null) {
-            ratingField.clear();
-        }
-        if (reviewArea != null) {
-            reviewArea.clear();
-        }
+        if (ratingField != null) ratingField.clear();
+        if (reviewArea != null) reviewArea.clear();
+    }
+
+    public void showConfirmation(String message) {
+        confirmationLabel.setText(message);
+        confirmationLabel.setVisible(true);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(event -> confirmationLabel.setVisible(false));
+        delay.play();
     }
 }

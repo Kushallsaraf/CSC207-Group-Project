@@ -7,7 +7,7 @@ import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
 
 public final class GamePageInteractor {
-    private final UserInteractor userInteractor;
+    public final UserInteractor userInteractor;
     private final GameDataHandler dataHandler;
     // to store user reviews under users
 

@@ -1,6 +1,6 @@
 package com.csc207.group.app;
 
-import com.csc207.group.ui.JavaFXUserAuthenticator;
+import com.csc207.group.ui.JavaFxUserAuthenticator;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.scene.layout.BorderPane;
@@ -26,7 +26,7 @@ public class GameCentral extends Application {
 
         HostServices h = getHostServices();
         GameCentralController gameCentralController = new GameCentralController(stage, h);
-        JavaFXUserAuthenticator authenticator = new JavaFXUserAuthenticator(stage, gameCentralController);
+        JavaFxUserAuthenticator authenticator = new JavaFxUserAuthenticator(stage, gameCentralController);
         authenticator.run();
     }
 }
