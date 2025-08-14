@@ -1,9 +1,17 @@
 package com.csc207.group.service;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.csc207.group.cache.FirebaseRestClient;
-import com.csc207.group.cache.IGDBFirebaseAPICache;
+import com.csc207.group.cache.IgdbFirebaseApiCache;
 import com.csc207.group.data_access.FirebaseGameDataHandler;
-import com.csc207.group.data_access.IGDBApiClient;
+import com.csc207.group.data_access.IgdbApiClient;
 import com.csc207.group.model.Game;
 import com.csc207.group.model.GamePreview;
 import com.csc207.group.model.LibraryEntry;
@@ -17,16 +25,11 @@ import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.*;
-
-public class GameService {
+public final class GameService {
     private final FirebaseGameDataHandler firebaseGameDataHandler =
             new FirebaseGameDataHandler(new FirebaseRestClient());
 
-    private final IGDBApiClient apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
+    private final IgdbApiClient apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
     private final Map<Integer, GamePreview> previewCache = new HashMap<>();
 
     public int getGameIdByName(String name) {
@@ -53,7 +56,8 @@ public class GameService {
     }
 
 
-    /**Will save a game to the database.
+    /**
+     * Will save a game to the database.
      *
      */
 
@@ -94,8 +98,8 @@ public class GameService {
         gameobj.setDeveloper(developers);
 
         // Ratings
-        gameobj.setCritic_rating(gameJson.optDouble("total_rating", 0));
-        gameobj.setRating_count(gameJson.optDouble("total_rating_count", 0));
+        gameobj.setCriticRating(gameJson.optDouble("total_rating", 0));
+        gameobj.setRatingCount(gameJson.optDouble("total_rating_count", 0));
 
         // Platforms
         List<String> platforms = new ArrayList<>();
@@ -111,19 +115,19 @@ public class GameService {
 
         // Cover Image
         String cover_page = gameJson.has("cover") ? getCoverPageById(gameJson.optInt("cover", 0)) : "No cover page";
-        gameobj.setCover_image(cover_page);
+        gameobj.setCoverImage(cover_page);
 
         // Age Rating
         String rating = gameJson.has("age_ratings")
                 ? getAgeRatingById(gameJson.getJSONArray("age_ratings").getInt(0))
                 : "age rating not found";
-        gameobj.setAge_rating(rating);
+        gameobj.setAgeRating(rating);
 
         // Release Date
         String release_date = gameJson.has("release_dates")
-                ? getRelease_date(gameJson.getJSONArray("release_dates").getInt(0))
+                ? getReleaseDate(gameJson.getJSONArray("release_dates").getInt(0))
                 : "Release date not found";
-        gameobj.setRelease_date(release_date);
+        gameobj.setReleaseDate(release_date);
 
         // DLCs
         List<Integer> DLCs = new ArrayList<>();
@@ -133,7 +137,7 @@ public class GameService {
                 DLCs.add(dlcArray.getInt(i));
             }
         }
-        gameobj.setDLCs(DLCs);
+        gameobj.setDownloadableContent(DLCs);
 
         // Description
         String summary = gameJson.optString("summary", "No description available.");
@@ -259,7 +263,7 @@ public class GameService {
         return response.getArray().getJSONObject(0).getString("rating");
     }
 
-    public String getRelease_date(int id) {
+    public String getReleaseDate(int id) {
         JsonNode response = apiClient.getReleaseDateById(id);
         return response.getArray().getJSONObject(0).getString("human");
     }
@@ -273,7 +277,7 @@ public class GameService {
             System.out.println("Reviews for game: " + game.getName());
             for (Review r : game.getReviews()) {
                 if (r != null) {
-                    System.out.println("User: " + r.getUserid());
+                    System.out.println("User: " + r.getUserId());
                     System.out.println("Rating: " + r.getRating());
                     System.out.println("Content: " + r.getContent());
                     System.out.println("---------------------------");

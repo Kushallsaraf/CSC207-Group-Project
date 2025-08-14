@@ -1,6 +1,5 @@
 package com.csc207.group.app;
 
-
 public class GameCentralLauncher {
     public static void main(String[] args) {
 

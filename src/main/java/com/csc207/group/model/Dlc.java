@@ -1,22 +1,26 @@
 package com.csc207.group.model;
 
-public class DLC {
+public final class Dlc {
     private String name;
     private String description;
-    private String cover_image;
+    private String coverImage;
 
-    public DLC(String name, String description, String cover_image) {
+    public Dlc(String name, String description, String coverImage) {
         this.name = name;
         this.description = description;
-        this.cover_image = cover_image;
+        this.coverImage = coverImage;
     }
+
     public String getName() {
         return name;
     }
+
     public String getDescription() {
         return description;
     }
-    public String getCover_image() {
-        return cover_image;
+
+    public String getCoverImage() {
+        return coverImage;
     }
+
 }

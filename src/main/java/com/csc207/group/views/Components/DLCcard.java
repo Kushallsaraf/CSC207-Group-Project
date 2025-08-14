@@ -1,6 +1,6 @@
 package com.csc207.group.views.Components;
 
-import com.csc207.group.model.DLC;
+import com.csc207.group.model.Dlc;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -10,8 +10,7 @@ import javafx.scene.shape.Rectangle;
 
 public class DLCcard {
     private static VBox card;
-
-    public DLCcard(DLC dlc) {
+    public DLCcard(Dlc dlc) {
         card = new VBox();
         card = new VBox(5);
         card.setAlignment(Pos.CENTER_LEFT);
@@ -20,10 +19,10 @@ public class DLCcard {
 
         ImageView gameImageView = new ImageView();
         try {
-            Image image = new Image(dlc.getCover_image(), 150, 200, false, true);
+            Image image = new Image(dlc.getCoverImage(), 150, 200, false, true);
             gameImageView.setImage(image);
         } catch (Exception e) {
-            System.err.println("Failed to load image: " + dlc.getCover_image());
+            System.err.println("Failed to load image: " + dlc.getCoverImage());
             Image placeholder = new Image("", 150, 200, false, true);
             gameImageView.setImage(placeholder);
         }

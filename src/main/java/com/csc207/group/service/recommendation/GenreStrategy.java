@@ -3,7 +3,6 @@ package com.csc207.group.service.recommendation;
 import com.csc207.group.model.GameRecommendation;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
-import com.csc207.group.service.GameService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +55,7 @@ public class GenreStrategy implements RecommendationStrategy{
             for (Review review : user.getReviews().values()) {
                 double rating = review.getRating();
                 if (rating >= lowerBound && rating < upperBound) {
-                    games.add(review.getGameid());
+                    games.add(review.getGameId());
                 }
             }
         }

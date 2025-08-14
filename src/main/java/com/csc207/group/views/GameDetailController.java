@@ -1,26 +1,27 @@
 package com.csc207.group.views;
 
 import com.csc207.group.app.GameCentralController;
-import com.csc207.group.cache.RAWGFirebaseAPICache;
-import com.csc207.group.data_access.RAWGApiClient;
-import com.csc207.group.model.*;
-import com.csc207.group.service.DLCService;
+import com.csc207.group.cache.RawgFirebaseApiCache;
+import com.csc207.group.data_access.RawgApiClient;
+import com.csc207.group.model.Achievement;
+import com.csc207.group.model.Dlc;
+import com.csc207.group.model.Game;
+import com.csc207.group.model.Review;
+import com.csc207.group.model.Screenshot;
+import com.csc207.group.model.User;
+import com.csc207.group.service.DlcService;
 import com.csc207.group.service.GamePageInteractor;
 import com.csc207.group.service.GenreService;
-import com.csc207.group.ui.controller.HomeController;
 import com.csc207.group.views.Components.AchievementCard;
 import com.csc207.group.views.Components.DLCcard;
-import javafx.application.HostServices;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,20 +32,16 @@ public class GameDetailController {
     private GameDetailViewFunc view;
     private GamePageInteractor gamePageInteractor;
     private User user;
-    private RAWGApiClient rawgApiClient;
-    private HostServices hostServices;
-    private HomeController homeController;
+    private RawgApiClient rawgApiClient;
 
     public GameDetailController(Game game, GamePageInteractor gamePageInteractor,
-                                GameCentralController gameCentralController, User user, HostServices hostServices, HomeController homeController) {
+                                GameCentralController gameCentralController, User user) {
         this.view = new GameDetailViewFunc();
         this.game = game;
         this.gamePageInteractor = gamePageInteractor;
         this.gameCentralController = gameCentralController;
         this.user = user;
-        this.rawgApiClient = new RAWGApiClient(new RAWGFirebaseAPICache());
-        this.hostServices = hostServices;
-        this.homeController = homeController;
+        this.rawgApiClient = new RawgApiClient(new RawgFirebaseApiCache());
     }
 
     // This method initializes the view with data from the game and returns the view instance
@@ -65,68 +62,7 @@ public class GameDetailController {
     private void setupActionHandlers() {
         view.getViewPhotosButton().setOnAction(e -> fetchAndDisplayScreenshots());
         view.getSubmitReviewButton().setOnAction(e -> handleReviewSubmission());
-        view.getBuyNowButton().setOnAction(e -> handleBuyNow());
-        view.getAddButton().setOnAction(e -> handleAddTOLibrary());
-        view.getMoreButton().setOnAction(e -> handleMoreLikeThis());
     }
-
-    private void handleMoreLikeThis() {
-        if (game.getGenres() != null && !game.getGenres().isEmpty()) {
-            String firstGenre = new GenreService().getGenresById(game.getGenres().get(0));
-            gameCentralController.showHomeViewWithSearch(firstGenre.toLowerCase());
-        }
-    }
-
-
-    private void handleAddTOLibrary() {
-        gamePageInteractor.userInteractor.addToLibrary(game.getGameid());
-        view.showConfirmation("Added to your library!");
-    }
-
-
-    private void handleBuyNow() {
-        new Thread(() -> {
-            try {
-                Integer rawgId = rawgApiClient.findGameIdByName(game.getName());
-                if (rawgId == null) {
-                    javafx.application.Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Not Available");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Could not find a store page for this game.");
-                        alert.showAndWait();
-                    });
-                    return;
-                }
-
-                List<GameStore> stores = rawgApiClient.getStoresForGame(String.valueOf(rawgId));
-                if (stores != null && !stores.isEmpty()) {
-                    String storeUrl = stores.get(0).getStoreURL();
-                    javafx.application.Platform.runLater(() -> {
-                        hostServices.showDocument(storeUrl);
-                    });
-                } else {
-                    javafx.application.Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Not Available");
-                        alert.setHeaderText(null);
-                        alert.setContentText("No store pages are available for this game.");
-                        alert.showAndWait();
-                    });
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                javafx.application.Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("An error occurred while trying to find a store page.");
-                    alert.showAndWait();
-                });
-            }
-        }).start();
-    }
-
 
     private void fetchAndDisplayScreenshots() {
         new Thread(() -> {
@@ -145,8 +81,8 @@ public class GameDetailController {
                 List<Screenshot> screenshots = rawgApiClient.getScreenshotsForGame(String.valueOf(rawgId));
                 List<Image> images = new ArrayList<>();
                 for (Screenshot s : screenshots) {
-                    if (s.getImageURL() != null && !s.getImageURL().isEmpty()) {
-                        images.add(new Image(s.getImageURL(), true)); // Load in background
+                    if (s.getImageUrl() != null && !s.getImageUrl().isEmpty()) {
+                        images.add(new Image(s.getImageUrl(), true)); // Load in background
                     }
                 }
 
@@ -180,11 +116,11 @@ public class GameDetailController {
     }
 
     public void setUserScore() {
-        view.setUserScore(game.getCritic_rating());
+        view.setUserScore(game.getCriticRating());
     }
 
     public void setImage() {
-        String coverUrl = game.getCover_image();
+        String coverUrl = game.getCoverImage();
         System.out.println("Cover image URL: " + coverUrl);
 
         if (coverUrl != null && !coverUrl.isEmpty()) {
@@ -200,20 +136,20 @@ public class GameDetailController {
         String devs = String.join(", ", game.getDeveloper());
         view.setDeveloper(devs);
 
-        view.setReleaseDate(game.getRelease_date());
-        view.setAgeRating(game.getAge_rating());
+        view.setReleaseDate(game.getReleaseDate());
+        view.setAgeRating(game.getAgeRating());
 
         String plats = String.join(", ", game.getPlatforms());
         view.setPlatforms(plats);
     }
 
     public void setDLCs() {
-        List<DLC> dlcs = new ArrayList<>();
-        for (Integer id : game.getDLCs()) {
-            dlcs.add(new DLCService().getDLCById(id));
+        List<Dlc> dlcs = new ArrayList<>();
+        for (Integer id : game.getDownloadableContent()) {
+            dlcs.add(new DlcService().getDlcById(id));
         }
         List<VBox> dlccards = new ArrayList<>();
-        for (DLC dlc : dlcs) {
+        for (Dlc dlc : dlcs) {
             dlccards.add(new DLCcard(dlc).getCard());
         }
         view.setDLCs(dlccards);
@@ -240,7 +176,8 @@ public class GameDetailController {
                         view.setAchievements(new ArrayList<>());
                     });
                 }
-            } catch (IOException | URISyntaxException | InterruptedException e) {
+            }
+            catch (URISyntaxException | InterruptedException e) {
                 e.printStackTrace();
                 javafx.application.Platform.runLater(() -> {
                     view.setAchievements(new ArrayList<>()); // Show empty on error
@@ -279,8 +216,8 @@ public class GameDetailController {
         for (Review r : reviews) {
             if (r == null) continue;
 
-            String userId = r.getUserid();
-            String avatarUrl = gamePageInteractor.getProfileURL(userId);
+            String userId = r.getUserId();
+            String avatarUrl = gamePageInteractor.getProfileUrl(userId);
 
             ImageView avatar = new ImageView();
             if (avatarUrl != null && !avatarUrl.isEmpty()) {

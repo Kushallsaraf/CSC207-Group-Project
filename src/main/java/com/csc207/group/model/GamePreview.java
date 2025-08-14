@@ -7,7 +7,8 @@ public class GamePreview {
     private final int year;
     private final Image coverImage;
     private final int gameid;
-    private final String description; // Added from the second version
+    private final String description;
+    // Added from the second version
 
     public GamePreview(String title, int year, Image coverImage, int gameid, String description) {
         this.title = title;
@@ -18,6 +19,7 @@ public class GamePreview {
     }
 
     // --- Getters ---
+
     public String getTitle() {
         return title;
     }

@@ -3,7 +3,7 @@ package com.csc207.group.social;
 import com.csc207.group.model.User;
 import com.csc207.group.service.UserInteractor;
 
-public class FollowCommand implements Command{
+public class FollowCommand implements Command {
     private final UserInteractor interactor;
     private final String targetUsername;
 

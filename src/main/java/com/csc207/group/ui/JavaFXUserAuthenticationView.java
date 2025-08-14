@@ -1,8 +1,10 @@
 package com.csc207.group.ui;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.csc207.group.util.Constants;
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -17,9 +19,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A JavaFX-based login view implementing the UserAuthenticationView and View interfaces.
@@ -103,8 +102,8 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView, Vie
 
     @Override
     public void onShow() {
-        clearUsernameAndPasswordFields();  // optional: clear fields when shown
-        messageLabel.setText("");          // optional: clear messages
+        clearUsernameAndPasswordFields();
+        messageLabel.setText("");
     }
 
     // --- UserAuthenticationView interface methods ---
@@ -132,9 +131,11 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView, Vie
         messageLabel.setText(message);
         if (Constants.SUCCESSFUL_LOGIN.equals(message)) {
             messageLabel.setStyle("-fx-text-fill: #00ff00;");
-        } else if (Constants.SUCCESSFUL_SIGNUP.equals(message)){
+        }
+        else if (Constants.SUCCESSFUL_SIGNUP.equals(message)){
             messageLabel.setStyle("-fx-text-fill: #00ff00;");
-        } else {
+        }
+        else {
             messageLabel.setStyle("-fx-text-fill: red;");
         }
 
@@ -146,7 +147,8 @@ public class JavaFXUserAuthenticationView implements UserAuthenticationView, Vie
 
         if (resetTriggers.contains(message)) {
             clearUsernameAndPasswordFields();
-        } else {
+        }
+        else {
             clearPasswordField();
         }
 

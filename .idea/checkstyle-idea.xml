@@ -5,13 +5,13 @@
     <scanScope>JavaOnly</scanScope>
     <option name="thirdPartyClasspath" />
     <option name="activeLocationIds">
-      <option value="d83d1b60-252f-4668-9d5e-f18a384c78fb" />
+      <option value="1088707c-91a0-4b37-a03c-545eb45af2f4" />
     </option>
     <option name="locations">
       <list>
         <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
-        <ConfigurationLocation id="d83d1b60-252f-4668-9d5e-f18a384c78fb" type="LOCAL_FILE" scope="All" description="CSC207 Checks">$PROJECT_DIR$/../../sing2267/hw3-git-activity/mystyle.xml</ConfigurationLocation>
+        <ConfigurationLocation id="1088707c-91a0-4b37-a03c-545eb45af2f4" type="LOCAL_FILE" scope="All" description="CSC207 checks">$PROJECT_DIR$/mystyle.xml</ConfigurationLocation>
       </list>
     </option>
   </component>

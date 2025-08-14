@@ -1,7 +1,7 @@
 package com.csc207.group.service.recommendation;
 
-import com.csc207.group.cache.IGDBFirebaseAPICache;
-import com.csc207.group.data_access.IGDBApiClient;
+import com.csc207.group.cache.IgdbFirebaseApiCache;
+import com.csc207.group.data_access.IgdbApiClient;
 import com.csc207.group.model.GameRecommendation;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONArray;
@@ -15,13 +15,13 @@ import java.util.List;
 
 public class RecommendationService {
 
-    private final IGDBApiClient apiClient;
+    private final IgdbApiClient apiClient;
 
     public RecommendationService() {
-        this.apiClient = new IGDBApiClient(new IGDBFirebaseAPICache());
+        this.apiClient = new IgdbApiClient(new IgdbFirebaseApiCache());
     }
 
-    public RecommendationService(IGDBApiClient apiClient) {
+    public RecommendationService(IgdbApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
@@ -169,7 +169,7 @@ public class RecommendationService {
 
     /**
      * Convenience: fetch by genre IDs (OR match) and return ready-to-use recommendations.
-     * Expects your IGDBApiClient.getGamesByGenreIds to request:
+     * Expects your IgdbApiClient.getGamesByGenreIds to request:
      * fields id, name, cover.image_id, first_release_date, rating;
      */
     public List<GameRecommendation> getRecommendationsByGenres(List<Integer> genreIds, int limit) {

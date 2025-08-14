@@ -2,13 +2,13 @@ package com.csc207.group.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Screenshot {
+public final class Screenshot {
 
     @JsonProperty("id")
     private int imageID;
 
     @JsonProperty("image")
-    private String imageURL;
+    private String imageUrl;
 
     @JsonProperty("width")
     private int imageWidth;
@@ -19,33 +19,38 @@ public class Screenshot {
     @JsonProperty("is_deleted")
     private boolean isVisible;
 
-    public Screenshot() {}
+    public Screenshot() {
 
-    public Screenshot(int imageID, String imageURL, int imageWidth, int imageHeight, boolean isVisible) {
+    }
+
+    public Screenshot(int imageID, String imageUrl, int imageWidth, int imageHeight, boolean isVisible) {
 
         this.imageID = imageID;
-        this.imageURL = imageURL;
+        this.imageUrl = imageUrl;
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
         this.isVisible = isVisible;
 
     }
 
-    public int getImageID() { return imageID; }
+    public int getImageID() {
+        return imageID;
+    }
 
-    public int getImageWidth() { return imageWidth; }
+    public int getImageWidth() {
+        return imageWidth;
+    }
 
-    public int getImageHeight() { return imageHeight; }
+    public int getImageHeight() {
+        return imageHeight;
+    }
 
-    public String getImageURL() { return imageURL; }
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-    public boolean isVisible() { return isVisible; }
-
-
-
-
-
-
-
+    public boolean isVisible() {
+        return isVisible;
+    }
 
 }
