@@ -91,13 +91,9 @@ You will need to obtain your own API keys from these services and place them in 
     cd Game-Central
     ```
 3.  **Install dependencies**:
-    * If using **Maven**:
+    * Using **Maven**:
       ```bash
       mvn install
-      ```
-    * If using **Gradle**:
-      ```bash
-      gradle build
       ```
 4.  **Run the application**:
     * You can run the application from your IDE by running the `GameCentralLauncher` class.
