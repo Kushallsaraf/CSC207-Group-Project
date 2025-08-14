@@ -1,5 +1,8 @@
 package com.csc207.group.ui.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.csc207.group.model.Game;
 import com.csc207.group.model.Review;
 import com.csc207.group.service.GamePageInteractor;
@@ -14,11 +17,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
-import java.util.List;
+public final class GamePageController {
 
-public class GamePageController {
-
+    public static final int TEN = 10;
+    public static final int FIVE = 5;
+    public static final int FORTYEIGHT = 48;
+    public static final int EIGHT = 8;
     private final GameService gameService;
     private final GamePageView gamePageView;
     private final GamePageInteractor gamePageInteractor;
@@ -34,10 +38,14 @@ public class GamePageController {
         this.gameid = gameid;
     }
 
-    public void setGamePageView(){
+    /**
+     * Sets the game page view.
+     */
+    public void setGamePageView() {
         gamePageView.setTitle(game.getName());
         gamePageView.getSubmitReviewButton().setOnAction(new ReviewSubmissionHandler(this));
-        updateView(); // populate existing reviews immediately
+        updateView();
+        // populate existing reviews immediately
     }
 
     /** Lets user interactor know to store review and under games, then refreshes UI. */
@@ -48,22 +56,30 @@ public class GamePageController {
 
         try {
             ratingValue = Double.parseDouble(rating);
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException ex) {
             ratingValue = 0.0;
         }
-        if (ratingValue < 0) ratingValue = 0;
-        if (ratingValue > 5) ratingValue = 5;
+        if (ratingValue < 0) {
+            ratingValue = 0;
+        }
+        if (ratingValue > FIVE) {
+            ratingValue = FIVE;
+        }
 
         this.gamePageInteractor.saveReview(ratingValue, content, gameid, game);
         this.gamePageView.clearReviewFields();
         updateView();
     }
 
-    public void updateView(){
+    /**
+     * Updates view.
+     */
+    public void updateView() {
         this.gamePageView.setReviewNodes(buildReviewNodes());
     }
 
-    private List<Node> buildReviewNodes(){
+    private List<Node> buildReviewNodes() {
         List<Review> reviews = game.getReviews();
         List<Node> nodes = new ArrayList<Node>();
 
@@ -74,20 +90,28 @@ public class GamePageController {
 
         for (int i = 0; i < reviews.size(); i++) {
             Review r = reviews.get(i);
-            if (r == null) continue;
+            if (r == null) {
+                continue;
+            }
 
             String userId = r.getUserId();
-            String avatarUrl = gamePageInteractor.getProfileUrl(userId); // assumed to exist
+            String avatarUrl = gamePageInteractor.getProfileUrl(userId);
+            // assumed to exist
 
             // Square avatar on the far left
-            ImageView avatar = buildSquareAvatar(avatarUrl, 48); // 48x48
+            ImageView avatar = buildSquareAvatar(avatarUrl, FORTYEIGHT);
+            // 48x48
 
             Label userLabel = new Label(userId);
             userLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13px;");
 
             double clamped = r.getRating();
-            if (clamped < 0) clamped = 0;
-            if (clamped > 5) clamped = 5;
+            if (clamped < 0) {
+                clamped = 0;
+            }
+            if (clamped > FIVE) {
+                clamped = FIVE;
+            }
 
             Label ratingLabel = new Label("Rating: " + String.format("%.1f", clamped) + " / 5");
             ratingLabel.setStyle("-fx-text-fill: #555;");
@@ -98,15 +122,16 @@ public class GamePageController {
             VBox textBox = new VBox(2);
             textBox.getChildren().addAll(userLabel, ratingLabel, contentLabel);
 
-            HBox row = new HBox(10);
-            row.setAlignment(Pos.TOP_LEFT); // avatar anchored left, text to the right
-            row.setPadding(new Insets(8, 10, 8, 10));
+            HBox row = new HBox(TEN);
+            row.setAlignment(Pos.TOP_LEFT);
+            // avatar anchored left, text to the right
+            row.setPadding(new Insets(EIGHT, TEN, EIGHT, TEN));
             row.getChildren().addAll(avatar, textBox);
             row.setStyle(
-                    "-fx-background-color: #f6f6f6; " +
-                            "-fx-background-radius: 8; " +
-                            "-fx-border-color: #e2e2e2; " +
-                            "-fx-border-radius: 8;"
+                    "-fx-background-color: #f6f6f6; "
+                            + "-fx-background-radius: 8; "
+                            + "-fx-border-color: #e2e2e2; "
+                            + "-fx-border-radius: 8;"
             );
 
             nodes.add(row);
@@ -115,20 +140,25 @@ public class GamePageController {
         return nodes;
     }
 
-    /** Builds a square avatar placed on the left.
+    /**
+     *  Builds a square avatar placed on the left.
      *  preserveRatio=false forces a square; switch to a viewport crop if you want no stretching.
+     * @param url url of avatar.
+     * @param size size of avatar.
+     * @return Image view.
      */
     private ImageView buildSquareAvatar(String url, double size) {
         ImageView iv = new ImageView();
         if (url != null && url.length() > 0) {
-            Image img = new Image(url, true); // background loading
+            Image img = new Image(url, true);
+            // background loading
             iv.setImage(img);
         }
         iv.setFitWidth(size);
         iv.setFitHeight(size);
-        iv.setPreserveRatio(false); // fill the square
+        iv.setPreserveRatio(false);
+        // fill the square
         iv.setSmooth(true);
         return iv;
     }
 }
-
