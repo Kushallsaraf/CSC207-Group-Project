@@ -126,6 +126,7 @@ them.
 - Logout button 
 - Improved genre search 
 - Advanced search function 
+- User Messaging
 
 
 
