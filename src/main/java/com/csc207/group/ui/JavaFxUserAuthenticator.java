@@ -6,14 +6,13 @@ import com.csc207.group.auth.*;
 import com.csc207.group.app.GameCentralController;
 import javafx.stage.Stage;
 import com.csc207.group.ui.controller.JavaFxUserAuthenticationController;
+import org.w3c.dom.UserDataHandler;
 
 public class JavaFxUserAuthenticator {
 
     private JavaFXUserAuthenticationView view;
     private JavaFxUserAuthenticationController controller;
-    private UserDataHandler dataHandler;
-    private JavaFXUserAuthenticationController controller;
-    private UserRepository dataHandler;
+    private FirebaseUserRepository dataHandler;
     private LoginPresenter loginPresenter;
     private LoginInteractor loginInteractor;
     private SignupInteractor signupInteractor;

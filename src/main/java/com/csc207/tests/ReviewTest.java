@@ -1,6 +1,6 @@
 package com.csc207.tests;
 
-import com.csc207.group.auth.UserDataHandler;
+import com.csc207.group.auth.UserRepository;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
 import com.csc207.group.service.UserInteractor;
@@ -14,13 +14,13 @@ import static org.mockito.Mockito.*;
 class ReviewTest {
 
     private User user;
-    private UserDataHandler mockHandler;
+    private UserRepository mockHandler;
     private UserInteractor interactor;
 
     @BeforeEach
     void setUp() {
         user = new User("Alice", BCrypt.hashpw("123456", BCrypt.gensalt()));
-        mockHandler = mock(UserDataHandler.class);
+        mockHandler = mock(UserRepository.class);
         interactor = new UserInteractor(user, mockHandler);
     }
 

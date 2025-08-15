@@ -95,7 +95,7 @@ public class FirebaseUserRepository implements UserRepository {
                 user.setBio(jsonObject.getString("bio"));
             }
             if (jsonObject.has("profile-picture-url")) {
-                user.setProfilePictureURL(jsonObject.getString("profile-picture-url"));
+                user.setProfilePictureUrl(jsonObject.getString("profile-picture-url"));
             }
 
             return user;
@@ -126,9 +126,9 @@ public class FirebaseUserRepository implements UserRepository {
             JSONObject reviewJson = new JSONObject();
             Review review = entry.getValue();
 
-            reviewJson.put("userid", review.getUserid());
+            reviewJson.put("userid", review.getUserId());
             reviewJson.put("content", review.getContent());
-            reviewJson.put("gameid", review.getGameid());
+            reviewJson.put("gameid", review.getGameId());
             reviewJson.put("rating", review.getRating());
 
             reviewsJson.put(String.valueOf(entry.getKey()), reviewJson);
@@ -136,7 +136,7 @@ public class FirebaseUserRepository implements UserRepository {
 
         userJson.put("reviews", reviewsJson);
         userJson.put("bio", user.getBio());
-        userJson.put("profile-picture-url", user.getProfilePictureURL());
+        userJson.put("profile-picture-url", user.getProfilePictureUrl());
 
 
         client.putData("Users/" + user.getUsername(), userJson.toString());

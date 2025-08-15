@@ -1,7 +1,9 @@
 package com.csc207.group.views;
 
+import com.csc207.group.model.GameStore;
 import com.csc207.group.views.Components.DLCcard;
 import javafx.animation.PauseTransition;
+import javafx.application.HostServices;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -16,6 +18,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;

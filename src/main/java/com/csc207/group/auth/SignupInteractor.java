@@ -3,12 +3,13 @@ package com.csc207.group.auth;
 import java.io.IOException;
 
 import com.csc207.group.util.Constants;
+import org.w3c.dom.UserDataHandler;
 
 public class SignupInteractor {
-    private UserDataHandler handler;
+    private UserRepository handler;
     private SignupPresenter presenter;
 
-    public SignupInteractor(UserDataHandler handler, SignupPresenter presenter) {
+    public SignupInteractor(UserRepository handler, SignupPresenter presenter) {
         this.handler = handler;
         this.presenter = presenter;
     }

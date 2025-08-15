@@ -3,7 +3,7 @@ package com.csc207.tests;
 import com.csc207.group.auth.LoginInteractor;
 import com.csc207.group.auth.LoginPresenter;
 import com.csc207.group.auth.PasswordHasher;
-import com.csc207.group.auth.UserDataHandler;
+import com.csc207.group.auth.UserRepository;
 import com.csc207.group.model.User;
 import com.csc207.group.util.Constants;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,13 +14,13 @@ import static org.mockito.Mockito.*;
 
 class LoginInteractorTest {
 
-    private UserDataHandler handler;
+    private UserRepository handler;
     private LoginPresenter presenter;
     private LoginInteractor interactor;
 
     @BeforeEach
     void setup() {
-        handler = mock(UserDataHandler.class);
+        handler = mock(UserRepository.class);
         presenter = mock(LoginPresenter.class);
         interactor = new LoginInteractor(handler, presenter);
     }

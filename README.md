@@ -1,5 +1,8 @@
 # Game Central
 
+## notice: 
+main branch is not able to run due to a series of conflicts. Please checkout
+branch main-demo to run the program. 
 ## Authors and Contributors
 
 This project was created by the **Game Central Team**.

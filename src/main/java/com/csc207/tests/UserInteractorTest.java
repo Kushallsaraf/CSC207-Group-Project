@@ -1,6 +1,8 @@
 package com.csc207.tests;
 
-import com.csc207.group.auth.UserDataHandler;
+import com.csc207.group.auth.UserRepository;
+import com.csc207.group.interface_adapter.FollowUserOutputBoundary;
+import com.csc207.group.interface_adapter.FollowUserResponseModel;
 import com.csc207.group.model.Review;
 import com.csc207.group.model.User;
 import com.csc207.group.service.UserInteractor;
@@ -14,16 +16,21 @@ import static org.mockito.Mockito.*;
 class UserInteractorTest {
 
     private User mockUser;
-    private UserDataHandler mockDataHandler;
+    private UserRepository mockDataHandler;
     private UserInteractor interactor;
 
     @BeforeEach
     void setUp() {
         mockUser = new User("testUser", "password");
-        mockDataHandler = Mockito.mock(UserDataHandler.class);
+        mockDataHandler = Mockito.mock(UserRepository.class);
 
         when(mockDataHandler.getUser("testUser")).thenReturn(mockUser);
-        interactor = new UserInteractor(mockUser, mockDataHandler);
+        interactor = new UserInteractor(mockUser, mockDataHandler, new FollowUserOutputBoundary() {
+            @Override
+            public void present(FollowUserResponseModel response) {
+                System.out.println("presenting");
+            }
+        });
     }
 
     @Test

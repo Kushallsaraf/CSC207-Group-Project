@@ -2,12 +2,13 @@ package com.csc207.group.auth;
 
 import com.csc207.group.model.User;
 import com.csc207.group.util.Constants;
+import org.w3c.dom.UserDataHandler;
 
 public class LoginInteractor {
-    private UserDataHandler handler;
+    private UserRepository handler;
     private LoginPresenter presenter;
 
-    public LoginInteractor(UserDataHandler handler, LoginPresenter presenter) {
+    public LoginInteractor(UserRepository handler, LoginPresenter presenter) {
         this.handler = handler;
         this.presenter = presenter;
     }

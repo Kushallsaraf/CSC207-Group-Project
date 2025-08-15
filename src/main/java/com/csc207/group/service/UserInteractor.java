@@ -20,7 +20,7 @@ public class UserInteractor implements UserInteractorInputBoundary {
     }
 
     public String getReviewerProfilePicture(String username){
-        return userRepository.getUser(username).getProfilePictureURL();
+        return userRepository.getUser(username).getProfilePictureUrl();
 
     }
 
@@ -131,7 +131,7 @@ public class UserInteractor implements UserInteractorInputBoundary {
     }
 
     public void editProfilePicture(String updatedProfilePictureUrl){
-        this.user.setProfilePictureURL(updatedProfilePictureUrl);
+        this.user.setProfilePictureUrl(updatedProfilePictureUrl);
         userRepository.saveUser(user);
 
     }
